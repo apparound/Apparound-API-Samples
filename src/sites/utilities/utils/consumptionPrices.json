@@ -1,0 +1,88 @@
+{
+   "superficieEnum": {
+      "< 60": 0,
+      "60-80": 1,
+      "80-100": 2,
+      "> 100": 3
+   },
+   "riscaldamentoEnum": {
+      "impianto_centralizzato": 0,
+      "caldaia_a_gas": 1,
+      "pompa_di_calore": 2
+   },
+   "acquaCaldaEnum": {
+      "impianto_centralizzato": 0,
+      "caldaia_a_gas": 1,
+      "boiler_elettrico": 2
+   },
+   "data": {
+      "0": {
+         "0": {
+            "0": { "elettrico": 640, "gas": 792 },
+            "1": { "elettrico": 160, "gas": 936 },
+            "2": { "elettrico": 1200, "gas": 0 }
+         },
+         "1": {
+            "0": { "elettrico": 400, "gas": 990 },
+            "1": { "elettrico": 100, "gas": 1170 },
+            "2": { "elettrico": 750, "gas": 0 }
+         },
+         "2": {
+            "0": { "elettrico": 1600, "gas": 0 },
+            "1": { "elettrico": 400, "gas": 0 },
+            "2": { "elettrico": 3000, "gas": 0 }
+         }
+      },
+      "1": {
+         "0": {
+            "0": { "elettrico": 960, "gas": 1188 },
+            "1": { "elettrico": 240, "gas": 1404 },
+            "2": { "elettrico": 1800, "gas": 0 }
+         },
+         "1": {
+            "0": { "elettrico": 600, "gas": 1485 },
+            "1": { "elettrico": 150, "gas": 1755 },
+            "2": { "elettrico": 1125, "gas": 0 }
+         },
+         "2": {
+            "0": { "elettrico": 2400, "gas": 0 },
+            "1": { "elettrico": 600, "gas": 0 },
+            "2": { "elettrico": 4500, "gas": 0 }
+         }
+      },
+      "2": {
+         "0": {
+            "0": { "elettrico": 1280, "gas": 1584 },
+            "1": { "elettrico": 320, "gas": 1872 },
+            "2": { "elettrico": 2400, "gas": 0 }
+         },
+         "1": {
+            "0": { "elettrico": 800, "gas": 1980 },
+            "1": { "elettrico": 200, "gas": 2340 },
+            "2": { "elettrico": 1500, "gas": 0 }
+         },
+         "2": {
+            "0": { "elettrico": 3200, "gas": 0 },
+            "1": { "elettrico": 800, "gas": 0 },
+            "2": { "elettrico": 6000, "gas": 0 }
+         }
+      },
+      "3": {
+         "0": {
+            "0": { "elettrico": 1920, "gas": 2376 },
+            "1": { "elettrico": 480, "gas": 2808 },
+            "2": { "elettrico": 3600, "gas": 0 }
+         },
+         "1": {
+            "0": { "elettrico": 1200, "gas": 2970 },
+            "1": { "elettrico": 300, "gas": 3510 },
+            "2": { "elettrico": 2250, "gas": 0 }
+         },
+         "2": {
+            "0": { "elettrico": 4800, "gas": 0 },
+            "1": { "elettrico": 1200, "gas": 0 },
+            "2": { "elettrico": 9000, "gas": 0 }
+         }
+      }
+   }
+}

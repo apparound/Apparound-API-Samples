@@ -1,0 +1,12 @@
+{
+   "houseHeatingType": [
+      { "id": "impianto_centralizzato", "label": "Impianto centralizzato" },
+      { "id": "caldaia_a_gas", "label": "Caldaia a gas" },
+      { "id": "pompa_di_calore", "label": "Pompa di calore" }
+   ],
+   "waterHeatingType": [
+      { "id": "impianto_centralizzato", "label": "Impianto centralizzato" },
+      { "id": "caldaia_a_gas", "label": "Caldaia a gas" },
+      { "id": "boiler_elettrico", "label": "Boiler elettrico" }
+   ]
+}

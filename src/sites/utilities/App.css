@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+   :root {
+   }
+}
+
+html.utilities-html {
+   --background: 220 100% 97%;
+   --foreground: 240 10% 3.9%;
+   --card: 0 0% 100%;
+   --card-foreground: 240 10% 3.9%;
+   --popover: 0 0% 100%;
+   --popover-foreground: 240 10% 3.9%;
+   --primary: 82, 39%, 49%; /* #8BAF4D */
+   --primary-foreground: 0 0% 98%;
+   --secondary: 186 100% 90%;
+   --secondary-foreground: 240 5.9% 10%;
+   --tertiary: 186 100% 90%;
+   --muted: 240 4.8% 95.9%;
+   --muted-foreground: 240 3.8% 46.1%;
+   --accent: 142 71% 45%;
+   --accent-foreground: 240 5.9% 10%;
+   --destructive: 0 84.2% 60.2%;
+   --destructive-foreground: 0 0% 98%;
+   --border: 240 5.9% 90%;
+   --input: 240 5.9% 90%;
+   --ring: 250 89% 65%;
+   --radius: 0.5rem;
+   --primary-text: #1d1b20;
+   --focus-border: #1d1b20;
+}
+
+#root {
+   margin: 0 auto;
+   padding: 0rem;
+   text-align: center;
+}
+
+.utilities-html .logo {
+   height: 6em;
+   padding: 1.5em;
+   will-change: filter;
+   transition: filter 300ms;
+}
+.utilities-html .logo:hover {
+   filter: drop-shadow(0 0 2em #646cffaa);
+}
+.utilities-html .logo.react:hover {
+   filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+   from {
+      transform: rotate(0deg);
+   }
+   to {
+      transform: rotate(360deg);
+   }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+   .utilities-html a:nth-of-type(2) .logo {
+      animation: logo-spin infinite 20s linear;
+   }
+}
+
+.utilities-html .card {
+   padding: 2em;
+}
+
+.utilities-html .read-the-docs {
+   color: #888;
+}
+
+.utilities-html input:focus,
+.utilities-html textarea:focus,
+.utilities-html select:focus {
+   outline-color: #1d1b20;
+}
+
+.utilities-html .step-indicator {
+   @apply flex items-center justify-between mx-auto;
+}
+
+.utilities-html .step {
+   @apply flex items-center;
+}
+
+.utilities-html .step-number {
+   @apply w-8 h-8 flex items-center justify-center text-sm font-medium mr-2;
+}
+
+.utilities-html .step-text {
+   @apply text-sm font-medium text-gray-700;
+}
+
+.utilities-html .step-arrow {
+   @apply flex-1 h-px bg-primary/30 mx-4;
+}
+
+.utilities-html .service-selector {
+   @apply gap-4 justify-center mb-8;
+}
+
+.utilities-html .service-option {
+   @apply flex flex-col items-center gap-2 p-4 rounded-[15px] cursor-pointer transition-all;
+   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+.utilities-html .service-option:hover {
+   @apply bg-[rgba(139,175,77,0.10)] border-none;
+}
+
+.utilities-html .service-option.selected {
+   @apply bg-[rgba(139,175,77,0.10)] border-none border-transparent rounded-[15px];
+   position: relative;
+}
+
+.utilities-html .service-option.selected::before {
+   content: '';
+   position: absolute;
+   inset: 0;
+   border-radius: 15px;
+   padding: 4px;
+   background: linear-gradient(45deg, rgba(139, 175, 77, 1), rgba(1, 129, 196, 1));
+   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+   -webkit-mask-composite: destination-out;
+   mask-composite: exclude;
+}
+
+.utilities-html .service-option.selected:hover {
+   @apply border-red-500 relative;
+}
+
+.utilities-html .card-gradient-border {
+   position: relative;
+   border-radius: 15px;
+   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+.utilities-html .card-gradient-border::before {
+   content: '';
+   position: absolute;
+   inset: 0;
+   border-radius: 15px;
+   padding: 4px;
+   background: linear-gradient(45deg, rgba(139, 175, 77, 1), rgba(1, 129, 196, 1));
+   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+   -webkit-mask-composite: destination-out;
+   mask-composite: exclude;
+}
+
+.utilities-html .question-section {
+   @apply transition-all;
+}
+
+.utilities-html .range-selector {
+   @apply w-full max-w-md mx-auto accent-primary;
+}
+
+.utilities-html .radio-group {
+   @apply grid grid-cols-3 gap-4 max-w-2xl mx-auto;
+}
+
+.utilities-html .radio-option {
+   @apply flex flex-col items-center gap-2 p-4 rounded-lg border cursor-pointer transition-all hover:bg-secondary/30;
+}
+
+.utilities-html .radio-option.selected {
+   @apply border-primary bg-gradient-to-br from-primary/10 to-secondary/50;
+}
