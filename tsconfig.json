@@ -1,0 +1,21 @@
+{
+   "files": [],
+   "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
+   "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+         "@/*": ["./src/*"],
+         "@interfaces/*": ["src/interfaces/*"],
+         "@utilities/*": ["src/utilities/*"],
+         "@utils/*": ["src/utils/*"]
+      },
+      "noImplicitAny": false,
+      "noUnusedParameters": false,
+      "skipLibCheck": true,
+      "allowJs": true,
+      "noUnusedLocals": false,
+      "strictNullChecks": false,
+      "moduleResolution": "Node"
+   },
+   "include": ["@types"]
+}

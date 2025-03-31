@@ -1,0 +1,39 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Log in to Azure Container Registry
+      run: |
+        echo "Login on AzureCR..."
+        echo "${{ secrets.ACR_PASSWORD }}" | docker login ${{ secrets.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
+
+    - name: Build Docker image
+      run: |
+        echo "Build docker image..."
+        docker build . -t ${{ secrets.ACR_LOGIN_SERVER }}/apparound-api-sample:${{ github.sha }} -t ${{ secrets.ACR_LOGIN_SERVER }}/apparound-api-sample:latest -t ${{ secrets.ACR_LOGIN_SERVER }}/apparound-api-sample:main
+
+    - name: Tag Docker image
+      run: |
+        echo "Tag docker image on AzureCR..."
+        docker tag ${{ secrets.ACR_LOGIN_SERVER }}/apparound-api-sample:${{ github.sha }} myregistry.azurecr.io/apparound-api-sample:${{ github.sha }}
+        docker tag ${{ secrets.ACR_LOGIN_SERVER }}/apparound-api-sample:latest myregistry.azurecr.io/apparound-api-sample:latest
+        docker tag ${{ secrets.ACR_LOGIN_SERVER }}/apparound-api-sample:main myregistry.azurecr.io/apparound-api-sample:main
+    
+    - name: Push Docker image
+      run: |
+        echo "Push docker image on AzureCR..."
+        docker push ${{ secrets.ACR_LOGIN_SERVER }}/apparound-api-sample:${{ github.sha }}
+        docker push ${{ secrets.ACR_LOGIN_SERVER }}/apparound-api-sample:latest
+        docker push ${{ secrets.ACR_LOGIN_SERVER }}/apparound-api-sample:main
+        
