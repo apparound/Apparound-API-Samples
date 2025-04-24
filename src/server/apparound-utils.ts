@@ -103,6 +103,13 @@ export class ApparoundUtils {
       }
    }
 
+   saveSessionQuote(quote: any, sessionId?: string): void {
+      if (!quote) 
+         return
+      sessionId = sessionId || SESSION_LIST[sessionId].SESSION_ID
+      SESSION_LIST[sessionId].QUOTE = Object.assign({}, quote)
+   }
+
    generateProductList(validateProductResponse: any[], parentGuid: string): any[] {
       return validateProductResponse
          .map(cluster => {
@@ -174,6 +181,8 @@ export class ApparoundUtils {
          CPQ_ID: cpqId,
          TOF_ID: -1,
          QUOTE_ID: -1,
+         QUOTE: null,
+         STARTING_PRODUCTS: {},
          CUSTOMER_ID: customer.id,
          CUSTOMER_QUOTE_ID: customerQuoteId || -1,
       }
@@ -186,6 +195,7 @@ export class ApparoundUtils {
             cpqId,
             SESSION_LIST[cpqInfo.sessionId].TOF_ID
          )
+         SESSION_LIST[cpqInfo.sessionId].STARTING_PRODUCTS[SESSION_LIST[cpqInfo.sessionId].TOF_ID] = Object.assign([], startingProducts)
       }
 
       return {
@@ -267,6 +277,7 @@ export class ApparoundUtils {
          `/v2/cpq/${cpqId}/quote/${quoteId}/basket/${cartId}`,
          'delete'
       )
+      this.saveSessionQuote(response.quote)
       return { quote: response.quote, validation: response.validation }
    }
 
@@ -299,7 +310,7 @@ export class ApparoundUtils {
             `/v2/cpq/${cpqId}/quote/${quoteId}/basket/${basket.basketId}/node/${productNode.nodeId}/parent/${parentNode.nodeId}`,
             'delete'
          )
-
+      this.saveSessionQuote(response.quote)
       return { quote: response.quote, validation: response.validation }
    }
 
@@ -402,7 +413,7 @@ export class ApparoundUtils {
       const parentNode = this.findParentNodeByProductGuid(quote, productGuid)
       const basket = this.findCartByProductGuid(quote, productGuid)
 
-      return await this.fetchData(
+      const response = await this.fetchData(
          sessionId,
          null,
          `/v2/cpq/${cpqId}/quote/${quoteId}/basket/${basket.basketId}/quantity`,
@@ -413,6 +424,9 @@ export class ApparoundUtils {
             quantity,
          }
       )
+
+      this.saveSessionQuote(response.quote)
+      return response
    }
 
    async initQuoteSession(token: string, cpqId: number, customerId: number): Promise<any> {
@@ -420,6 +434,8 @@ export class ApparoundUtils {
    }
 
    async getStartingProducts(sessionId: string, cpqId: number, tofId: number): Promise<any> {
+      if (SESSION_LIST[sessionId].STARTING_PRODUCTS[tofId])
+         return SESSION_LIST[sessionId].STARTING_PRODUCTS[tofId]
       return await this.fetchData(sessionId, null, `/v2/cpq/${cpqId}/tof/${tofId}/validproducts`, 'get')
    }
 
@@ -448,6 +464,8 @@ export class ApparoundUtils {
    }
 
    async getQuote(sessionId: string, cpqId: number, quoteId: number): Promise<any> {
+      if(SESSION_LIST[sessionId].QUOTE) 
+         return SESSION_LIST[sessionId].QUOTE
       const response: any = await this.fetchData(sessionId, null, `/v2/cpq/${cpqId}/quote/${quoteId}`, 'get')
       return response?.quote || null
    }
@@ -476,7 +494,9 @@ export class ApparoundUtils {
       const cpqId = SESSION_LIST[sessionId].CPQ_ID
       const quoteId = SESSION_LIST[sessionId].QUOTE_ID
       await this.fetchData(sessionId, null, `/v2/cpq/finalize/${quoteId}`, 'put')
-      return await this.fetchData(sessionId, null, `/v2/cpq/${cpqId}/quote/${quoteId}`, 'get')
+      const quote = await this.fetchData(sessionId, null, `/v2/cpq/${cpqId}/quote/${quoteId}`, 'get')
+      this.saveSessionQuote(quote)
+      return quote
    }
 
    async getPdfQuote(sessionId: string): Promise<any> {
@@ -525,6 +545,8 @@ export class ApparoundUtils {
                cartData,
                quoteId || -1
             )
+
+            this.saveSessionQuote(response.quote)
             SESSION_LIST[sessionId].QUOTE_ID = response.quote?.quoteId
             return { quote: response.quote, validation: response.validation }
          }
@@ -550,6 +572,8 @@ export class ApparoundUtils {
                parentNode.nodeId,
                productData
             )
+
+            this.saveSessionQuote(response.quote)
             return { quote: response.quote, validation: response.validation, solutionId: basket.solutionId }
          }
       }
