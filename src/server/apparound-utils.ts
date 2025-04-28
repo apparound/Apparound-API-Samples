@@ -103,10 +103,8 @@ export class ApparoundUtils {
       }
    }
 
-   saveSessionQuote(quote: any, sessionId?: string): void {
-      if (!quote) 
-         return
-      sessionId = sessionId || SESSION_LIST[sessionId].SESSION_ID
+   saveSessionQuote(quote: any, sessionId: string): void {
+      if (!quote) return
       SESSION_LIST[sessionId].QUOTE = Object.assign({}, quote)
    }
 
@@ -131,7 +129,7 @@ export class ApparoundUtils {
                      obj[item.code] = item.value
 
                      return obj
-                  }, {})
+                  }, {}),
                }))
 
             if (products.length > 0) {
@@ -157,13 +155,14 @@ export class ApparoundUtils {
          throw new Error('Failed to retrieve TOKEN: ' + error.message)
       }
 
-      const customer = await this.getCustomer(token, CUSTOMER_DATA_FILTER).then((response: any[]) => {
-         if (response.length > 0) {
-            return response[0]
-         } else {
-            return this.createCustomer(token, CUSTOMER_DATA)
-         }
-      }) || {}
+      const customer =
+         (await this.getCustomer(token, CUSTOMER_DATA_FILTER).then((response: any[]) => {
+            if (response.length > 0) {
+               return response[0]
+            } else {
+               return this.createCustomer(token, CUSTOMER_DATA)
+            }
+         })) || {}
 
       let customerQuoteId: any = null
       let responseInitQuoteSession: any = null
@@ -195,7 +194,10 @@ export class ApparoundUtils {
             cpqId,
             SESSION_LIST[cpqInfo.sessionId].TOF_ID
          )
-         SESSION_LIST[cpqInfo.sessionId].STARTING_PRODUCTS[SESSION_LIST[cpqInfo.sessionId].TOF_ID] = Object.assign([], startingProducts)
+         SESSION_LIST[cpqInfo.sessionId].STARTING_PRODUCTS[SESSION_LIST[cpqInfo.sessionId].TOF_ID] = Object.assign(
+            {},
+            startingProducts
+         )
       }
 
       return {
@@ -253,7 +255,7 @@ export class ApparoundUtils {
       const token = SESSION_LIST[sessionId].TOKEN
       const customerId = SESSION_LIST[sessionId].CUSTOMER_ID
       const currentQuoteId = SESSION_LIST[sessionId].CUSTOMER_QUOTE_ID
-   
+
       return await this.createCustomerBase(token, { ...customerData, id: customerId }, currentQuoteId)
    }
 
@@ -277,7 +279,7 @@ export class ApparoundUtils {
          `/v2/cpq/${cpqId}/quote/${quoteId}/basket/${cartId}`,
          'delete'
       )
-      this.saveSessionQuote(response.quote)
+      this.saveSessionQuote(response.quote, sessionId)
       return { quote: response.quote, validation: response.validation }
    }
 
@@ -310,7 +312,7 @@ export class ApparoundUtils {
             `/v2/cpq/${cpqId}/quote/${quoteId}/basket/${basket.basketId}/node/${productNode.nodeId}/parent/${parentNode.nodeId}`,
             'delete'
          )
-      this.saveSessionQuote(response.quote)
+      this.saveSessionQuote(response.quote, sessionId)
       return { quote: response.quote, validation: response.validation }
    }
 
@@ -425,7 +427,7 @@ export class ApparoundUtils {
          }
       )
 
-      this.saveSessionQuote(response.quote)
+      this.saveSessionQuote(response.quote, sessionId)
       return response
    }
 
@@ -434,8 +436,7 @@ export class ApparoundUtils {
    }
 
    async getStartingProducts(sessionId: string, cpqId: number, tofId: number): Promise<any> {
-      if (SESSION_LIST[sessionId].STARTING_PRODUCTS[tofId])
-         return SESSION_LIST[sessionId].STARTING_PRODUCTS[tofId]
+      if (SESSION_LIST[sessionId].STARTING_PRODUCTS[tofId]) return SESSION_LIST[sessionId].STARTING_PRODUCTS[tofId]
       return await this.fetchData(sessionId, null, `/v2/cpq/${cpqId}/tof/${tofId}/validproducts`, 'get')
    }
 
@@ -464,8 +465,7 @@ export class ApparoundUtils {
    }
 
    async getQuote(sessionId: string, cpqId: number, quoteId: number): Promise<any> {
-      if(SESSION_LIST[sessionId].QUOTE) 
-         return SESSION_LIST[sessionId].QUOTE
+      if (SESSION_LIST[sessionId].QUOTE) return SESSION_LIST[sessionId].QUOTE
       const response: any = await this.fetchData(sessionId, null, `/v2/cpq/${cpqId}/quote/${quoteId}`, 'get')
       return response?.quote || null
    }
@@ -495,7 +495,7 @@ export class ApparoundUtils {
       const quoteId = SESSION_LIST[sessionId].QUOTE_ID
       await this.fetchData(sessionId, null, `/v2/cpq/finalize/${quoteId}`, 'put')
       const quote = await this.fetchData(sessionId, null, `/v2/cpq/${cpqId}/quote/${quoteId}`, 'get')
-      this.saveSessionQuote(quote)
+      this.saveSessionQuote(quote, sessionId)
       return quote
    }
 
@@ -546,7 +546,7 @@ export class ApparoundUtils {
                quoteId || -1
             )
 
-            this.saveSessionQuote(response.quote)
+            this.saveSessionQuote(response.quote, sessionId)
             SESSION_LIST[sessionId].QUOTE_ID = response.quote?.quoteId
             return { quote: response.quote, validation: response.validation }
          }
@@ -573,7 +573,7 @@ export class ApparoundUtils {
                productData
             )
 
-            this.saveSessionQuote(response.quote)
+            this.saveSessionQuote(response.quote, sessionId)
             return { quote: response.quote, validation: response.validation, solutionId: basket.solutionId }
          }
       }
