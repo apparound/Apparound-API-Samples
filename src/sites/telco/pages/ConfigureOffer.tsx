@@ -26,13 +26,13 @@ const ConfigureOffer = () => {
 
          {/* Offer Details */}
          <div className="max-w-3xl mx-auto py-12 px-4">
-            <h2 className="text-2xl font-bold text-purple-600 mb-8">Dettaglio offerta</h2>
+            <h2 className="text-2xl font-bold text-primary mb-8">Dettaglio offerta</h2>
 
             <Card className="mb-8 p-6">
                <h3 className="font-semibold mb-4">Costi di attivazione</h3>
                <div className="flex justify-between items-center py-2">
                   <div className="flex items-center gap-2">
-                     <div className="text-purple-600">
+                     <div className="text-primary">
                         <Router className="w-5 h-5" />
                      </div>
                      <span>Attivazione offerta</span>
@@ -43,7 +43,7 @@ const ConfigureOffer = () => {
                <h3 className="font-semibold mt-6 mb-4">Costi ricorrenti</h3>
                <div className="flex justify-between items-center py-2">
                   <div className="flex items-center gap-2">
-                     <div className="text-purple-600">
+                     <div className="text-primary">
                         <Router className="w-5 h-5" />
                      </div>
                      <span>{offer}</span>
@@ -70,14 +70,14 @@ const ConfigureOffer = () => {
                <div className="flex gap-8 mb-4">
                   <div>
                      <div className="flex items-center gap-2 mb-1">
-                        <Download className="w-4 h-4 text-purple-600" />
+                        <Download className="w-4 h-4 text-primary" />
                         <span className="font-medium">Download</span>
                      </div>
                      <p className="text-sm text-gray-600">fino a 200 Mbps</p>
                   </div>
                   <div>
                      <div className="flex items-center gap-2 mb-1">
-                        <Upload className="w-4 h-4 text-purple-600" />
+                        <Upload className="w-4 h-4 text-primary" />
                         <span className="font-medium">Upload</span>
                      </div>
                      <p className="text-sm text-gray-600">fino a 20 Mbps</p>
