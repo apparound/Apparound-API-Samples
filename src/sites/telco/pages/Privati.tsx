@@ -1,68 +1,49 @@
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useNavigate } from 'react-router-dom'
+import Navbar from '@/sites/telco/components/Navbar'
+import StepIndicator from '@/sites/utilities/components/custom/StepIndicator'
+import { useMediaQuery } from 'react-responsive'
+import OfferCard from '@/sites/telco/components/OfferCard'
 
 const Privati = () => {
    const navigate = useNavigate()
+   const isMobile = useMediaQuery({ maxWidth: 767 })
 
    return (
       <div className="min-h-screen bg-white">
-         {/* Navbar */}
-         <nav className="flex justify-between items-center p-4 border-b">
-            <div className="text-xl font-semibold text-purple-600 cursor-pointer" onClick={() => navigate('/')}>
-               TelcoSample
-            </div>
-            <div className="space-x-4">
-               <Button variant="link" className="text-purple-600">
-                  PRIVATI
-               </Button>
-               <Button variant="link" className="text-purple-600" onClick={() => navigate('/business')}>
-                  BUSINESS
-               </Button>
-            </div>
-         </nav>
+         <Navbar />
+         <div className="w-full">
+            {!isMobile ? (
+               <StepIndicator step={1} customSteps={['Configura', 'Scopri', 'Attiva', 'Inserisci i dati', 'Fine']} />
+            ) : (
+               <div className="border-t-2 w-full" style={{ borderColor: '#f4f4f4' }}></div>
+            )}
+         </div>
 
-         {/* Header */}
-         <header className="relative h-[300px] bg-gradient-to-r from-purple-600 to-blue-500 flex items-center justify-center">
+         <header
+            className="relative h-[300px] bg-gradient-to-r from-purple-600 to-blue-500 flex items-center justify-center bg-cover bg-center"
+            style={{
+               backgroundImage: 'url(/src/sites/telco/assets/images/privati_banner.png)',
+            }}
+         >
             <h1 className="text-4xl font-bold text-white">Offerte Privati</h1>
          </header>
 
-         {/* Main Content */}
          <main className="max-w-4xl mx-auto py-12 px-4">
             <h2 className="text-2xl font-bold text-purple-600 mb-8 text-center">Configura la tua offerta</h2>
 
-            {/* Offer Types */}
-            <div className="grid md:grid-cols-2 gap-8 mb-12">
-               <Card className="cursor-pointer hover:shadow-lg transition-shadow">
-                  <img
-                     src="/lovable-uploads/09f23e1b-df7e-46f5-b592-389496fa825e.png"
-                     alt="Mobile"
-                     className="w-full h-48 object-cover rounded-t-lg"
-                  />
-                  <div className="p-6">
-                     <h3 className="text-xl font-bold text-purple-600">Mobile</h3>
-                  </div>
-               </Card>
-
-               <Card
-                  className="cursor-pointer hover:shadow-lg transition-shadow"
+            <div className="flex flex-wrap gap-8 mb-12 justify-center">
+               <OfferCard imageSrc="/src/sites/telco/assets/images/banner04.png" title="Mobile" />
+               <OfferCard
+                  imageSrc="/src/sites/telco/assets/images/banner03.png"
+                  title="Home"
                   onClick={() => navigate('/offerta-home')}
-               >
-                  <img
-                     src="/lovable-uploads/0cde01a7-49c7-4632-98f3-eb2c72bd5ae4.png"
-                     alt="Home"
-                     className="w-full h-48 object-cover rounded-t-lg"
-                  />
-                  <div className="p-6">
-                     <h3 className="text-xl font-bold text-purple-600">Home</h3>
-                  </div>
-               </Card>
+               />
             </div>
 
-            {/* Mobile Options */}
             <div className="space-y-4 mb-12">
                <h3 className="text-xl font-semibold text-purple-600 mb-4">Opzioni offerta Mobile</h3>
                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
@@ -75,7 +56,6 @@ const Privati = () => {
                </div>
             </div>
 
-            {/* Coverage Check */}
             <div className="bg-white rounded-lg shadow p-6">
                <h3 className="text-xl font-semibold text-purple-600 mb-4">Verifica copertura</h3>
                <p className="text-gray-600 mb-6">

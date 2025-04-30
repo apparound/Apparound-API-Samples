@@ -2,26 +2,14 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Check } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import Navbar from '@/sites/telco/components/Navbar'
 
 const OffertaHome = () => {
    const navigate = useNavigate()
 
    return (
       <div className="min-h-screen bg-white">
-         {/* Navbar */}
-         <nav className="flex justify-between items-center p-4 border-b">
-            <div className="text-xl font-semibold text-purple-600 cursor-pointer" onClick={() => navigate('/')}>
-               TelcoSample
-            </div>
-            <div className="space-x-4">
-               <Button variant="link" className="text-purple-600" onClick={() => navigate('/privati')}>
-                  PRIVATI
-               </Button>
-               <Button variant="link" className="text-purple-600" onClick={() => navigate('/business')}>
-                  BUSINESS
-               </Button>
-            </div>
-         </nav>
+         <Navbar />
 
          {/* Header */}
          <header className="relative h-[300px] bg-gradient-to-r from-purple-600 to-blue-500 flex items-center justify-center text-center px-4">
