@@ -286,7 +286,7 @@ app.get('*', (req: any, res: any) => {
          res.status(500).send('Errore nel file')
          return
       }
-      const envKeys = ['CPQ_RETAIL', 'CPQ_UTILITIES', 'UTILITIES_LUCE', 'UTILITIES_GAS']
+      const envKeys = ['CPQ_RETAIL', 'CPQ_UTILITIES', 'CPQ_TELCO', 'UTILITIES_LUCE', 'UTILITIES_GAS']
       const envs = Object.entries(process.env).reduce((obj: any, [key, value]) => {
          if (envKeys.includes(key)) {
             obj[key] = value

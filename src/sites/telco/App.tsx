@@ -1,9 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Routes, Route } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
+import { store } from './store'
+import { persistor } from './persistor'
 import Index from './pages/Index'
 import Privati from '@/sites/telco/pages/Privati'
 import Business from '@/sites/telco/pages/Business'
@@ -25,20 +29,24 @@ const App = () => {
    }, [])
 
    return (
-      <QueryClientProvider client={queryClient}>
-         <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <Routes>
-               <Route path="/" element={<Index />} />
-               <Route path="privati" element={<Privati />} />
-               <Route path="business" element={<Business />} />
-               <Route path="offerta-home" element={<OffertaHome />} />
-               <Route path="configure-offer" element={<ConfigureOffer />} />
-               <Route path="*" element={<NotFound />} />
-            </Routes>
-         </TooltipProvider>
-      </QueryClientProvider>
+      <Provider store={store}>
+         <PersistGate loading={null} persistor={persistor}>
+            <QueryClientProvider client={queryClient}>
+               <TooltipProvider>
+                  <Toaster />
+                  <Sonner />
+                  <Routes>
+                     <Route path="/" element={<Index />} />
+                     <Route path="privati" element={<Privati />} />
+                     <Route path="business" element={<Business />} />
+                     <Route path="offerta-home" element={<OffertaHome />} />
+                     <Route path="configure-offer" element={<ConfigureOffer />} />
+                     <Route path="*" element={<NotFound />} />
+                  </Routes>
+               </TooltipProvider>
+            </QueryClientProvider>
+         </PersistGate>
+      </Provider>
    )
 }
 
