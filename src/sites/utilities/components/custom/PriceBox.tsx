@@ -11,7 +11,9 @@ const PriceBox = ({ title, price, icon }) => {
             <h2 className="text-gray-800 text-xl font-bold ml-2">{t(title)}</h2>
          </div>
          <hr className="w-full border-[#DCE1E6] my-2" style={{ borderWidth: '1px' }} />
-         <p className="text-black text-lg font-semibold mt-1 whitespace-nowrap">{price.toFixed(2)} €/mese</p>
+         <p className="text-black text-lg font-semibold mt-1 whitespace-nowrap">
+            {price.toFixed(2)} {t('€/mese')}
+         </p>{' '}
       </div>
    )
 }

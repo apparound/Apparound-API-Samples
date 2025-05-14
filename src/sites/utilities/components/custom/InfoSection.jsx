@@ -33,7 +33,7 @@ const InfoSection = () => {
             <img src={imageSrc} alt="Luce e Gas" className="w-full h-full object-cover" />
          </div>
          <div className="md:col-span-2">
-            <h2 className="text-primary text-2xl font-semibold text-left">Smart Casa</h2>
+            <h2 className="text-primary text-2xl font-semibold text-left">{t('Smart Casa')}</h2>{' '}
             <p className="text-gray-700 text-sm mt-2 text-left">{description}</p>
             <div className="flex flex-col md:flex-row justify-start mt-6 gap-4">
                {showLuce && (
