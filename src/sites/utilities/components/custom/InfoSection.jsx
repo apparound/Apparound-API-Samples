@@ -8,19 +8,22 @@ import luceGasImage from '@/assets/images/GasLuceSquare.jpg'
 import luce from '@/assets/images/LuceSquare.jpg'
 import gas from '@/assets/images/GasSquare.jpg'
 import { hasMainProductId } from '@/utils/treeManager'
+import { useTranslation } from 'react-i18next'
 
 const InfoSection = () => {
    const showLuce = hasMainProductId(mainServicesId.LUCE)
    const showGas = hasMainProductId(mainServicesId.GAS)
+   const { t } = useTranslation()
 
-   let description =
+   let description = t(
       'Include la fornitura di energia elettrica per la tua casa. Copre la fornitura di gas naturale per riscaldamento e usi quotidiani.'
+   )
    let imageSrc = luceGasImage
    if (showLuce && !showGas) {
-      description = 'Include la fornitura di energia elettrica per la tua casa.'
+      description = t('Include la fornitura di energia elettrica per la tua casa.')
       imageSrc = luce
    } else if (!showLuce && showGas) {
-      description = 'Copre la fornitura di gas naturale per riscaldamento e usi quotidiani.'
+      description = t('Copre la fornitura di gas naturale per riscaldamento e usi quotidiani.')
       imageSrc = gas
    }
 
