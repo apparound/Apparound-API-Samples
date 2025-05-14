@@ -19,7 +19,7 @@ Questo repository contiene una collezione di applicazioni web progettate per dim
 1. Clona il repository:
 
    ```bash
-   git clone https://github.com/albertoschiariti/Apparound-API-Samples.git
+   git clone https://github.com/apparound/Apparound-API-Samples.git
    cd Apparound-API-Samples
    ```
 

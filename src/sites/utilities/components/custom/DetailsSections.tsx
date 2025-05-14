@@ -18,6 +18,8 @@ const priceUnits = {
 }
 
 const renderProductList = products => {
+   const { t } = useTranslation()
+
    const tree = localStorage.getItem('validProducts')
    const productList = []
    let previousClusterId = null
@@ -27,7 +29,7 @@ const renderProductList = products => {
          const node = findNodeProperty('uniqueGuid', product.uniqueGuid, null, null, tree)
          const imageSrc = node?.productDetail?.icon
          const priceUnit = priceUnits[node?.categoryId] || '€'
-         const price = product.price > 0 ? `${product.price} ${priceUnit}` : ''
+         const price = product.price > 0 ? `${product.price} ${t(priceUnit)}` : ''
 
          if (previousClusterId !== null && previousClusterId !== product.clusterId) {
             productList.push(<Separator className="my-4 border-t-2" />)

@@ -8,19 +8,22 @@ import luceGasImage from '@/assets/images/GasLuceSquare.jpg'
 import luce from '@/assets/images/LuceSquare.jpg'
 import gas from '@/assets/images/GasSquare.jpg'
 import { hasMainProductId } from '@/utils/treeManager'
+import { useTranslation } from 'react-i18next'
 
 const InfoSection = () => {
    const showLuce = hasMainProductId(mainServicesId.LUCE)
    const showGas = hasMainProductId(mainServicesId.GAS)
+   const { t } = useTranslation()
 
-   let description =
+   let description = t(
       'Include la fornitura di energia elettrica per la tua casa. Copre la fornitura di gas naturale per riscaldamento e usi quotidiani.'
+   )
    let imageSrc = luceGasImage
    if (showLuce && !showGas) {
-      description = 'Include la fornitura di energia elettrica per la tua casa.'
+      description = t('Include la fornitura di energia elettrica per la tua casa.')
       imageSrc = luce
    } else if (!showLuce && showGas) {
-      description = 'Copre la fornitura di gas naturale per riscaldamento e usi quotidiani.'
+      description = t('Copre la fornitura di gas naturale per riscaldamento e usi quotidiani.')
       imageSrc = gas
    }
 
@@ -30,7 +33,7 @@ const InfoSection = () => {
             <img src={imageSrc} alt="Luce e Gas" className="w-full h-full object-cover" />
          </div>
          <div className="md:col-span-2">
-            <h2 className="text-primary text-2xl font-semibold text-left">Smart Casa</h2>
+            <h2 className="text-primary text-2xl font-semibold text-left">{t('Smart Casa')}</h2>{' '}
             <p className="text-gray-700 text-sm mt-2 text-left">{description}</p>
             <div className="flex flex-col md:flex-row justify-start mt-6 gap-4">
                {showLuce && (

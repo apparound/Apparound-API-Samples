@@ -15,7 +15,7 @@ const ConsumptionItem = ({ id }) => {
             className="mr-2 text-primary"
          />
          <div className="text-left">
-            <span className="font-bold">{id == mainServicesId.LUCE ? 'Luce' : 'Gas'}</span>
+            <span className="font-bold">{id == mainServicesId.LUCE ? t('Luce') : t('Gas')}</span>
             <div>
                {calculatePrice(id)} {id == mainServicesId.LUCE ? 'kWh' : 'm³'} {t("all'anno")}
             </div>
