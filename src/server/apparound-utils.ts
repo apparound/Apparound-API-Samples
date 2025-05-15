@@ -489,7 +489,11 @@ export class ApparoundUtils {
       return await this.fetchData(sessionId, null, `/v2/cpq/${cpqId}/tof/${tofId}/validproducts`, 'get')
    }
 
-   async getValidProducts(sessionId: string, productGuid: string): Promise<any[]> {
+   async getValidProductsLegacy(sessionId: string, productGuid: string): Promise<any[]> {
+      return await this.getValidProducts(sessionId, SESSION_LIST[sessionId].TOF_ID, productGuid)
+   }
+
+   async getValidProducts(sessionId: string, tofId: string, productGuid: string): Promise<any[]> {
       const cpqId = SESSION_LIST[sessionId].CPQ_ID
       const quoteId = SESSION_LIST[sessionId].QUOTE_ID
 
@@ -498,19 +502,24 @@ export class ApparoundUtils {
       const parentNode: any = this.findParentNodeByProductGuid(quote, productGuid)
       const basket: any = this.findCartByProductGuid(quote, productGuid)
 
-      const response: any = await this.fetchData(
-         sessionId,
-         null,
-         `/v2/cpq/${cpqId}/tof/${SESSION_LIST[sessionId].TOF_ID}/validproducts?quoteId=${quoteId}&basketId=${
-            basket.basketId
-         }&nodeId=${productNode?.nodeId}&parentId=${parentNode?.nodeId || null}`,
-         'get'
-      )
-
-      return [
-         ...this.generateProductList(response.bottomAxis || [], productGuid),
-         ...this.generateProductList(response.rightAxis || [], productGuid),
-      ]
+      let response: any = {}
+      if (productGuid) {
+         response = await this.fetchData(
+            sessionId,
+            null,
+            `/v2/cpq/${cpqId}/tof/${tofId}/validproducts?quoteId=${quoteId}&basketId=${basket.basketId}&nodeId=${
+               productNode?.nodeId
+            }&parentId=${parentNode?.nodeId || null}`,
+            'get'
+         )
+         return [
+            ...this.generateProductList(response.bottomAxis || [], productGuid),
+            ...this.generateProductList(response.rightAxis || [], productGuid),
+         ]
+      } else {
+         response = await this.getStartingProducts(sessionId, cpqId, parseInt(tofId))
+         return this.generateProductList(response?.leftAxis || [], DEFAULT_GUID)
+      }
    }
 
    async getQuote(sessionId: string, cpqId: number, quoteId: number): Promise<any> {
@@ -569,9 +578,13 @@ export class ApparoundUtils {
       }
    }
 
-   async addProduct(sessionId: string, productGuid: string, parentGuid?: string): Promise<any> {
-      const cpqId = SESSION_LIST[sessionId].CPQ_ID
+   async addProductLegacy(sessionId: string, productGuid: string, parentGuid?: string): Promise<any> {
       const tofId = SESSION_LIST[sessionId].TOF_ID
+      return await this.addProduct(sessionId, tofId, productGuid, parentGuid)
+   }
+
+   async addProduct(sessionId: string, tofId: string, productGuid: string, parentGuid?: string): Promise<any> {
+      const cpqId = SESSION_LIST[sessionId].CPQ_ID
       const quoteId = SESSION_LIST[sessionId].QUOTE_ID
       const quote = await this.getQuote(sessionId, cpqId, quoteId)
 
@@ -602,7 +615,7 @@ export class ApparoundUtils {
       } else {
          const parentNode = this.findNodeByGuid(quote, parentGuid)
          const basket = this.findCartByProductGuid(quote, parentGuid)
-         const validProducts = await this.getValidProducts(sessionId, parentGuid)
+         const validProducts = await this.getValidProducts(sessionId, tofId, parentGuid)
          const product = this.findProductByKey(validProducts, 'guid', productGuid)
 
          if (product) {

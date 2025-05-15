@@ -44,7 +44,19 @@ app.get('/getProducts/productGuid/:productGuid', async (req: any, res: any) => {
    try {
       const sessionId: string = getSessionIdFromHeaders(req)
       const productGuid: string = req.params?.productGuid?.toString() || null
-      const response: any = await new ApparoundUtils().getValidProducts(sessionId, productGuid)
+      const response: any = await new ApparoundUtils().getValidProductsLegacy(sessionId, productGuid)
+      res.json(response)
+   } catch (error: any) {
+      res.status(500).send(error)
+   }
+})
+
+app.get('/getProducts/tofId/:tofId/productGuid/:productGuid?', async (req: any, res: any) => {
+   try {
+      const sessionId: string = getSessionIdFromHeaders(req)
+      const tofId: string = req.params?.tofId?.toString() || null
+      const productGuid: string = req.params?.productGuid?.toString() || null
+      const response: any = await new ApparoundUtils().getValidProducts(sessionId, tofId, productGuid)
       res.json(response)
    } catch (error: any) {
       res.status(500).send(error)
@@ -56,7 +68,20 @@ app.get('/addProduct/productGuid/:productGuid/parentGuid/:parentGuid?', async (r
       const sessionId: string = getSessionIdFromHeaders(req)
       const productGuid: string = req.params?.productGuid?.toString() || null
       const parentGuid: string = req.params?.parentGuid?.toString() || null
-      const response: any = await new ApparoundUtils().addProduct(sessionId, productGuid, parentGuid)
+      const response: any = await new ApparoundUtils().addProductLegacy(sessionId, productGuid, parentGuid)
+      res.json(response)
+   } catch (error: any) {
+      res.status(500).send(error)
+   }
+})
+
+app.get('/addProduct/tofId/:tofId/productGuid/:productGuid/parentGuid/:parentGuid?', async (req: any, res: any) => {
+   try {
+      const sessionId: string = getSessionIdFromHeaders(req)
+      const tofId: string = req.params?.tofId?.toString() || null
+      const productGuid: string = req.params?.productGuid?.toString() || null
+      const parentGuid: string = req.params?.parentGuid?.toString() || null
+      const response: any = await new ApparoundUtils().addProduct(sessionId, tofId, productGuid, parentGuid)
       res.json(response)
    } catch (error: any) {
       res.status(500).send(error)
