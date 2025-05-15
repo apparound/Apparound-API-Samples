@@ -30,6 +30,16 @@ app.get('/init/cpqId/:cpqId', async (req: any, res: any) => {
    }
 })
 
+app.get('/initSession/cpqId/:cpqId', async (req: any, res: any) => {
+   try {
+      const cpqId: number = req.params?.cpqId || -1
+      const response: any = await new ApparoundUtils().initSession(cpqId)
+      res.json(response)
+   } catch (error: any) {
+      res.status(500).send(error)
+   }
+})
+
 app.get('/getProducts/productGuid/:productGuid', async (req: any, res: any) => {
    try {
       const sessionId: string = getSessionIdFromHeaders(req)

@@ -129,7 +129,7 @@ export class ApparoundUtils {
                      obj[item.code] = item.value
 
                      return obj
-                  }, {})
+                  }, {}),
                }))
 
             if (products.length > 0) {
@@ -205,6 +205,56 @@ export class ApparoundUtils {
          customer,
          customerQuoteId,
          startingClusters: this.generateProductList(startingProducts?.leftAxis || [], DEFAULT_GUID),
+      }
+   }
+
+   async initSession(cpqId: number): Promise<any> {
+      if (!cpqId) throw new Error('CpqId is Required!')
+
+      let token = ''
+      try {
+         const responseToken = await this.getToken()
+         token = responseToken.token || ''
+      } catch (error: any) {
+         throw new Error('Failed to retrieve TOKEN: ' + error.message)
+      }
+
+      const customer =
+         (await this.getCustomer(token, CUSTOMER_DATA_FILTER).then((response: any[]) => {
+            if (response.length > 0) {
+               return response[0]
+            } else {
+               return this.createCustomer(token, CUSTOMER_DATA)
+            }
+         })) || {}
+
+      let customerQuoteId: any = null
+      let responseInitQuoteSession: any = null
+      try {
+         customerQuoteId = await this.createCustomerQuote(token, { ...CUSTOMER_DATA, id: customer.id }, -1)
+         responseInitQuoteSession = await this.initQuoteSession(token, cpqId, customer.id)
+      } catch (error) {
+         console.log(error)
+         return null
+      }
+      const cpqInfo = responseInitQuoteSession || {}
+
+      SESSION_LIST[cpqInfo.sessionId] = {
+         TOKEN: token,
+         CPQ_ID: cpqId,
+         TOF_ID: -1,
+         QUOTE_ID: -1,
+         QUOTE: null,
+         STARTING_PRODUCTS: {},
+         CUSTOMER_ID: customer.id,
+         CUSTOMER_QUOTE_ID: customerQuoteId || -1,
+      }
+
+      return {
+         sessionId: cpqInfo.sessionId,
+         customer,
+         customerQuoteId,
+         tofList: cpqInfo.tofList || [],
       }
    }
 
