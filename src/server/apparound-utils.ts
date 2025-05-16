@@ -498,12 +498,13 @@ export class ApparoundUtils {
       const quoteId = SESSION_LIST[sessionId].QUOTE_ID
 
       const quote: any = await this.getQuote(sessionId, cpqId, quoteId)
-      const productNode: any = this.findNodeByGuid(quote, productGuid)
-      const parentNode: any = this.findParentNodeByProductGuid(quote, productGuid)
-      const basket: any = this.findCartByProductGuid(quote, productGuid)
-
       let response: any = {}
+
       if (productGuid) {
+         const productNode: any = this.findNodeByGuid(quote, productGuid)
+         const parentNode: any = this.findParentNodeByProductGuid(quote, productGuid)
+         const basket: any = this.findCartByProductGuid(quote, productGuid)
+
          response = await this.fetchData(
             sessionId,
             null,

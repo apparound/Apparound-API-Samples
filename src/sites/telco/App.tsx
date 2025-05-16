@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -9,7 +9,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { store } from './store'
 import { persistor } from './persistor'
 import Index from './pages/Index'
-import Privati from '@/sites/telco/pages/Privati'
+import Privato from '@/sites/telco/pages/Privato'
 import Business from '@/sites/telco/pages/Business'
 import OffertaHome from './pages/OffertaHome'
 import NotFound from './pages/NotFound'
@@ -37,7 +37,7 @@ const App = () => {
                   <Sonner />
                   <Routes>
                      <Route path="/" element={<Index />} />
-                     <Route path="privati" element={<Privati />} />
+                     <Route path="privato" element={<Privato products={undefined} />} />
                      <Route path="business" element={<Business />} />
                      <Route path="offerta-home" element={<OffertaHome />} />
                      <Route path="configure-offer" element={<ConfigureOffer />} />

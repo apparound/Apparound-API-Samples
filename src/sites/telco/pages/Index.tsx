@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import HeroCarousel from '@/sites/telco/components/HeroCarousel'
 import Footer from '@/components/Footer'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { reset as resetQuote, selectCart, selectTree } from '@/sites/retail/features/quoteSlice'
 import { showLoader, reset as resetApp } from '@/sites/retail/features/appSlice'
 import { initQuote } from '@/sites/telco/hooks/apparoundData'
@@ -15,20 +15,25 @@ const Index = () => {
    const dispatch = useDispatch()
    const tree = useSelector(selectTree)
    const cart = useSelector(selectCart)
+   const [isLoading, setIsLoading] = useState(true)
 
    useEffect(() => {
-      dispatch(resetQuote())
-      dispatch(resetApp())
-      dispatch(showLoader())
-      initQuote(dispatch)
-   }, [])
+      const initialize = async () => {
+         dispatch(resetQuote())
+         dispatch(resetApp())
+         dispatch(showLoader())
+         await initQuote(dispatch)
+         setIsLoading(false)
+      }
+
+      initialize()
+   }, [dispatch])
 
    return (
       <div className="min-h-screen bg-white flex flex-col">
          <Navbar />
          <HeroCarousel />
-         <Offers onNavigate={navigate} />
-
+         <Offers onNavigate={navigate} isLoading={isLoading} />
          <Footer />
       </div>
    )
