@@ -1,6 +1,7 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit'
 import { config } from '@/sites/retail/config'
 import { Product } from '@/interfaces/Product'
+import { create } from 'domain'
 
 interface cartI {
    [key: string]: cartI
@@ -139,7 +140,7 @@ export const quoteSlice = createSlice({
       },
       updateStartingProducts: (state, { payload }) => {
          const { products } = payload
-
+         state.tofId = payload.id
          state.startingProducts = products.map(product => ({
             id: product.productId,
             guid: product.guid,
@@ -261,6 +262,7 @@ export const selectContractProperties = state => state.quote.contract.properties
 export const selectContract = state => state.quote.contract
 export const selectCustomer = state => state.quote.customer
 export const selectQuote = state => state.quote.quote
+
 export const selectStartingProducts = createSelector(
    state => state.quote.startingProducts,
    startingProducts => {
@@ -276,6 +278,10 @@ export const selectStartingProducts = createSelector(
       }))
    }
 )
+export const selectTofId = createSelector(
+   state => state.quote.tofId,
+   tofId => tofId
+);
 
 export const {
    reset,

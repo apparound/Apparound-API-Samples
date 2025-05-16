@@ -4,6 +4,7 @@ import {
    initQuoteTofsList,
    initQuote as initQuoteAction,
    updateStartingProducts as updateStartingProducts,
+   addProduct as addProductAction,
 } from '@/sites/retail/features/quoteSlice'
 
 export const initQuote = async (dispatch: any) => {
@@ -21,4 +22,24 @@ export const getProductsFromTof = async (dispatch: any, tofId: string) => {
    const response = await fetchData(`/getProducts/tofId/${tofId || ''}/productGuid/`, 'get')
 
    dispatch(updateStartingProducts(response[0]))
+}
+
+export const addProduct = async (
+   productGuid: string,
+   dispatch: any,
+   tofId: string,
+   parentGuid?: string,
+   getParentProducts?: boolean
+) => {
+   const response = await fetchData(
+      `/addProduct/tofId/${tofId}/productGuid/${productGuid}/parentGuid/${parentGuid || ''}`,
+      'get'
+   )
+
+   const products = await fetchData(
+      `/getProducts/productGuid/${getParentProducts && parentGuid ? parentGuid : productGuid}`,
+      'get'
+   )
+
+   dispatch(addProductAction({ productGuid, parentGuid, products, ...response }))
 }

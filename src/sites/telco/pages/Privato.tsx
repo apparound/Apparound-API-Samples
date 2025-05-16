@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import Navbar from '@/sites/telco/components/Navbar'
 import StepIndicator from '@/sites/utilities/components/custom/StepIndicator'
 import { useMediaQuery } from 'react-responsive'
@@ -8,19 +7,19 @@ import CheckCoverage from '@/sites/telco/components/CheckCoverage'
 import OfferHeader from '@/sites/telco/components/OfferHeader'
 import Footer from '@/components/Footer'
 import { useSelector } from 'react-redux'
-import { selectStartingProducts } from '@/sites/retail/features/quoteSlice'
-import { useEffect } from 'react'
+import { selectStartingProducts, selectTofId } from '@/sites/retail/features/quoteSlice'
+import { useEffect, useState } from 'react'
+import { addProduct } from '@/sites/telco/hooks/apparoundData'
+import { useDispatch } from 'react-redux'
 
 const Privato = () => {
-   const navigate = useNavigate()
    const isMobile = useMediaQuery({ maxWidth: 767 })
    const startingProducts = useSelector(selectStartingProducts)
+   const tofId = useSelector(selectTofId)
+   const [offerSelected, setOfferSelected] = useState(false)
+   const dispatch = useDispatch()
 
-   useEffect(() => {
-      if (!startingProducts) {
-         console.error('Redux context is not available. Ensure the Provider is correctly set up.')
-      }
-   }, [startingProducts])
+   useEffect(() => {}, [startingProducts])
 
    if (!startingProducts || startingProducts.length === 0) {
       return null
@@ -48,13 +47,20 @@ const Privato = () => {
                      key={product.id}
                      imageSrc={'/src/sites/telco/assets/images/default.png'}
                      title={product.description}
-                     onClick={() => navigate(`/offerta-${product.productName.toLowerCase()}`)}
+                     onClick={async () => {
+                        await addProduct(product.guid, dispatch, tofId)
+                        setOfferSelected(true)
+                     }}
                   />
                ))}
             </div>
 
-            <MobileOfferOptions />
-            <CheckCoverage />
+            {offerSelected && (
+               <>
+                  <MobileOfferOptions />
+                  <CheckCoverage />
+               </>
+            )}
          </main>
 
          <Footer />
