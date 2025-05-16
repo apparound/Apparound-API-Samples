@@ -3,7 +3,7 @@ import { fetchData } from '@/utils/fetcher'
 import {
    initQuoteTofsList,
    initQuote as initQuoteAction,
-   addProduct as addProductAction,
+   updateStartingProducts as updateStartingProducts,
 } from '@/sites/retail/features/quoteSlice'
 
 export const initQuote = async (dispatch: any) => {
@@ -17,6 +17,8 @@ export const initQuoteWithTof = async (dispatch: any) => {
    dispatch(initQuoteAction(response))
 }
 
-export const getProductsFromTof = async (tofId: string) => {
-   const products = await fetchData(`/getProducts/tofId/${tofId || ''}/productGuid/`, 'get')
+export const getProductsFromTof = async (dispatch: any, tofId: string) => {
+   const response = await fetchData(`/getProducts/tofId/${tofId || ''}/productGuid/`, 'get')
+
+   dispatch(updateStartingProducts(response[0]))
 }

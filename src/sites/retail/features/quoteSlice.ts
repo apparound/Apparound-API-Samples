@@ -1,5 +1,6 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit'
 import { config } from '@/sites/retail/config'
+import { Product } from '@/interfaces/Product'
 
 interface cartI {
    [key: string]: cartI
@@ -22,6 +23,7 @@ interface initialState {
    contract?: contractDataI
    customer?: any
    tofId?: string
+   startingProducts?: Product[]
 }
 
 const initialState: initialState = {
@@ -135,6 +137,21 @@ export const quoteSlice = createSlice({
             ...payload.customer,
          }
       },
+      updateStartingProducts: (state, { payload }) => {
+         const { products } = payload
+
+         state.startingProducts = products.map(product => ({
+            id: product.productId,
+            guid: product.guid,
+            label: product.label,
+            description: product.description,
+            price: product.price,
+            activationPrice: product.activationPrice,
+            config: product.config,
+         }))
+
+         console.log('Starting products:', state.startingProducts)
+      },
       addProduct: (state, { payload }) => {
          const { productGuid, parentGuid, products, quote, solutionId, validation, tofId } = payload
 
@@ -244,6 +261,21 @@ export const selectContractProperties = state => state.quote.contract.properties
 export const selectContract = state => state.quote.contract
 export const selectCustomer = state => state.quote.customer
 export const selectQuote = state => state.quote.quote
+export const selectStartingProducts = createSelector(
+   state => state.quote.startingProducts,
+   startingProducts => {
+      if (!startingProducts) return []
+      return startingProducts.map(product => ({
+         id: product.productId,
+         guid: product.guid,
+         label: product.label,
+         description: product.description,
+         price: product.price,
+         activationPrice: product.activationPrice,
+         config: product.config,
+      }))
+   }
+)
 
 export const {
    reset,
@@ -256,6 +288,7 @@ export const {
    updateCustomer,
    updateQuote,
    updateContract,
+   updateStartingProducts,
 } = quoteSlice.actions
 
 export default quoteSlice.reducer

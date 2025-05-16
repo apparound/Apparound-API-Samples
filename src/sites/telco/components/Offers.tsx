@@ -43,7 +43,7 @@ const Offers = ({ onNavigate, isLoading }) => {
                   altText={item.name}
                   title={item.name.toUpperCase()}
                   onClick={async () => {
-                     await getProductsFromTof(item.id)
+                     await getProductsFromTof(dispatch, item.id)
                      onNavigate(`/telco/${item.name.toLowerCase()}`)
                   }}
                />
