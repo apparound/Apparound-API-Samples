@@ -4,9 +4,14 @@ import Logo from '@/assets/images/logo.png'
 const Navbar = () => {
    return (
       <nav className="flex justify-between items-center border-b">
-         <button onClick={() => {}}>
-            <img className="h-16" src={Logo} />
-         </button>{' '}
+         <button
+            onClick={() => {
+               window.location.href = '/'
+            }}
+            className="float-left"
+         >
+            <img src={Logo} alt="Apparound Logo" className="h-16" />
+         </button>
       </nav>
    )
 }

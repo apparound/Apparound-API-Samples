@@ -3,7 +3,7 @@ import StepIndicator from '@/sites/utilities/components/custom/StepIndicator'
 import { useMediaQuery } from 'react-responsive'
 import OfferCard from '@/sites/telco/components/OfferCard'
 import MobileOfferOptions from '@/sites/telco/components/MobileOfferOptions'
-import CheckCoverage from '@/sites/telco/components/CheckCoverage'
+import CheckCoverage from '@/sites/telco/components/CheckCoverage/CheckCoverage'
 import OfferHeader from '@/sites/telco/components/OfferHeader'
 import Footer from '@/components/Footer'
 import { useSelector } from 'react-redux'
@@ -44,7 +44,7 @@ const Privato = () => {
             <div className="flex flex-wrap gap-8 mb-12 justify-center">
                {startingProducts.map(product => (
                   <OfferCard
-                     key={product.id}
+                     key={product.guid}
                      imageSrc={'/src/sites/telco/assets/images/default.png'}
                      title={product.description}
                      onClick={async () => {
@@ -55,12 +55,13 @@ const Privato = () => {
                ))}
             </div>
 
-            {offerSelected && (
-               <>
-                  <MobileOfferOptions />
-                  <CheckCoverage />
-               </>
-            )}
+            {offerSelected ||
+               (1 == 1 && (
+                  <>
+                     <MobileOfferOptions />
+                     <CheckCoverage />
+                  </>
+               ))}
          </main>
 
          <Footer />
