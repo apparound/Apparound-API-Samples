@@ -590,7 +590,7 @@ export class ApparoundUtils {
       const quote = await this.getQuote(sessionId, cpqId, quoteId)
 
       if (!parentGuid) {
-         const startingProducts = await this.getStartingProducts(sessionId, cpqId, quote?.offerTypeId || tofId)
+         const startingProducts = await this.getStartingProducts(sessionId, cpqId, quote?.offerTypeId || parseInt(tofId))
          const product = this.findProductByKey(startingProducts.leftAxis, 'uniqueGuid', productGuid)
 
          if (product) {
@@ -604,7 +604,7 @@ export class ApparoundUtils {
             const response: any = await this.createCart(
                sessionId,
                cpqId,
-               quote?.offerTypeId || tofId,
+               quote?.offerTypeId || parseInt(tofId),
                cartData,
                quoteId || -1
             )
