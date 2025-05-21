@@ -9,11 +9,10 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { store } from './store'
 import { persistor } from './persistor'
 import Index from './pages/Index'
-import Privato from '@/sites/telco/pages/Privato'
+import ConfigureOffer from '@/sites/telco/pages/ConfigureOffer'
 import Business from '@/sites/telco/pages/Business'
 import OffertaHome from './pages/OffertaHome'
 import NotFound from './pages/NotFound'
-import ConfigureOffer from './pages/ConfigureOffer'
 import './App.css'
 
 const queryClient = new QueryClient()
@@ -39,10 +38,8 @@ const App = () => {
                   <Sonner />
                   <Routes>
                      <Route path="/" element={<Index />} />
-                     <Route path="privato" element={<Privato />} />
-                     <Route path="business" element={<Business />} />
-                     <Route path="offerta-home" element={<OffertaHome />} />
                      <Route path="configure-offer" element={<ConfigureOffer />} />
+                     <Route path="offerta-home" element={<OffertaHome />} />
                      <Route path="*" element={<NotFound />} />
                   </Routes>
                </TooltipProvider>

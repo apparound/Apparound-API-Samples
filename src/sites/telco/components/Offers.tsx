@@ -42,7 +42,7 @@ const Offers = ({ onNavigate, isLoading }) => {
                   title={item.name.toUpperCase()}
                   onClick={async () => {
                      await getProductsFromTof(dispatch, item.id)
-                     onNavigate(`/telco/${item.name.toLowerCase()}`)
+                     onNavigate(`/telco/configure-offer`)
                   }}
                />
             ))}
