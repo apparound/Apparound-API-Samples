@@ -11,7 +11,8 @@ import { selectMainProduct, selectStartingProducts, selectTofId, selectTree } fr
 import { useState, useEffect } from 'react'
 import { addProduct } from '@/sites/telco/hooks/apparoundData'
 import { useDispatch } from 'react-redux'
-import { use } from 'i18next'
+import React from 'react'
+import ProductSwitch from '@/sites/telco/components/ProductSwitch'
 
 const Privato = () => {
    const isMobile = useMediaQuery({ maxWidth: 767 })
@@ -21,11 +22,17 @@ const Privato = () => {
    const mainProduct = useSelector(selectMainProduct)
    const [cluster, setCluster] = useState()
    const [products, setProducts] = useState([])
+   const [switchStates, setSwitchStates] = useState({})
 
    useEffect(() => {
       if (mainProduct?.clusters) {
          setCluster(mainProduct.clusters[0])
          setProducts(mainProduct.clusters[0].products)
+         const initialSwitches = {}
+         mainProduct.clusters[0].products.forEach(p => {
+            initialSwitches[p.guid] = false
+         })
+         setSwitchStates(initialSwitches)
       }
    }, [mainProduct])
 
@@ -61,11 +68,27 @@ const Privato = () => {
                ))}
             </div>
 
+            {/* Switch per i products */}
             {products.length > 0 && (
-               <>
-                  <MobileOfferOptions />
-                  <CheckCoverage />
-               </>
+               <div className="space-y-4 mb-8 flex flex-col items-center gap-4">
+                  {products.map(product =>
+                     product.description === 'Verifica copertura' ? (
+                        <CheckCoverage key={product.guid} />
+                     ) : (
+                        <ProductSwitch
+                           key={product.guid}
+                           description={product.description}
+                           checked={!!switchStates[product.guid]}
+                           onChange={() =>
+                              setSwitchStates(prev => ({
+                                 ...prev,
+                                 [product.guid]: !prev[product.guid],
+                              }))
+                           }
+                        />
+                     )
+                  )}
+               </div>
             )}
          </main>
 
