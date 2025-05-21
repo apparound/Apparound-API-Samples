@@ -3,6 +3,8 @@ import { selectTofList, selectTree } from '@/sites/retail/features/quoteSlice'
 import { getProductsFromTof } from '@/sites/telco/hooks/apparoundData'
 import CustomerCard from './CustomerCard'
 import { Skeleton } from '@/components/ui/skeleton'
+import ImmaginePrivato from '@/sites/telco/assets/images/privato.png'
+import ImmagineBusiness from '@/sites/telco/assets/images/business.png'
 
 const Offers = ({ onNavigate, isLoading }) => {
    const dispatch = useDispatch()
@@ -35,11 +37,7 @@ const Offers = ({ onNavigate, isLoading }) => {
             {tofList.map(item => (
                <CustomerCard
                   key={item.id}
-                  imageSrc={
-                     item.name.toLowerCase() === 'privato'
-                        ? '/src/sites/telco/assets/images/privato.png'
-                        : '/src/sites/telco/assets/images/business.png'
-                  }
+                  imageSrc={item.name.toLowerCase() === 'privato' ? ImmaginePrivato : ImmagineBusiness}
                   altText={item.name}
                   title={item.name.toUpperCase()}
                   onClick={async () => {

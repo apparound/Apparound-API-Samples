@@ -1,17 +1,20 @@
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import Autoplay from 'embla-carousel-autoplay'
+import Banner01 from '@/sites/telco/assets/images/banner01.png'
+import Banner02 from '@/sites/telco/assets/images/banner02.png'
+import Banner03 from '@/sites/telco/assets/images/banner03.png'
 
 const carouselItems = [
    {
-      image: '/src/sites/telco/assets/images/banner01.png',
+      image: Banner01,
       title: 'WiFi ancora più potente, veloce e sicuro',
    },
    {
-      image: '/src/sites/telco/assets/images/banner02.png',
+      image: Banner02,
       title: 'Connettività senza limiti',
    },
    {
-      image: '/src/sites/telco/assets/images/banner03.png',
+      image: Banner03,
       title: 'Tecnologia all’avanguardia',
    },
 ]
