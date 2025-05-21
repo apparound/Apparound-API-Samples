@@ -1,12 +1,12 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { selectTree } from '@/sites/retail/features/quoteSlice'
+import { selectTofList, selectTree } from '@/sites/retail/features/quoteSlice'
 import { getProductsFromTof } from '@/sites/telco/hooks/apparoundData'
 import CustomerCard from './CustomerCard'
 import { Skeleton } from '@/components/ui/skeleton'
 
 const Offers = ({ onNavigate, isLoading }) => {
    const dispatch = useDispatch()
-   const tofList = useSelector(selectTree)
+   const tofList = useSelector(selectTofList)
 
    if (isLoading) {
       return (

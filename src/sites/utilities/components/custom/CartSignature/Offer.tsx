@@ -14,7 +14,6 @@ interface OfferProps {
 }
 
 const Offer = ({ className, children, hideTitle = true }: OfferProps) => {
-   // Imposta il valore predefinito
    const tree = getTree()
    const { t } = useTranslation()
 

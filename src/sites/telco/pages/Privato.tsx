@@ -7,24 +7,31 @@ import CheckCoverage from '@/sites/telco/components/CheckCoverage/CheckCoverage'
 import OfferHeader from '@/sites/telco/components/OfferHeader'
 import Footer from '@/components/Footer'
 import { useSelector } from 'react-redux'
-import { selectStartingProducts, selectTofId } from '@/sites/retail/features/quoteSlice'
-import { useEffect, useState } from 'react'
+import { selectMainProduct, selectStartingProducts, selectTofId, selectTree } from '@/sites/retail/features/quoteSlice'
+import { useState, useEffect } from 'react'
 import { addProduct } from '@/sites/telco/hooks/apparoundData'
 import { useDispatch } from 'react-redux'
+import { use } from 'i18next'
 
 const Privato = () => {
    const isMobile = useMediaQuery({ maxWidth: 767 })
    const startingProducts = useSelector(selectStartingProducts)
    const tofId = useSelector(selectTofId)
-   const [offerSelected, setOfferSelected] = useState(false)
    const dispatch = useDispatch()
+   const mainProduct = useSelector(selectMainProduct)
+   const [cluster, setCluster] = useState()
+   const [products, setProducts] = useState([])
 
-   useEffect(() => {}, [startingProducts])
+   useEffect(() => {
+      if (mainProduct?.clusters) {
+         setCluster(mainProduct.clusters[0])
+         setProducts(mainProduct.clusters[0].products)
+      }
+   }, [mainProduct])
 
    if (!startingProducts || startingProducts.length === 0) {
       return null
    }
-
    return (
       <div className="min-h-screen bg-white">
          <Navbar />
@@ -49,19 +56,17 @@ const Privato = () => {
                      title={product.description}
                      onClick={async () => {
                         await addProduct(product.guid, dispatch, tofId)
-                        setOfferSelected(true)
                      }}
                   />
                ))}
             </div>
 
-            {offerSelected ||
-               (1 == 1 && (
-                  <>
-                     <MobileOfferOptions />
-                     <CheckCoverage />
-                  </>
-               ))}
+            {products.length > 0 && (
+               <>
+                  <MobileOfferOptions />
+                  <CheckCoverage />
+               </>
+            )}
          </main>
 
          <Footer />

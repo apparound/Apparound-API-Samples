@@ -20,8 +20,8 @@ export const initQuoteWithTof = async (dispatch: any) => {
 
 export const getProductsFromTof = async (dispatch: any, tofId: string) => {
    const response = await fetchData(`/getProducts/tofId/${tofId || ''}/productGuid/`, 'get')
-
-   dispatch(updateStartingProducts(response[0]))
+   const payload = response[0]
+   dispatch(updateStartingProducts({ ...payload, tofId }))
 }
 
 export const addProduct = async (
@@ -37,7 +37,7 @@ export const addProduct = async (
    )
 
    const products = await fetchData(
-      `/getProducts/productGuid/${getParentProducts && parentGuid ? parentGuid : productGuid}`,
+      `/getProducts/tofId/${tofId}/productGuid/${getParentProducts && parentGuid ? parentGuid : productGuid}`,
       'get'
    )
 

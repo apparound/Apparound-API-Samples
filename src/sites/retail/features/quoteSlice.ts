@@ -25,6 +25,7 @@ interface initialState {
    customer?: any
    tofId?: string
    startingProducts?: Product[]
+   tofList?: any[]
 }
 
 const initialState: initialState = {
@@ -122,25 +123,14 @@ export const quoteSlice = createSlice({
       initQuoteTofsList: (state, { payload }) => {
          localStorage.setItem('sessionId', payload.sessionId)
          state.sessionId = payload.sessionId
-         const tree = payload.tofList.map(item => ({
-            id: item.id,
-            name: item.name,
-            rank: item.rank,
-            tofGroupId: item.tofGroupId,
-            tofGroupName: item.tofGroupName,
-            payments: item.payments,
-            config: item.config,
-            isCampaign: item.isCampaign,
-            image: item.image,
-         }))
-         state.tree = tree
+         state.tofList = payload.tofList
          state.customer = {
             ...payload.customer,
          }
       },
       updateStartingProducts: (state, { payload }) => {
-         const { products } = payload
-         state.tofId = payload.id
+         const { products, tofId } = payload
+         state.tofId = tofId
          state.startingProducts = products.map(product => ({
             id: product.productId,
             guid: product.guid,
@@ -150,8 +140,7 @@ export const quoteSlice = createSlice({
             activationPrice: product.activationPrice,
             config: product.config,
          }))
-
-         console.log('Starting products:', state.startingProducts)
+         state.tree = state.startingProducts
       },
       addProduct: (state, { payload }) => {
          const { productGuid, parentGuid, products, quote, solutionId, validation, tofId } = payload
@@ -164,7 +153,7 @@ export const quoteSlice = createSlice({
          state.tree = addProductsToParent(state.tree, products, productGuid)
          state.quote = quote
          state.isValid = validation.isValid
-         state.tofId = tofId
+         state.tofId = tofId ? tofId : state.tofId
       },
       updateQuote: (state, { payload }) => {
          state.quote = payload
@@ -204,11 +193,8 @@ export const selectMainProduct = state => {
 }
 export const selectSizeProducts = getSelected => state => {
    const mainProduct = state.quote.tree?.find(item => item.guid === Object.keys(state.quote.cart)[0])
-
    const selectedSizeGuid = Object.keys(state.quote.cart[Object.keys(state.quote.cart || {})[0]] || {})[0]
-
    const mainCluster = mainProduct?.clusters?.find(cluster => cluster.label === config.mainClusterLabel) || {}
-
    const toReturn = mainCluster?.products || []
 
    return getSelected ? toReturn.find(item => item.guid === selectedSizeGuid) : toReturn
@@ -223,15 +209,10 @@ export const selectAddedToCart = state => {
 }
 export const selectColorProduct = state => {
    const mainProduct = state.quote.tree?.find(item => item.guid === Object.keys(state.quote.cart)[0])
-
    const selectedSizeGuid = Object.keys(state.quote.cart[Object.keys(state.quote.cart || {})[0]] || {})[0]
-
    const mainCluster = mainProduct?.clusters?.find(cluster => cluster.label === config.mainClusterLabel) || {}
-
    const selectedSize = mainCluster?.products?.find(item => item.guid === selectedSizeGuid)
-
    const colorCluster = selectedSize?.clusters?.find(cluster => cluster.label === config.colorClusterLabel) || {}
-
    const cartItems = flatCart(state.quote.cart || {})
 
    return colorCluster?.products?.find(product => cartItems.includes(product.guid))
@@ -242,9 +223,7 @@ export const selectCartClusters = createSelector(
       if (!cart || !flatCart || !mainProduct) return null
 
       const selectedSizeGuid = Object.keys(cart[Object.keys(cart || {})[0]] || {})[0]
-
       const mainCluster = mainProduct?.clusters?.find(cluster => cluster.label === config.mainClusterLabel) || {}
-
       const selectedSize = mainCluster?.products?.find(item => item.guid === selectedSizeGuid)
 
       return {
@@ -262,6 +241,7 @@ export const selectContractProperties = state => state.quote.contract.properties
 export const selectContract = state => state.quote.contract
 export const selectCustomer = state => state.quote.customer
 export const selectQuote = state => state.quote.quote
+export const selectTofList = state => state.quote.tofList
 
 export const selectStartingProducts = createSelector(
    state => state.quote.startingProducts,
@@ -281,7 +261,7 @@ export const selectStartingProducts = createSelector(
 export const selectTofId = createSelector(
    state => state.quote.tofId,
    tofId => tofId
-);
+)
 
 export const {
    reset,

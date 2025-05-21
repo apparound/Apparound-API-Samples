@@ -3,9 +3,9 @@ import Offers from '@/sites/telco/components/Offers'
 import { useNavigate } from 'react-router-dom'
 import HeroCarousel from '@/sites/telco/components/HeroCarousel'
 import Footer from '@/components/Footer'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
-import { reset as resetQuote, selectCart, selectTree } from '@/sites/retail/features/quoteSlice'
+import { reset as resetQuote } from '@/sites/retail/features/quoteSlice'
 import { showLoader, reset as resetApp } from '@/sites/retail/features/appSlice'
 import { initQuote } from '@/sites/telco/hooks/apparoundData'
 
@@ -13,8 +13,6 @@ const Index = () => {
    const navigate = useNavigate()
 
    const dispatch = useDispatch()
-   const tree = useSelector(selectTree)
-   const cart = useSelector(selectCart)
    const [isLoading, setIsLoading] = useState(true)
 
    useEffect(() => {
