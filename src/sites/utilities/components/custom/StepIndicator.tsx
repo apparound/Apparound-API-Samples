@@ -8,16 +8,24 @@ interface Step {
    text: string
 }
 
-const StepIndicator = ({ step: currentStep }) => {
+interface StepIndicatorProps {
+   step: number
+   customSteps?: string[]
+}
+
+const StepIndicator = ({ step: currentStep, customSteps }: StepIndicatorProps) => {
    const navigate = useNavigate()
    const location = useLocation()
    const { t } = useTranslation()
-   const steps: Step[] = [
+   const defaultSteps: Step[] = [
       { text: t('Inserisci dati fornitura') },
       { text: t('Configura offerta') },
       { text: t('Inserisci dati contatto') },
       { text: t('Firma contratto') },
    ]
+   const steps: Step[] = customSteps
+      ? customSteps.map(text => ({ text: t(text) })) // Traduzione dei testi personalizzati
+      : defaultSteps
 
    return (
       <div

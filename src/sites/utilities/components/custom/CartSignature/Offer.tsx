@@ -14,7 +14,6 @@ interface OfferProps {
 }
 
 const Offer = ({ className, children, hideTitle = true }: OfferProps) => {
-   // Imposta il valore predefinito
    const tree = getTree()
    const { t } = useTranslation()
 
@@ -32,7 +31,7 @@ const Offer = ({ className, children, hideTitle = true }: OfferProps) => {
                   <SectionTitle
                      icon={cluster.label === 'Luce' ? mdiLightbulbOnOutline : mdiGasBurner}
                      title={cluster.label}
-                     info={`${cart.price.toFixed(2)}€/mese`}
+                     info={`${cart.price.toFixed(2)}${t('€/mese')}`}
                   />
                   {cluster.children.map((product: any, productIndex: number) => {
                      const label: string =

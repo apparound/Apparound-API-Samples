@@ -30,11 +30,33 @@ app.get('/init/cpqId/:cpqId', async (req: any, res: any) => {
    }
 })
 
+app.get('/initSession/cpqId/:cpqId', async (req: any, res: any) => {
+   try {
+      const cpqId: number = req.params?.cpqId || -1
+      const response: any = await new ApparoundUtils().initSession(cpqId)
+      res.json(response)
+   } catch (error: any) {
+      res.status(500).send(error)
+   }
+})
+
 app.get('/getProducts/productGuid/:productGuid', async (req: any, res: any) => {
    try {
       const sessionId: string = getSessionIdFromHeaders(req)
       const productGuid: string = req.params?.productGuid?.toString() || null
-      const response: any = await new ApparoundUtils().getValidProducts(sessionId, productGuid)
+      const response: any = await new ApparoundUtils().getValidProductsLegacy(sessionId, productGuid)
+      res.json(response)
+   } catch (error: any) {
+      res.status(500).send(error)
+   }
+})
+
+app.get('/getProducts/tofId/:tofId/productGuid/:productGuid?', async (req: any, res: any) => {
+   try {
+      const sessionId: string = getSessionIdFromHeaders(req)
+      const tofId: string = req.params?.tofId?.toString() || null
+      const productGuid: string = req.params?.productGuid?.toString() || null
+      const response: any = await new ApparoundUtils().getValidProducts(sessionId, tofId, productGuid)
       res.json(response)
    } catch (error: any) {
       res.status(500).send(error)
@@ -46,7 +68,20 @@ app.get('/addProduct/productGuid/:productGuid/parentGuid/:parentGuid?', async (r
       const sessionId: string = getSessionIdFromHeaders(req)
       const productGuid: string = req.params?.productGuid?.toString() || null
       const parentGuid: string = req.params?.parentGuid?.toString() || null
-      const response: any = await new ApparoundUtils().addProduct(sessionId, productGuid, parentGuid)
+      const response: any = await new ApparoundUtils().addProductLegacy(sessionId, productGuid, parentGuid)
+      res.json(response)
+   } catch (error: any) {
+      res.status(500).send(error)
+   }
+})
+
+app.get('/addProduct/tofId/:tofId/productGuid/:productGuid/parentGuid/:parentGuid?', async (req: any, res: any) => {
+   try {
+      const sessionId: string = getSessionIdFromHeaders(req)
+      const tofId: string = req.params?.tofId?.toString() || null
+      const productGuid: string = req.params?.productGuid?.toString() || null
+      const parentGuid: string = req.params?.parentGuid?.toString() || null
+      const response: any = await new ApparoundUtils().addProduct(sessionId, tofId, productGuid, parentGuid)
       res.json(response)
    } catch (error: any) {
       res.status(500).send(error)
@@ -286,7 +321,7 @@ app.get('*', (req: any, res: any) => {
          res.status(500).send('Errore nel file')
          return
       }
-      const envKeys = ['CPQ_RETAIL', 'CPQ_UTILITIES', 'UTILITIES_LUCE', 'UTILITIES_GAS']
+      const envKeys = ['CPQ_RETAIL', 'CPQ_UTILITIES', 'CPQ_TELCO', 'UTILITIES_LUCE', 'UTILITIES_GAS']
       const envs = Object.entries(process.env).reduce((obj: any, [key, value]) => {
          if (envKeys.includes(key)) {
             obj[key] = value
