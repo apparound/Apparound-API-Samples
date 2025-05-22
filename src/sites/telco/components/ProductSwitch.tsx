@@ -7,7 +7,7 @@ interface ProductSwitchProps {
 }
 
 const ProductSwitch = ({ description, checked, onChange }: ProductSwitchProps) => (
-   <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg w-full max-w-md">
+   <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg w-full max-w-lg">
       <span>{description}</span>
       <Switch checked={checked} onCheckedChange={onChange} />
    </div>
