@@ -21,9 +21,9 @@ const carouselItems = [
 
 const HeroCarousel = () => {
    return (
-      <section className="relative h-full bg-gradient-to-r from-purple-600 to-blue-500 overflow-auto">
+      <section className="relative h-[500px] max-h-[500px] bg-gradient-to-r from-purple-600 to-blue-500 overflow-auto">
          <Carousel
-            className="h-full border-[#DCE1E6] border-b-2"
+            className="h-[500px] max-h-[500px] border-[#DCE1E6] border-b-2"
             opts={{
                align: 'start',
                loop: true,
@@ -36,12 +36,12 @@ const HeroCarousel = () => {
          >
             <CarouselContent>
                {carouselItems.map((item, index) => (
-                  <CarouselItem key={index} className="h-full">
-                     <div className="h-2/3">
+                  <CarouselItem key={index} className="h-[500px] max-h-[500px]">
+                     <div className="h-[400px] max-h-[400px]">
                         <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
                      </div>
-                     <div className="h-1/3 flex text-white bg-gradient-to-t from-black/50 to-transparent ">
-                        <h1 className="text-3xl font-bold py-4 ml-8">{item.title}</h1>
+                     <div className="h-[100px] max-h-[100px] flex items-center text-white bg-gradient-to-t from-black/50 to-transparent ">
+                        <h1 className="text-4xl font-bold ml-8">{item.title}</h1>
                      </div>
                   </CarouselItem>
                ))}

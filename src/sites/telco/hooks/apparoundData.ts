@@ -5,6 +5,7 @@ import {
    initQuote as initQuoteAction,
    updateStartingProducts as updateStartingProducts,
    addProduct as addProductAction,
+   deleteProduct as deleteProductAction,
 } from '@/sites/retail/features/quoteSlice'
 
 export const initQuote = async (dispatch: any) => {
@@ -42,4 +43,10 @@ export const addProduct = async (
    )
 
    dispatch(addProductAction({ productGuid, parentGuid, products, ...response }))
+}
+
+export const deleteProduct = async (productGuid: string, dispatch: any) => {
+   await fetchData(`/removeProduct/productGuid/${productGuid}`, 'delete')
+
+   dispatch(deleteProductAction({ productGuid }))
 }

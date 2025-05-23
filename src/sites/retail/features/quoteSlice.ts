@@ -1,7 +1,6 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit'
 import { config } from '@/sites/retail/config'
 import { Product } from '@/interfaces/Product'
-import { create } from 'domain'
 
 interface cartI {
    [key: string]: cartI
