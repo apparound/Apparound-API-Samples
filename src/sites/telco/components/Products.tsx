@@ -1,5 +1,6 @@
 import CheckCoverage from '@/sites/telco/components/CheckCoverage/CheckCoverage'
 import ProductSwitch from '@/sites/telco/components/ProductSwitch'
+import ProductIcon from '@/sites/telco/components/ProductIcon'
 
 interface ProductsProps {
    products: any[]
@@ -44,6 +45,7 @@ const Products: React.FC<ProductsProps> = ({
                         }
                      })
                   }}
+                  icon={ProductIcon.get(product.description.toLowerCase())}
                />
             )
          )}

@@ -5,15 +5,19 @@ import CustomerCard from './CustomerCard'
 import { Skeleton } from '@/components/ui/skeleton'
 import ImmaginePrivato from '@/sites/telco/assets/images/privato.png'
 import ImmagineBusiness from '@/sites/telco/assets/images/business.png'
+import { useTranslation } from 'react-i18next'
 
 const Offers = ({ onNavigate, isLoading }) => {
    const dispatch = useDispatch()
    const tofList = useSelector(selectTofList)
+   const { t } = useTranslation()
 
    if (isLoading) {
       return (
          <section className="py-20 px-4">
-            <h2 className="text-3xl font-bold text-center text-primary mb-12">Scopri le offerte pensate per te</h2>
+            <h2 className="text-3xl font-bold text-center text-primary mb-12">
+               {t('Scopri le offerte pensate per te')}
+            </h2>
             <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-4">
                {[...Array(2)].map((_, index) => (
                   <div key={index} className="flex flex-col items-center p-4">
@@ -32,12 +36,12 @@ const Offers = ({ onNavigate, isLoading }) => {
 
    return (
       <section className="py-20 px-4">
-         <h2 className="text-3xl font-bold text-center text-primary mb-12">Scopri le offerte pensate per te</h2>
+         <h2 className="text-3xl font-bold text-center text-primary mb-12">{t('Scopri le offerte pensate per te')}</h2>
          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-4">
             {tofList.map(item => (
                <CustomerCard
                   key={item.id}
-                  imageSrc={item.name.toLowerCase() === 'privato' ? ImmaginePrivato : ImmagineBusiness}
+                  imageSrc={item.name.toLowerCase() === 'business' ? ImmagineBusiness : ImmaginePrivato}
                   altText={item.name}
                   title={item.name.toUpperCase()}
                   onClick={async () => {

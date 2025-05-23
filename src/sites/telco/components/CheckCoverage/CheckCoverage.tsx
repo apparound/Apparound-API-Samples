@@ -1,12 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import comuni from '@/assets/comuni.json'
 import CheckCoverageForm from './CheckCoverageForm'
-import SelectProvincia from './SelectProvincia'
-import SelectComune from './SelectComune'
-import SelectCap from './SelectCap'
+import FiberTechnology from './FiberTechnology'
 
 const CheckCoverage = () => {
    const [formData, setFormData] = useState({ provincia: '', comune: '', cap: '', indirizzo: '' })
@@ -83,7 +78,7 @@ const CheckCoverage = () => {
             handleInputChange={handleInputChange}
             handleSubmit={handleSubmit}
          />
-         {response && <div className="mt-4 text-green-600">{response.message}</div>}
+         {response && <FiberTechnology />}
       </div>
    )
 }
