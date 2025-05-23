@@ -1,5 +1,5 @@
 import Navbar from '@/sites/telco/components/Navbar'
-import Offers from '@/sites/telco/components/Offers'
+import Offers from '@/sites/telco/components/Offers/Offers'
 import { useNavigate } from 'react-router-dom'
 import HeroCarousel from '@/sites/telco/components/HeroCarousel'
 import Footer from '@/components/Footer'

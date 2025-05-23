@@ -5,9 +5,21 @@ interface ProductsProps {
    products: any[]
    switchStates: { [key: string]: boolean }
    setSwitchStates: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>
+   addProduct: (guid: string, dispatch: any, tofId: any, parentGuid: string) => Promise<void>
+   dispatch: any
+   tofId: any
+   parentGuid: string
 }
 
-const Products: React.FC<ProductsProps> = ({ products, switchStates, setSwitchStates }) => {
+const Products: React.FC<ProductsProps> = ({
+   products,
+   switchStates,
+   setSwitchStates,
+   addProduct,
+   dispatch,
+   tofId,
+   parentGuid,
+}) => {
    if (!products || products.length === 0) return null
 
    return (
@@ -20,12 +32,18 @@ const Products: React.FC<ProductsProps> = ({ products, switchStates, setSwitchSt
                   key={product.guid}
                   description={product.description}
                   checked={!!switchStates[product.guid]}
-                  onChange={() =>
-                     setSwitchStates(prev => ({
-                        ...prev,
-                        [product.guid]: !prev[product.guid],
-                     }))
-                  }
+                  onChange={async () => {
+                     setSwitchStates(prev => {
+                        const newState = !prev[product.guid]
+                        if (newState) {
+                           addProduct(product.guid, dispatch, tofId, parentGuid)
+                        }
+                        return {
+                           ...prev,
+                           [product.guid]: newState,
+                        }
+                     })
+                  }}
                />
             )
          )}

@@ -1,4 +1,4 @@
-import OfferCard from '@/sites/telco/components/OfferCard'
+import OfferCard from '@/sites/telco/components/Offers/OfferCard'
 
 interface MainProductsProps {
    startingProducts: any[]
