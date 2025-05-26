@@ -1,6 +1,9 @@
 import CheckCoverage from '@/sites/telco/components/CheckCoverage/CheckCoverage'
 import ProductSwitch from '@/sites/telco/components/ProductSwitch'
 import ProductIcon from '@/sites/telco/components/ProductIcon'
+import SimSwitch from '@/sites/telco/components/SimSwitch'
+import { useState } from 'react'
+import { setProductQuantity } from '@/sites/telco/hooks/apparoundData'
 
 interface ProductsProps {
    products: any[]
@@ -21,14 +24,37 @@ const Products: React.FC<ProductsProps> = ({
    tofId,
    parentGuid,
 }) => {
+   const [simValues, setSimValues] = useState<{ [key: string]: number }>({})
+
    if (!products || products.length === 0) return null
 
    return (
       <div className="space-y-4 mb-8 flex flex-col items-center gap-4">
-         {products.map(product =>
-            product.description === 'Verifica copertura' ? (
-               <CheckCoverage key={product.guid} />
-            ) : (
+         {products.map(product => {
+            if (product.description === 'Verifica copertura') {
+               return <CheckCoverage key={product.guid} />
+            }
+            if (product.description.toLowerCase() === 'sim/esim') {
+               return (
+                  <SimSwitch
+                     key={product.guid}
+                     description={product.description}
+                     value={simValues[product.guid] || 0}
+                     onChange={async val => {
+                        const prevVal = simValues[product.guid] || 0
+                        setSimValues(prev => ({ ...prev, [product.guid]: val }))
+                        if (prevVal === 0 && val > 0) {
+                           await addProduct(product.guid, dispatch, tofId, parentGuid)
+                        }
+                        if (val > 0) {
+                           await setProductQuantity(product.guid, val, dispatch)
+                        }
+                     }}
+                     icon={ProductIcon.get(product.description.toLowerCase())}
+                  />
+               )
+            }
+            return (
                <ProductSwitch
                   key={product.guid}
                   description={product.description}
@@ -48,7 +74,7 @@ const Products: React.FC<ProductsProps> = ({
                   icon={ProductIcon.get(product.description.toLowerCase())}
                />
             )
-         )}
+         })}
       </div>
    )
 }

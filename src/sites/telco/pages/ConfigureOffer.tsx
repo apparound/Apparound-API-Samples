@@ -12,12 +12,14 @@ import {
    selectTofList,
 } from '@/sites/retail/features/quoteSlice'
 import { useState, useEffect } from 'react'
-import { addProduct } from '@/sites/telco/hooks/apparoundData'
+import { addProduct, deleteProduct } from '@/sites/telco/hooks/apparoundData'
 import { useDispatch } from 'react-redux'
 import MainProducts from '@/sites/telco/components/MainProducts'
 import Products from '@/sites/telco/components/Products'
+import { useTranslation } from 'react-i18next'
 
 const ConfigureOffer = () => {
+   const { t } = useTranslation()
    const isMobile = useMediaQuery({ maxWidth: 767 })
    const startingProducts = useSelector(selectStartingProducts)
    const tofId = useSelector(selectTofId)
@@ -74,6 +76,13 @@ const ConfigureOffer = () => {
       }
    }, [startingProducts, cart])
 
+   const handleSelectMainProduct = async (guid: string) => {
+      if (selectedOfferGuid) {
+         await deleteProduct(selectedOfferGuid, dispatch)
+      }
+      setSelectedOfferGuid(guid)
+   }
+
    if (!startingProducts || startingProducts.length === 0) {
       return null
    }
@@ -91,12 +100,12 @@ const ConfigureOffer = () => {
          <OfferHeader title={headerTitle} />
 
          <main className="max-w-4xl mx-auto py-12 px-4">
-            <h2 className="text-2xl font-bold text-primary mb-8 text-center">Configura la tua offerta</h2>
+            <h2 className="text-2xl font-bold text-primary mb-8 text-center">{t('Configura la tua offerta')}</h2>
 
             <MainProducts
                startingProducts={startingProducts}
                selectedOfferGuid={selectedOfferGuid}
-               setSelectedOfferGuid={setSelectedOfferGuid}
+               setSelectedOfferGuid={handleSelectMainProduct}
                addProduct={addProduct}
                dispatch={dispatch}
                tofId={tofId}

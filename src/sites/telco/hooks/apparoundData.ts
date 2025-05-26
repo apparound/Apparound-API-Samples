@@ -50,3 +50,12 @@ export const deleteProduct = async (productGuid: string, dispatch: any) => {
 
    dispatch(deleteProductAction({ productGuid }))
 }
+
+export const setProductQuantity = async (
+   productGuid: string,
+   quantity: number,
+   dispatch: any
+) => {
+   await fetchData(`/setProductQuantity/productGuid/${productGuid}/qty/${quantity}`, 'post')
+   // Qui puoi eventualmente aggiornare lo stato globale se necessario
+}
