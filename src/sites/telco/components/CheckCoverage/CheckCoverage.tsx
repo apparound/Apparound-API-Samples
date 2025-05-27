@@ -2,10 +2,16 @@ import { useState, useEffect } from 'react'
 import comuni from '@/assets/comuni.json'
 import CheckCoverageForm from './CheckCoverageForm'
 import FiberTechnology from './FiberTechnology'
+import { useNavigate } from 'react-router-dom'
 
-const CheckCoverage = () => {
+interface CheckCoverageProps {
+   onCoverageResponse?: (response: any) => void
+}
+
+const CheckCoverage = ({ onCoverageResponse }: CheckCoverageProps) => {
    const [formData, setFormData] = useState({ provincia: '', comune: '', cap: '', indirizzo: '' })
    const [response, setResponse] = useState(null)
+   const navigate = useNavigate()
 
    const province = [...new Set(comuni.map((comune: { provincia: { nome: string } }) => comune.provincia.nome))].sort()
    const comuniByProvincia = formData.provincia
@@ -47,11 +53,14 @@ const CheckCoverage = () => {
             comune.cap.includes(formData.cap)
       )
 
+      let res
       if (selectedComune) {
-         setResponse({ message: 'Copertura disponibile per il tuo indirizzo!' })
+         res = { message: 'Copertura disponibile per il tuo indirizzo!' }
       } else {
-         setResponse({ message: 'Nessuna copertura disponibile per il tuo indirizzo.' })
+         res = { message: 'Nessuna copertura disponibile per il tuo indirizzo.' }
       }
+      setResponse(res)
+      if (onCoverageResponse) onCoverageResponse(res)
    }
 
    useEffect(() => {
@@ -62,24 +71,26 @@ const CheckCoverage = () => {
    }, [formData.comune, comuniByProvincia])
 
    return (
-      <div className="bg-white rounded-lg shadow p-6">
-         <h3 className="text-xl font-semibold text-primary mb-4">Verifica copertura</h3>
-         <p className="text-gray-600 mb-6">
-            Inserisci il tuo indirizzo, poi verifica la copertura per visualizzare la migliore tecnologia disponibile
-            per te
-         </p>
-         <CheckCoverageForm
-            province={province}
-            comuniByProvincia={comuniByProvincia}
-            formData={formData}
-            handleProvinceChange={handleProvinceChange}
-            handleComuneChange={handleComuneChange}
-            handleCapChange={handleCapChange}
-            handleInputChange={handleInputChange}
-            handleSubmit={handleSubmit}
-         />
-         {response && <FiberTechnology />}
-      </div>
+      <>
+         <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="text-xl font-semibold text-primary mb-4">Verifica copertura</h3>
+            <p className="text-gray-600 mb-6">
+               Inserisci il tuo indirizzo, poi verifica la copertura per visualizzare la migliore tecnologia disponibile
+               per te
+            </p>
+            <CheckCoverageForm
+               province={province}
+               comuniByProvincia={comuniByProvincia}
+               formData={formData}
+               handleProvinceChange={handleProvinceChange}
+               handleComuneChange={handleComuneChange}
+               handleCapChange={handleCapChange}
+               handleInputChange={handleInputChange}
+               handleSubmit={handleSubmit}
+            />
+            {response && <FiberTechnology />}
+         </div>
+      </>
    )
 }
 

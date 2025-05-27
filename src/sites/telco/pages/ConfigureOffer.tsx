@@ -45,7 +45,6 @@ const ConfigureOffer = () => {
       }
    }, [mainProduct])
 
-   // Update the switch states based on the cart
    useEffect(() => {
       if (cart) {
          const updatedSwitchStates = { ...switchStates }
@@ -66,7 +65,6 @@ const ConfigureOffer = () => {
       return Object.values(cartObj).some(value => cartContainsGuid(value, guid))
    }
 
-   // Setta il mainProduct selezionato se presente nel cart
    useEffect(() => {
       if (startingProducts && startingProducts.length > 0 && cart) {
          const found = startingProducts.find(p => cartContainsGuid(cart, p.guid))
