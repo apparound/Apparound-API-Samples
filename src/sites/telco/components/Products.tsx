@@ -3,7 +3,6 @@ import ProductSwitch from '@/sites/telco/components/ProductSwitch'
 import ProductIcon from '@/sites/telco/components/ProductIcon'
 import SimSwitch from '@/sites/telco/components/SimSwitch'
 import { useState, useEffect } from 'react'
-import { setProductQuantity } from '@/sites/telco/hooks/apparoundData'
 import { deleteProduct } from '@/sites/telco/hooks/apparoundData'
 import { useTranslation } from 'react-i18next'
 
@@ -32,17 +31,13 @@ const Products: React.FC<ProductsProps> = ({
    const [discoverEnabled, setDiscoverEnabled] = useState(!hasCheckCoverage)
 
    useEffect(() => {
-      if (products.some(product => product.description === 'Verifica copertura')) {
-         setDiscoverEnabled(false)
-      }
+      const check = products.some(product => product.description === 'Verifica copertura')
+      setDiscoverEnabled(!check)
    }, [products])
 
    const handleCoverageResponse = (response: any) => {
-      if (response && response.message === 'Copertura disponibile per il tuo indirizzo!') {
-         setDiscoverEnabled(true)
-      } else {
-         setDiscoverEnabled(false)
-      }
+      const check = response && response.message === 'Copertura disponibile per il tuo indirizzo!'
+      setDiscoverEnabled(check)
    }
 
    if (!products || products.length === 0) return null
@@ -57,19 +52,10 @@ const Products: React.FC<ProductsProps> = ({
                return (
                   <SimSwitch
                      key={product.guid}
-                     description={product.description}
+                     product={product}
                      value={simValues[product.guid] || 0}
-                     onChange={async val => {
-                        const prevVal = simValues[product.guid] || 0
-                        setSimValues(prev => ({ ...prev, [product.guid]: val }))
-                        if (prevVal === 0 && val > 0) {
-                           await addProduct(product.guid, dispatch, tofId, parentGuid)
-                        }
-                        if (val > 0) {
-                           await setProductQuantity(product.guid, val, dispatch)
-                        }
-                     }}
-                     icon={ProductIcon.get(product.description.toLowerCase())}
+                     dispatch={dispatch}
+                     tofId={tofId}
                   />
                )
             }

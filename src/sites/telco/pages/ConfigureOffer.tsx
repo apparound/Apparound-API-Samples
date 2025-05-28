@@ -31,6 +31,7 @@ const ConfigureOffer = () => {
    const [selectedOfferGuid, setSelectedOfferGuid] = useState<string | null>(null)
    const cart = useSelector(selectCart)
    const tofList = useSelector(selectTofList)
+   const [addingMainProductGuid, setAddingMainProductGuid] = useState<string | null>(null)
 
    const offerTitle = tofList?.find((tof: any) => String(tof.id) === String(tofId))?.name || ''
    const headerTitle = offerTitle ? `Offerte ${offerTitle}` : 'Offerte'
@@ -77,6 +78,7 @@ const ConfigureOffer = () => {
 
    const handleSelectMainProduct = async (guid: string) => {
       if (selectedOfferGuid) {
+         setProducts([])
          await deleteProduct(selectedOfferGuid, dispatch)
       }
       setSelectedOfferGuid(guid)
@@ -108,6 +110,8 @@ const ConfigureOffer = () => {
                addProduct={addProduct}
                dispatch={dispatch}
                tofId={tofId}
+               addingProductGuid={addingMainProductGuid}
+               setAddingProductGuid={setAddingMainProductGuid}
             />
 
             <Products

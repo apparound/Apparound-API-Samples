@@ -7,6 +7,8 @@ interface MainProductsProps {
    addProduct: (guid: string, dispatch: any, tofId: any) => Promise<void>
    dispatch: any
    tofId: any
+   addingProductGuid: string | null
+   setAddingProductGuid: (guid: string | null) => void
 }
 
 const MainProducts: React.FC<MainProductsProps> = ({
@@ -16,6 +18,8 @@ const MainProducts: React.FC<MainProductsProps> = ({
    addProduct,
    dispatch,
    tofId,
+   addingProductGuid,
+   setAddingProductGuid,
 }) => (
    <div className="flex flex-wrap gap-8 mb-12 justify-center">
       {startingProducts.map(product => (
@@ -24,9 +28,15 @@ const MainProducts: React.FC<MainProductsProps> = ({
             imageSrc={'/src/sites/telco/assets/images/default.png'}
             title={product.description}
             selected={selectedOfferGuid === product.guid}
+            loading={addingProductGuid === product.guid}
             onClick={async () => {
                setSelectedOfferGuid(product.guid)
-               await addProduct(product.guid, dispatch, tofId)
+               setAddingProductGuid(product.guid)
+               try {
+                  await addProduct(product.guid, dispatch, tofId)
+               } finally {
+                  setAddingProductGuid(null)
+               }
             }}
          />
       ))}
