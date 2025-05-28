@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux'
 import MainProducts from '@/sites/telco/components/MainProducts'
 import Products from '@/sites/telco/components/Products'
 import { useTranslation } from 'react-i18next'
+import { customSteps } from '@/sites/telco/config'
 
 const ConfigureOffer = () => {
    const { t } = useTranslation()
@@ -89,7 +90,7 @@ const ConfigureOffer = () => {
          <Navbar showTofList={true} />
          <div className="w-full">
             {!isMobile ? (
-               <StepIndicator step={1} customSteps={['Configura', 'Scopri', 'Attiva', 'Inserisci i dati', 'Fine']} />
+               <StepIndicator step={1} customSteps={customSteps} />
             ) : (
                <div className="border-t-2 w-full" style={{ borderColor: '#f4f4f4' }}></div>
             )}

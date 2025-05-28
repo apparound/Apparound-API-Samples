@@ -9,6 +9,7 @@ import Footer from '@/components/Footer'
 import { useMediaQuery } from 'react-responsive'
 import StepIndicator from '@/sites/utilities/components/custom/StepIndicator'
 import OfferHeader from '../components/Offers/OfferHeader'
+import { customSteps } from '@/sites/telco/config'
 
 const OffertaHome = () => {
    const { t } = useTranslation()
@@ -33,21 +34,18 @@ const OffertaHome = () => {
          <Navbar showTofList={true} />
          <div className="w-full">
             {!isMobile ? (
-               <StepIndicator step={1} customSteps={['Configura', 'Scopri', 'Attiva', 'Inserisci i dati', 'Fine']} />
+               <StepIndicator step={2} customSteps={customSteps} />
             ) : (
                <div className="border-t-2 w-full" style={{ borderColor: '#f4f4f4' }}></div>
             )}
          </div>
 
-         {/* Header */}
          <OfferHeader title={headerTitle} />
 
-         {/* Main Content */}
          <main className="max-w-6xl mx-auto py-12 px-4">
             <h2 className="text-2xl font-bold text-primary mb-12 text-center">{t('Ecco le offerte pensate per te')}</h2>
             <OfferFullCards products={products} navigate={navigate} />
 
-            {/* App Download Section */}
             <div className="bg-gray-50 rounded-lg p-8 text-center">
                <h3 className="text-2xl font-bold text-primary mb-4">Scarica l'app per gestire la tua offerta</h3>
                <p className="text-gray-600 mb-6">

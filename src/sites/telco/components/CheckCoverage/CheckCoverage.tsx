@@ -3,15 +3,16 @@ import comuni from '@/assets/comuni.json'
 import CheckCoverageForm from './CheckCoverageForm'
 import FiberTechnology from './FiberTechnology'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 interface CheckCoverageProps {
    onCoverageResponse?: (response: any) => void
 }
 
 const CheckCoverage = ({ onCoverageResponse }: CheckCoverageProps) => {
+   const { t } = useTranslation()
    const [formData, setFormData] = useState({ provincia: '', comune: '', cap: '', indirizzo: '' })
    const [response, setResponse] = useState(null)
-   const navigate = useNavigate()
 
    const province = [...new Set(comuni.map((comune: { provincia: { nome: string } }) => comune.provincia.nome))].sort()
    const comuniByProvincia = formData.provincia
@@ -72,11 +73,12 @@ const CheckCoverage = ({ onCoverageResponse }: CheckCoverageProps) => {
 
    return (
       <>
-         <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-xl font-semibold text-primary mb-4">Verifica copertura</h3>
+         <div className="bg-white rounded-3xl w-full shadow p-6">
+            <h3 className="text-xl font-semibold text-primary mb-4">{t('Verifica copertura')}</h3>
             <p className="text-gray-600 mb-6">
-               Inserisci il tuo indirizzo, poi verifica la copertura per visualizzare la migliore tecnologia disponibile
-               per te
+               {t(
+                  'Inserisci il tuo indirizzo, poi verifica la copertura per visualizzare la migliore tecnologia disponibile per te'
+               )}
             </p>
             <CheckCoverageForm
                province={province}

@@ -44,13 +44,11 @@ const HeroCarousel = () => {
                         <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
                      </div>
                      <div className="h-[100px] max-h-[100px] flex items-center text-white bg-gradient-to-t from-black/50 to-transparent ">
-                        <h1 className="text-4xl font-bold ml-8">{t(item.title)}</h1>
+                        <h1 className="text-2xl md:text-4xl font-bold ml-8">{t(item.title)}</h1>
                      </div>
                   </CarouselItem>
                ))}
             </CarouselContent>
-            <CarouselPrevious className="text-white" />
-            <CarouselNext className="text-white" />
          </Carousel>
       </section>
    )

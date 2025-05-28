@@ -2,9 +2,10 @@ import CheckCoverage from '@/sites/telco/components/CheckCoverage/CheckCoverage'
 import ProductSwitch from '@/sites/telco/components/ProductSwitch'
 import ProductIcon from '@/sites/telco/components/ProductIcon'
 import SimSwitch from '@/sites/telco/components/SimSwitch'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { setProductQuantity } from '@/sites/telco/hooks/apparoundData'
 import { deleteProduct } from '@/sites/telco/hooks/apparoundData'
+import { useTranslation } from 'react-i18next'
 
 interface ProductsProps {
    products: any[]
@@ -25,9 +26,16 @@ const Products: React.FC<ProductsProps> = ({
    tofId,
    parentGuid,
 }) => {
+   const { t } = useTranslation()
    const [simValues, setSimValues] = useState<{ [key: string]: number }>({})
    let hasCheckCoverage = products.some(product => product.description === 'Verifica copertura')
    const [discoverEnabled, setDiscoverEnabled] = useState(!hasCheckCoverage)
+
+   useEffect(() => {
+      if (products.some(product => product.description === 'Verifica copertura')) {
+         setDiscoverEnabled(false)
+      }
+   }, [products])
 
    const handleCoverageResponse = (response: any) => {
       if (response && response.message === 'Copertura disponibile per il tuo indirizzo!') {
@@ -90,15 +98,15 @@ const Products: React.FC<ProductsProps> = ({
          })}
          <button
             type="button"
-            className="w-[40%] mt-6 bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-lg shadow transition-all disabled:opacity-50"
+            className="w-[60%] mt-6 bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-3xl shadow transition-all disabled:opacity-50"
             onClick={() => window.location.assign('/telco/offerta-home')}
             disabled={!discoverEnabled}
          >
-            Scopri le offerte
+            {t('Scopri le offerte').toUpperCase()}
          </button>
          {hasCheckCoverage && !discoverEnabled && (
             <div className="text-red-600 text-sm mt-2 text-center">
-               Compila il form di verifica copertura per proseguire
+               {t('Compila il form di verifica copertura per proseguire')}
             </div>
          )}
       </div>
