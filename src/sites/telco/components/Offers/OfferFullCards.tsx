@@ -3,9 +3,15 @@ import { Button } from '@/components/ui/button'
 import { Check } from 'lucide-react'
 import cardHeader from '@/sites/telco/assets/misc/cardHeader.png'
 import { useTranslation } from 'react-i18next'
+import { addProduct } from '@/sites/telco/hooks/apparoundData'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectTofId } from '@/sites/retail/features/quoteSlice'
 
 const OfferFullCards = ({ products, navigate }) => {
    const { t } = useTranslation()
+   const dispatch = useDispatch()
+   const tofId = useSelector(selectTofId)
+
    return (
       <div className="grid md:grid-cols-3 gap-8 mb-12">
          {products.map((product, idx) => (
@@ -41,9 +47,10 @@ const OfferFullCards = ({ products, navigate }) => {
                   </div>
                   <Button
                      className="w-full bg-primary hover:bg-purple-700 rounded-3xl"
-                     onClick={() =>
-                        navigate('/configure-offer', { state: { offer: product.productName || product.label } })
-                     }
+                     onClick={async () => {
+                        await addProduct(product.guid, dispatch, tofId, product.parentGuid)
+                        navigate('/telco/offer-detail', { state: { offer: product.productName || product.label } })
+                     }}
                   >
                      {t('SCOPRI E ATTIVA')}
                   </Button>

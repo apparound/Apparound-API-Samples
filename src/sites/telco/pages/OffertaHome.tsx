@@ -7,9 +7,8 @@ import { useTranslation } from 'react-i18next'
 import OfferFullCards from '../components/Offers/OfferFullCards'
 import Footer from '@/components/Footer'
 import { useMediaQuery } from 'react-responsive'
-import StepIndicator from '@/sites/utilities/components/custom/StepIndicator'
 import OfferHeader from '../components/Offers/OfferHeader'
-import { customSteps } from '@/sites/telco/config'
+import StepIndicatorTelco from './StepIndicatorTelco'
 
 const OffertaHome = () => {
    const { t } = useTranslation()
@@ -32,13 +31,7 @@ const OffertaHome = () => {
    return (
       <div className="min-h-screen bg-white">
          <Navbar showTofList={true} />
-         <div className="w-full">
-            {!isMobile ? (
-               <StepIndicator step={2} customSteps={customSteps} />
-            ) : (
-               <div className="border-t-2 w-full" style={{ borderColor: '#f4f4f4' }}></div>
-            )}
-         </div>
+         <StepIndicatorTelco step={2} />
 
          <OfferHeader title={headerTitle} />
 

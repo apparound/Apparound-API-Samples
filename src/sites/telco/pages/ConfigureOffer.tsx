@@ -1,5 +1,4 @@
 import Navbar from '@/sites/telco/components/Navbar'
-import StepIndicator from '@/sites/utilities/components/custom/StepIndicator'
 import { useMediaQuery } from 'react-responsive'
 import OfferHeader from '@/sites/telco/components/Offers/OfferHeader'
 import Footer from '@/components/Footer'
@@ -17,7 +16,7 @@ import { useDispatch } from 'react-redux'
 import MainProducts from '@/sites/telco/components/MainProducts'
 import Products from '@/sites/telco/components/Products'
 import { useTranslation } from 'react-i18next'
-import { customSteps } from '@/sites/telco/config'
+import StepIndicatorTelco from './StepIndicatorTelco'
 
 const ConfigureOffer = () => {
    const { t } = useTranslation()
@@ -90,13 +89,7 @@ const ConfigureOffer = () => {
    return (
       <div className="min-h-screen bg-white">
          <Navbar showTofList={true} />
-         <div className="w-full">
-            {!isMobile ? (
-               <StepIndicator step={1} customSteps={customSteps} />
-            ) : (
-               <div className="border-t-2 w-full" style={{ borderColor: '#f4f4f4' }}></div>
-            )}
-         </div>
+         <StepIndicatorTelco step={1} />
 
          <OfferHeader title={headerTitle} />
 
