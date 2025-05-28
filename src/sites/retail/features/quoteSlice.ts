@@ -187,9 +187,13 @@ export const quoteSlice = createSlice({
 export const selectTree = state => state.quote.tree
 export const selectCart = state => state.quote.cart || {}
 export const selectIsValid = state => state.quote.isValid
-export const selectMainProduct = state => {
-   return state.quote.tree?.find(item => item.guid === Object.keys(state.quote.cart)[0]) || {}
-}
+export const selectMainProduct = createSelector(
+   [state => state.quote.tree, state => state.quote.cart],
+   (tree, cart) => {
+      const mainGuid = Object.keys(cart)[0]
+      return tree?.find(item => item.guid === mainGuid) || {}
+   }
+)
 export const selectSizeProducts = getSelected => state => {
    const mainProduct = state.quote.tree?.find(item => item.guid === Object.keys(state.quote.cart)[0])
    const selectedSizeGuid = Object.keys(state.quote.cart[Object.keys(state.quote.cart || {})[0]] || {})[0]
@@ -257,10 +261,7 @@ export const selectStartingProducts = createSelector(
       }))
    }
 )
-export const selectTofId = createSelector(
-   state => state.quote.tofId,
-   tofId => tofId
-)
+export const selectTofId = state => state.quote.tofId
 
 export const {
    reset,

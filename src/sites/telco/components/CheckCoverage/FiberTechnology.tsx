@@ -18,19 +18,21 @@ const Info = ({ icon, label, value }: { icon: React.ReactNode; label: string; va
 const FiberTechnology = () => {
    const { t } = useTranslation()
    return (
-      <div className="mt-8 flex items-center bg-[#f6f6f8] rounded-2xl shadow p-6">
-         <div className="flex-shrink-0 mr-6">
+      <div className="mt-8 flex flex-col sm:flex-row items-center bg-[#f6f6f8] rounded-2xl shadow p-4 sm:p-6">
+         <div className="flex-shrink-0 mb-4 sm:mb-0 sm:mr-6">
             <img
                src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=facearea&w=400&h=300"
                alt="FTTC"
-               className="rounded-xl w-48 h-32 object-cover"
+               className="rounded-xl w-full max-w-xs h-32 object-cover sm:w-48"
             />
          </div>
-         <div>
+         <div className="w-full">
             <div className="flex items-baseline gap-2">
-               <h4 className="text-2xl font-bold text-[#7c4bc6]">{t('Tecnologia FTTC Fiber to the Cabinet')}</h4>
+               <h4 className="text-xl sm:text-2xl font-bold text-[#7c4bc6]">
+                  {t('Tecnologia FTTC Fiber to the Cabinet')}
+               </h4>
             </div>
-            <div className="flex gap-8 my-8">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 my-4 sm:my-8">
                <Info
                   icon={<Icon path={mdiDownload} size={1.2} color="#7c4bc6" />}
                   label="Download"
@@ -42,7 +44,7 @@ const FiberTechnology = () => {
                   value={t('Velocita FTTC upload')}
                />
             </div>
-            <div className="text-black mt-2 text-left">
+            <div className="text-black mt-2 text-left text-sm sm:text-base">
                {t("Fibra fino all'armadio stradale e rame fino a casa. Buon compromesso tra velocità e copertura.")}
             </div>
          </div>

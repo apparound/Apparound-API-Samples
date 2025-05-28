@@ -31,7 +31,11 @@ const CheckCoverageForm = ({
             />
             <Input name="indirizzo" placeholder="Indirizzo e numero civico" onChange={handleInputChange} />
          </div>
-         <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 text-white">
+         <Button
+            type="submit"
+            className="w-full bg-primary hover:bg-purple-700 text-white"
+            disabled={!(formData.provincia && formData.comune && formData.cap && formData.indirizzo)}
+         >
             VERIFICA COPERTURA
          </Button>
       </form>

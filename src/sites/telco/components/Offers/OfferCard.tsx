@@ -1,4 +1,5 @@
 import { Card } from '@/components/ui/card'
+import cardBottom from '@/sites/telco/assets/misc/cardBottom.png'
 
 interface OfferCardProps {
    imageSrc: string
@@ -10,15 +11,21 @@ interface OfferCardProps {
 const OfferCard: React.FC<OfferCardProps> = ({ imageSrc, title, onClick, selected }) => {
    return (
       <Card
-         className={`w-[350px] cursor-pointer transition-shadow shadow-md relative ${
+         className={`w-[350px] cursor-pointer relative rounded-2xl border-0 ${
             selected ? 'shadow-[0_0_12px_2px_theme(colors.primary.DEFAULT)]' : 'hover:shadow-lg'
          }`}
          onClick={onClick}
       >
-         <h3 className="text-xl font-bold text-primary bg-primary/60 text-white absolute bottom-0 left-0 p-2 z-10 w-full rounded-b-lg">
+         <img
+            src={cardBottom}
+            alt="Card Bottom"
+            className="absolute bottom-0 left-0 w-full object-fit rounded-b-2xl"
+            style={{ pointerEvents: 'none' }}
+         />
+         <h3 className="text-xl font-bold text-primary text-white absolute bottom-0 left-0 p-2 z-10 w-full rounded-xl">
             {title}
          </h3>
-         <img src={imageSrc} alt={title} className="w-full h-48 object-cover rounded-lg" />
+         <img src={imageSrc} alt={title} className="w-full h-48 object-cover rounded-2xl" />
       </Card>
    )
 }

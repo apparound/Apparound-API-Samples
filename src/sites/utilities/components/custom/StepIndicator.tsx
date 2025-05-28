@@ -23,9 +23,7 @@ const StepIndicator = ({ step: currentStep, customSteps }: StepIndicatorProps) =
       { text: t('Inserisci dati contatto') },
       { text: t('Firma contratto') },
    ]
-   const steps: Step[] = customSteps
-      ? customSteps.map(text => ({ text: t(text) })) // Traduzione dei testi personalizzati
-      : defaultSteps
+   const steps: Step[] = customSteps ? customSteps.map(text => ({ text: t(text) })) : defaultSteps
 
    return (
       <div

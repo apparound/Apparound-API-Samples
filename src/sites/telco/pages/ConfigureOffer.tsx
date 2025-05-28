@@ -12,12 +12,15 @@ import {
    selectTofList,
 } from '@/sites/retail/features/quoteSlice'
 import { useState, useEffect } from 'react'
-import { addProduct } from '@/sites/telco/hooks/apparoundData'
+import { addProduct, deleteProduct } from '@/sites/telco/hooks/apparoundData'
 import { useDispatch } from 'react-redux'
 import MainProducts from '@/sites/telco/components/MainProducts'
 import Products from '@/sites/telco/components/Products'
+import { useTranslation } from 'react-i18next'
+import { customSteps } from '@/sites/telco/config'
 
 const ConfigureOffer = () => {
+   const { t } = useTranslation()
    const isMobile = useMediaQuery({ maxWidth: 767 })
    const startingProducts = useSelector(selectStartingProducts)
    const tofId = useSelector(selectTofId)
@@ -43,7 +46,6 @@ const ConfigureOffer = () => {
       }
    }, [mainProduct])
 
-   // Update the switch states based on the cart
    useEffect(() => {
       if (cart) {
          const updatedSwitchStates = { ...switchStates }
@@ -64,7 +66,6 @@ const ConfigureOffer = () => {
       return Object.values(cartObj).some(value => cartContainsGuid(value, guid))
    }
 
-   // Setta il mainProduct selezionato se presente nel cart
    useEffect(() => {
       if (startingProducts && startingProducts.length > 0 && cart) {
          const found = startingProducts.find(p => cartContainsGuid(cart, p.guid))
@@ -74,6 +75,13 @@ const ConfigureOffer = () => {
       }
    }, [startingProducts, cart])
 
+   const handleSelectMainProduct = async (guid: string) => {
+      if (selectedOfferGuid) {
+         await deleteProduct(selectedOfferGuid, dispatch)
+      }
+      setSelectedOfferGuid(guid)
+   }
+
    if (!startingProducts || startingProducts.length === 0) {
       return null
    }
@@ -82,7 +90,7 @@ const ConfigureOffer = () => {
          <Navbar showTofList={true} />
          <div className="w-full">
             {!isMobile ? (
-               <StepIndicator step={1} customSteps={['Configura', 'Scopri', 'Attiva', 'Inserisci i dati', 'Fine']} />
+               <StepIndicator step={1} customSteps={customSteps} />
             ) : (
                <div className="border-t-2 w-full" style={{ borderColor: '#f4f4f4' }}></div>
             )}
@@ -91,12 +99,12 @@ const ConfigureOffer = () => {
          <OfferHeader title={headerTitle} />
 
          <main className="max-w-4xl mx-auto py-12 px-4">
-            <h2 className="text-2xl font-bold text-primary mb-8 text-center">Configura la tua offerta</h2>
+            <h2 className="text-2xl font-bold text-primary mb-8 text-center">{t('Configura la tua offerta')}</h2>
 
             <MainProducts
                startingProducts={startingProducts}
                selectedOfferGuid={selectedOfferGuid}
-               setSelectedOfferGuid={setSelectedOfferGuid}
+               setSelectedOfferGuid={handleSelectMainProduct}
                addProduct={addProduct}
                dispatch={dispatch}
                tofId={tofId}

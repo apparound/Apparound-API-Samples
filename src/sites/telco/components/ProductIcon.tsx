@@ -3,9 +3,9 @@ import * as mdiIcons from '@mdi/js'
 
 const iconMap: Record<string, string> = {
    modem: 'mdiRouterWireless',
-   portabilita: 'mdiSwapHorizontal',
+   portabilità: 'mdiSwapHorizontal',
    '5g': 'mdiSignal',
-   sim: 'mdiSim',
+   'sim/esim': 'mdiSim',
    terminali: 'mdiDeskphone',
    postazioni: 'mdiDesk',
    server: 'mdiServer',

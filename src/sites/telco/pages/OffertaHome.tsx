@@ -1,146 +1,51 @@
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Check } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '@/sites/telco/components/Navbar'
+import { selectMainProduct, selectTofId, selectTofList } from '@/sites/retail/features/quoteSlice'
+import { useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import OfferFullCards from '../components/Offers/OfferFullCards'
+import Footer from '@/components/Footer'
+import { useMediaQuery } from 'react-responsive'
+import StepIndicator from '@/sites/utilities/components/custom/StepIndicator'
+import OfferHeader from '../components/Offers/OfferHeader'
+import { customSteps } from '@/sites/telco/config'
 
 const OffertaHome = () => {
+   const { t } = useTranslation()
+   const isMobile = useMediaQuery({ maxWidth: 767 })
    const navigate = useNavigate()
+   const mainProduct = useSelector(selectMainProduct)
+   const [products, setProducts] = useState([])
+   const tofList = useSelector(selectTofList)
+   const tofId = useSelector(selectTofId)
+
+   const offerTitle = tofList?.find((tof: any) => String(tof.id) === String(tofId))?.name || ''
+   const headerTitle = offerTitle ? `Offerte ${offerTitle}` : 'Offerte'
+
+   useEffect(() => {
+      if (mainProduct?.clusters) {
+         setProducts(mainProduct.clusters[1].products)
+      }
+   }, [mainProduct])
 
    return (
       <div className="min-h-screen bg-white">
-         <Navbar />
+         <Navbar showTofList={true} />
+         <div className="w-full">
+            {!isMobile ? (
+               <StepIndicator step={2} customSteps={customSteps} />
+            ) : (
+               <div className="border-t-2 w-full" style={{ borderColor: '#f4f4f4' }}></div>
+            )}
+         </div>
 
-         {/* Header */}
-         <header className="relative h-[300px] bg-gradient-to-r from-purple-600 to-blue-500 flex items-center justify-center text-center px-4">
-            <div>
-               <h1 className="text-4xl font-bold text-white mb-4">Offerte Home</h1>
-               <p className="text-xl text-white/90 max-w-2xl">
-                  Connessione ultra veloce e stabile per tutta la famiglia. Ideale per streaming, smart working e
-                  dispositivi connessi.
-               </p>
-            </div>
-         </header>
+         <OfferHeader title={headerTitle} />
 
-         {/* Main Content */}
          <main className="max-w-6xl mx-auto py-12 px-4">
-            <h2 className="text-2xl font-bold text-primary mb-12 text-center">Ecco le offerte pensate per te</h2>
+            <h2 className="text-2xl font-bold text-primary mb-12 text-center">{t('Ecco le offerte pensate per te')}</h2>
+            <OfferFullCards products={products} navigate={navigate} />
 
-            {/* Offer Cards */}
-            <div className="grid md:grid-cols-3 gap-8 mb-12">
-               {/* Home Light */}
-               <Card className="relative overflow-hidden">
-                  <div className="p-6">
-                     <h3 className="text-xl font-bold text-primary mb-6">Home Light</h3>
-                     <ul className="space-y-4 mb-8">
-                        <li className="flex items-center">
-                           <Check className="text-green-500 mr-2" />
-                           <span>Velocità fino a 2 Gbps</span>
-                        </li>
-                        <li className="flex items-center">
-                           <Check className="text-green-500 mr-2" />
-                           <span>Fibra ultraveloce</span>
-                        </li>
-                        <li className="flex items-center">
-                           <Check className="text-green-500 mr-2" />
-                           <span>Modem incluso</span>
-                        </li>
-                        <li className="flex items-center">
-                           <Check className="text-green-500 mr-2" />
-                           <span>Chiamate a consumo</span>
-                        </li>
-                     </ul>
-                     <div className="text-center mb-6">
-                        <div className="text-sm text-gray-600">A partire da</div>
-                        <div className="text-3xl font-bold text-primary">
-                           22,99 € <span className="text-sm font-normal">al mese</span>
-                        </div>
-                     </div>
-                     <Button
-                        className="w-full bg-purple-600 hover:bg-purple-700"
-                        onClick={() => navigate('/configure-offer', { state: { offer: 'Home Light' } })}
-                     >
-                        SCOPRI E ATTIVA
-                     </Button>
-                  </div>
-               </Card>
-
-               {/* Home Full */}
-               <Card className="relative overflow-hidden border-purple-600 shadow-lg">
-                  <div className="p-6">
-                     <h3 className="text-xl font-bold text-primary mb-6">Home Full</h3>
-                     <ul className="space-y-4 mb-8">
-                        <li className="flex items-center">
-                           <Check className="text-green-500 mr-2" />
-                           <span>Velocità fino a 2 Gbps</span>
-                        </li>
-                        <li className="flex items-center">
-                           <Check className="text-green-500 mr-2" />
-                           <span>Fibra ultraveloce</span>
-                        </li>
-                        <li className="flex items-center">
-                           <Check className="text-green-500 mr-2" />
-                           <span>Modem incluso</span>
-                        </li>
-                        <li className="flex items-center">
-                           <Check className="text-green-500 mr-2" />
-                           <span>Chiamate illimitate</span>
-                        </li>
-                     </ul>
-                     <div className="text-center mb-6">
-                        <div className="text-sm text-gray-600">A partire da</div>
-                        <div className="text-3xl font-bold text-primary">
-                           25,99 € <span className="text-sm font-normal">al mese</span>
-                        </div>
-                     </div>
-                     <Button
-                        className="w-full bg-purple-600 hover:bg-purple-700"
-                        onClick={() => navigate('/configure-offer', { state: { offer: 'Home Full' } })}
-                     >
-                        SCOPRI E ATTIVA
-                     </Button>
-                  </div>
-               </Card>
-
-               {/* Home Internet Full */}
-               <Card className="relative overflow-hidden">
-                  <div className="p-6">
-                     <h3 className="text-xl font-bold text-primary mb-6">Home Internet Full</h3>
-                     <ul className="space-y-4 mb-8">
-                        <li className="flex items-center">
-                           <Check className="text-green-500 mr-2" />
-                           <span>Velocità fino a 2 Gbps</span>
-                        </li>
-                        <li className="flex items-center">
-                           <Check className="text-green-500 mr-2" />
-                           <span>Fibra ultraveloce</span>
-                        </li>
-                        <li className="flex items-center">
-                           <Check className="text-green-500 mr-2" />
-                           <span>Modem incluso</span>
-                        </li>
-                        <li className="flex items-center">
-                           <Check className="text-green-500 mr-2" />
-                           <span>Solo Internet</span>
-                        </li>
-                     </ul>
-                     <div className="text-center mb-6">
-                        <div className="text-sm text-gray-600">A partire da</div>
-                        <div className="text-3xl font-bold text-primary">
-                           20,99 € <span className="text-sm font-normal">al mese</span>
-                        </div>
-                     </div>
-                     <Button
-                        className="w-full bg-purple-600 hover:bg-purple-700"
-                        onClick={() => navigate('/configure-offer', { state: { offer: 'Home Internet Full' } })}
-                     >
-                        SCOPRI E ATTIVA
-                     </Button>
-                  </div>
-               </Card>
-            </div>
-
-            {/* App Download Section */}
             <div className="bg-gray-50 rounded-lg p-8 text-center">
                <h3 className="text-2xl font-bold text-primary mb-4">Scarica l'app per gestire la tua offerta</h3>
                <p className="text-gray-600 mb-6">
@@ -154,10 +59,7 @@ const OffertaHome = () => {
             </div>
          </main>
 
-         {/* Footer */}
-         <footer className="py-4 px-4 border-t text-center text-sm text-gray-600">
-            <p>©Copyright TelcoSample. All rights reserved.</p>
-         </footer>
+         <Footer />
       </div>
    )
 }
