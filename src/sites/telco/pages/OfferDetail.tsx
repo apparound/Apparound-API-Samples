@@ -48,7 +48,7 @@ const OfferDetail = () => {
          <StepIndicatorTelco step={3} />
 
          <OfferHeader title={offerTitle} />
-         <Addons addons={addons} />
+         {addons.length > 0 && <Addons addons={addons} />}
 
          <OfferPriceBox activationPrice="30,00" monthlyPrice="38,99" onActivate={() => {}} />
 

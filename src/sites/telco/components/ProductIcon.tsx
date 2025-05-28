@@ -19,7 +19,7 @@ class ProductIcon {
       const foundKey = Object.keys(iconMap).find(key => name.toLowerCase().includes(key.toLowerCase()))
       const iconKey = foundKey ? iconMap[foundKey] : undefined
       const path = iconKey ? mdiIcons[iconKey] : null
-      if (!path) return null
+      if (!path) return <div style={{ width: `${size}em`, height: `${size}em` }} />
       return <Icon path={path} size={size} color={color} />
    }
 }
