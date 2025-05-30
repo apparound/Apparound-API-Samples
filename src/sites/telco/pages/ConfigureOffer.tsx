@@ -20,7 +20,6 @@ import StepIndicatorTelco from './StepIndicatorTelco'
 
 const ConfigureOffer = () => {
    const { t } = useTranslation()
-   const isMobile = useMediaQuery({ maxWidth: 767 })
    const startingProducts = useSelector(selectStartingProducts)
    const tofId = useSelector(selectTofId)
    const dispatch = useDispatch()
@@ -37,9 +36,11 @@ const ConfigureOffer = () => {
 
    useEffect(() => {
       if (mainProduct?.clusters) {
-         setProducts(mainProduct.clusters[0].products)
+         const clusters = mainProduct.clusters.slice(0, -1)
+         const allProducts = clusters.flatMap(cluster => cluster.products)
+         setProducts(allProducts)
          const initialSwitches = {}
-         mainProduct.clusters[0].products.forEach(p => {
+         allProducts.forEach(p => {
             initialSwitches[p.guid] = false
          })
          setSwitchStates(initialSwitches)

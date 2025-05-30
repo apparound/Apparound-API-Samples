@@ -138,6 +138,7 @@ export const quoteSlice = createSlice({
             price: product.price,
             activationPrice: product.activationPrice,
             config: product.config,
+            icon: product.icon,
          }))
          state.tree = state.startingProducts
       },
@@ -258,6 +259,7 @@ export const selectStartingProducts = createSelector(
          price: product.price,
          activationPrice: product.activationPrice,
          config: product.config,
+         icon: product.icon,
       }))
    }
 )

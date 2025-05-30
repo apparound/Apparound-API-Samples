@@ -12,6 +12,23 @@ const OfferFullCards = ({ products, navigate }) => {
    const dispatch = useDispatch()
    const tofId = useSelector(selectTofId)
 
+   function getDetailsList(product, lang) {
+      if (product.features && product.features.length > 0) {
+         return product.features.map((feature, i) => ({ key: i, value: feature }))
+      } else if (product.config && product.config.details) {
+         let detailsArr = []
+         try {
+            detailsArr = JSON.parse(product.config.details)
+         } catch (e) {
+            detailsArr = []
+         }
+         if (Array.isArray(detailsArr) && detailsArr.length > 0) {
+            return detailsArr.map((detail, i) => ({ key: i, value: detail[lang] || '' }))
+         }
+      }
+      return [{ key: 0, value: 'Fibra ultraveloce' }]
+   }
+
    return (
       <div className="grid md:grid-cols-3 gap-8 mb-12">
          {products.map((product, idx) => (
@@ -23,20 +40,13 @@ const OfferFullCards = ({ products, navigate }) => {
                   </h3>
                </div>
                <div className="p-6 pt-2">
-                  <ul className="space-y-4 mb-8">
-                     {product.features && product.features.length > 0 ? (
-                        product.features.map((feature, i) => (
-                           <li className="flex items-center" key={i}>
-                              <Check className="text-green-500 mr-2" />
-                              <span>{feature}</span>
-                           </li>
-                        ))
-                     ) : (
-                        <li className="flex items-center">
-                           <Check className="text-green-500 mr-2" />
-                           <span>Fibra ultraveloce</span>
+                  <ul className="space-y-4 mb-8 text-left">
+                     {getDetailsList(product, t('en') || 'it').map(({ key, value }) => (
+                        <li className="flex items-center" key={key}>
+                           <Check className="text-primary mr-2" />
+                           <span>{value}</span>
                         </li>
-                     )}
+                     ))}
                   </ul>
                   <div className="text-center mb-6">
                      <div className="text-sm text-gray-600">A partire da</div>

@@ -1,13 +1,16 @@
 import React from 'react'
-import { mdiPlusCircle } from '@mdi/js'
+import { mdiPlusCircle, mdiCloseCircleOutline } from '@mdi/js'
 import Button from '@/sites/retail/components/Button'
 
 interface ProductRowProps {
    product: any
    isLast: boolean
+   added?: boolean
+   onAdd: (product: any) => void
+   onRemove?: (product: any) => void
 }
 
-const ProductRow: React.FC<ProductRowProps> = ({ product, isLast }) => (
+const ProductRow: React.FC<ProductRowProps> = ({ product, isLast, added = false, onAdd, onRemove }) => (
    <>
       <div className="flex items-center justify-between py-2 px-1">
          <div className="flex items-center gap-3">
@@ -23,9 +26,9 @@ const ProductRow: React.FC<ProductRowProps> = ({ product, isLast }) => (
                : 'Incluso'}
             <Button
                className="w-full bg-white focus:outline-none"
-               onClick={() => console.log('Add product')}
+               onClick={() => (added ? onRemove && onRemove(product) : onAdd(product))}
                leftIcon={{
-                  path: mdiPlusCircle,
+                  path: added ? mdiCloseCircleOutline : mdiPlusCircle,
                   size: 1.4,
                   className: 'text-primary',
                }}

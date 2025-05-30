@@ -137,6 +137,7 @@ export class ApparoundUtils {
                   id: cluster.id,
                   label: cluster.name,
                   shortName: cluster.shortname,
+                  code: cluster.code,
                   products,
                }
             }
@@ -590,7 +591,11 @@ export class ApparoundUtils {
       const quote = await this.getQuote(sessionId, cpqId, quoteId)
 
       if (!parentGuid) {
-         const startingProducts = await this.getStartingProducts(sessionId, cpqId, quote?.offerTypeId || parseInt(tofId))
+         const startingProducts = await this.getStartingProducts(
+            sessionId,
+            cpqId,
+            quote?.offerTypeId || parseInt(tofId)
+         )
          const product = this.findProductByKey(startingProducts.leftAxis, 'uniqueGuid', productGuid)
 
          if (product) {

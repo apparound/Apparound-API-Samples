@@ -22,7 +22,8 @@ const OfferDetail = () => {
 
    useEffect(() => {
       if (mainProduct?.clusters) {
-         setProducts(mainProduct.clusters[1].products || [])
+         const lastCluster = mainProduct.clusters[mainProduct.clusters.length - 1]
+         setProducts(lastCluster.products || [])
       }
    }, [mainProduct])
 

@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react'
+import { ApparoundData } from '@/hooks/use-apparound-data'
 import OfferCard from '@/sites/telco/components/Offers/OfferCard'
+import { getImageUrl } from '@/utils/utils'
 
 interface MainProductsProps {
    startingProducts: any[]
@@ -20,27 +23,29 @@ const MainProducts: React.FC<MainProductsProps> = ({
    tofId,
    addingProductGuid,
    setAddingProductGuid,
-}) => (
-   <div className="flex flex-wrap gap-8 mb-12 justify-center">
-      {startingProducts.map(product => (
-         <OfferCard
-            key={product.guid}
-            imageSrc={'/src/sites/telco/assets/images/default.png'}
-            title={product.description}
-            selected={selectedOfferGuid === product.guid}
-            loading={addingProductGuid === product.guid}
-            onClick={async () => {
-               setSelectedOfferGuid(product.guid)
-               setAddingProductGuid(product.guid)
-               try {
-                  await addProduct(product.guid, dispatch, tofId)
-               } finally {
-                  setAddingProductGuid(null)
-               }
-            }}
-         />
-      ))}
-   </div>
-)
+}) => {
+   return (
+      <div className="flex flex-wrap gap-8 mb-12 justify-center">
+         {startingProducts.map(product => (
+            <OfferCard
+               key={product.guid}
+               imageSrc={getImageUrl(product.icon)}
+               title={product.description}
+               selected={selectedOfferGuid === product.guid}
+               loading={addingProductGuid === product.guid}
+               onClick={async () => {
+                  setSelectedOfferGuid(product.guid)
+                  setAddingProductGuid(product.guid)
+                  try {
+                     await addProduct(product.guid, dispatch, tofId)
+                  } finally {
+                     setAddingProductGuid(null)
+                  }
+               }}
+            />
+         ))}
+      </div>
+   )
+}
 
 export default MainProducts
