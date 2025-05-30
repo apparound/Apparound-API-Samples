@@ -1,26 +1,17 @@
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import Autoplay from 'embla-carousel-autoplay'
-import Banner01 from '@/sites/telco/assets/images/bannerHome01.jpeg'
-import Banner02 from '@/sites/telco/assets/images/bannerHome02.jpeg'
-import Banner03 from '@/sites/telco/assets/images/bannerHome03.jpeg'
 import { useTranslation } from 'react-i18next'
 
-const carouselItems = [
-   {
-      image: Banner01,
-      title: 'WiFi ancora più potente, veloce e sicuro',
-   },
-   {
-      image: Banner02,
-      title: 'Naviga senza limiti in 5G',
-   },
-   {
-      image: Banner03,
-      title: 'Attivazione semplice e veloce',
-   },
-]
+interface CarouselItemType {
+   image: string
+   title: string
+}
 
-const HeroCarousel = () => {
+interface HeroCarouselProps {
+   items: CarouselItemType[]
+}
+
+const HeroCarousel = ({ items }: HeroCarouselProps) => {
    const { t } = useTranslation()
 
    return (
@@ -38,7 +29,7 @@ const HeroCarousel = () => {
             ]}
          >
             <CarouselContent>
-               {carouselItems.map((item, index) => (
+               {items.map((item, index) => (
                   <CarouselItem key={index} className="h-[500px] max-h-[500px]">
                      <div className="h-[400px] max-h-[400px]">
                         <img src={item.image} alt={item.title} className="w-full h-full object-cover" />

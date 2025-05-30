@@ -7,6 +7,35 @@ import { addProduct } from '@/sites/telco/hooks/apparoundData'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectTofId } from '@/sites/retail/features/quoteSlice'
 
+const ProductPrice = ({ price }) => (
+   <div className="text-center mb-6">
+      <div className="text-sm text-gray-600">A partire da</div>
+      <div className="text-3xl font-bold text-primary">
+         {price ? `${price} €` : '--'} <span className="text-sm font-normal">al mese</span>
+      </div>
+   </div>
+)
+
+const ProductDetailsList = ({ details }) => (
+   <ul className="space-y-4 mb-8 text-left">
+      {details.map(({ key, value }) => (
+         <li className="flex items-center" key={key}>
+            <Check className="text-primary mr-2" />
+            <span>{value}</span>
+         </li>
+      ))}
+   </ul>
+)
+
+const ProductCardHeader = ({ image, title }) => (
+   <div className="relative">
+      <img src={image} alt="Decorazione" className="w-full h-18 object-cover" />
+      <h3 className="absolute top-0 left-0 w-full flex items-start justify-center text-xl font-bold text-white drop-shadow-lg mt-2">
+         {title}
+      </h3>
+   </div>
+)
+
 const OfferFullCards = ({ products, navigate }) => {
    const { t } = useTranslation()
    const dispatch = useDispatch()
@@ -30,31 +59,16 @@ const OfferFullCards = ({ products, navigate }) => {
    }
 
    return (
-      <div className="grid md:grid-cols-3 gap-8 mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-12">
          {products.map((product, idx) => (
-            <Card key={product.guid || idx} className="relative overflow-hidden rounded-3xl">
-               <div className="relative">
-                  <img src={cardHeader} alt="Decorazione" className="w-full h-18 object-cover" />
-                  <h3 className="absolute top-0 left-0 w-full flex items-start justify-center text-xl font-bold text-white drop-shadow-lg mt-2">
-                     {product.productName || product.label}
-                  </h3>
-               </div>
+            <Card
+               key={product.guid || idx}
+               className="relative overflow-hidden rounded-3xl min-w-0 max-w-[350px] w-full mx-auto"
+            >
+               <ProductCardHeader image={cardHeader} title={product.productName || product.label} />
                <div className="p-6 pt-2">
-                  <ul className="space-y-4 mb-8 text-left">
-                     {getDetailsList(product, t('en') || 'it').map(({ key, value }) => (
-                        <li className="flex items-center" key={key}>
-                           <Check className="text-primary mr-2" />
-                           <span>{value}</span>
-                        </li>
-                     ))}
-                  </ul>
-                  <div className="text-center mb-6">
-                     <div className="text-sm text-gray-600">A partire da</div>
-                     <div className="text-3xl font-bold text-primary">
-                        {product.price ? `${product.price} €` : '--'}{' '}
-                        <span className="text-sm font-normal">al mese</span>
-                     </div>
-                  </div>
+                  <ProductDetailsList details={getDetailsList(product, t('en') || 'it')} />
+                  <ProductPrice price={product.price} />
                   <Button
                      className="w-full bg-primary hover:bg-purple-700 rounded-3xl"
                      onClick={async () => {

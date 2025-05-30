@@ -3,6 +3,7 @@ import SelectComune from './SelectComune'
 import SelectCap from './SelectCap'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { useTranslation } from 'react-i18next'
 
 const CheckCoverageForm = ({
    province,
@@ -14,6 +15,7 @@ const CheckCoverageForm = ({
    handleInputChange,
    handleSubmit,
 }) => {
+   const { t } = useTranslation()
    return (
       <form className="space-y-4" onSubmit={handleSubmit}>
          <div className="grid md:grid-cols-3 gap-4">
@@ -29,14 +31,14 @@ const CheckCoverageForm = ({
                handleCapChange={handleCapChange}
                isDisabled={!formData.comune}
             />
-            <Input name="indirizzo" placeholder="Indirizzo e numero civico" onChange={handleInputChange} />
+            <Input name="indirizzo" placeholder={t('Indirizzo e numero civico')} onChange={handleInputChange} />
          </div>
          <Button
             type="submit"
             className="w-full bg-primary hover:bg-purple-700 text-white"
             disabled={!(formData.provincia && formData.comune && formData.cap && formData.indirizzo)}
          >
-            VERIFICA COPERTURA
+            {t('Verifica copertura').toUpperCase()}
          </Button>
       </form>
    )
