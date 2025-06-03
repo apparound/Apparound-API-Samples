@@ -8,17 +8,25 @@ interface OfferPriceBoxProps {
    onActivate?: () => void
 }
 
-const PriceBox: React.FC<{ label: string; price: string; isMobile: boolean }> = ({ label, price, isMobile }) => (
-   <div className={`min-w-[120px] ${isMobile ? 'text-center' : 'text-left'}`}>
-      <div className={`font-bold ${isMobile ? 'text-base' : 'text-2xl'} ${isMobile ? 'text-center' : ''}`}>{label}</div>
-      <div className={`font-bold ${isMobile ? 'text-2xl' : 'text-5xl'} leading-none ${isMobile ? 'text-center' : ''}`}>
-         {price.split(',')[0]}
-         <span className={`font-normal ${isMobile ? 'text-lg' : 'text-2xl'} ${isMobile ? 'text-center' : ''}`}>
-            ,{price.split(',')[1]} €
-         </span>
+const PriceBox: React.FC<{ label: string; price: string; isMobile: boolean }> = ({ label, price, isMobile }) => {
+   const [intPart, decPart] = price.split(',')
+   const decimals = decPart !== undefined ? decPart.padEnd(2, '0') : '00'
+   return (
+      <div className={`min-w-[120px] ${isMobile ? 'text-center' : 'text-left'}`}>
+         <div className={`font-bold ${isMobile ? 'text-base' : 'text-2xl'} ${isMobile ? 'text-center' : ''}`}>
+            {label}
+         </div>
+         <div
+            className={`font-bold ${isMobile ? 'text-2xl' : 'text-5xl'} leading-none ${isMobile ? 'text-center' : ''}`}
+         >
+            {intPart}
+            <span className={`font-normal ${isMobile ? 'text-lg' : 'text-2xl'} ${isMobile ? 'text-center' : ''}`}>
+               ,{decimals} €
+            </span>
+         </div>
       </div>
-   </div>
-)
+   )
+}
 
 const OfferPriceBox: React.FC<OfferPriceBoxProps> = ({ activationPrice, monthlyPrice, onActivate }) => {
    const isMobile = useMediaQuery({ maxWidth: 767 })

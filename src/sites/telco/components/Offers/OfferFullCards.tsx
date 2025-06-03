@@ -7,17 +7,32 @@ import { addProduct } from '@/sites/telco/hooks/apparoundData'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectTofId } from '@/sites/retail/features/quoteSlice'
 
-const ProductPrice = ({ price }) => (
-   <div className="text-center mb-6">
-      <div className="text-sm text-gray-600">A partire da</div>
-      <div className="text-3xl font-bold text-primary">
-         {price ? `${price} €` : '--'} <span className="text-sm font-normal">al mese</span>
+const ProductPrice = ({ price }) => {
+   const { t } = useTranslation()
+   let intPart = '--',
+      decPart = ''
+   if (price) {
+      const [int, dec] = price.toString().split(',')
+      intPart = int
+      decPart = ',' + (typeof dec !== 'undefined' ? dec.padEnd(2, '0') : '00')
+   }
+   return (
+      <div className="w-full flex flex-col items-center mb-6 bg-primary/20 px-4 py-4">
+         <div>
+            <div className="text-base text-gray-600 mb-1 w-full text-left">{t('A partire da')}</div>
+            <div className="flex items-end w-full">
+               <span className="text-5xl font-bold text-black leading-none">{intPart}</span>
+               <span className="text-2xl font-bold text-black leading-none mb-1">{decPart}</span>
+               <span className="text-2xl font-bold text-black leading-none mb-1 ml-1">€</span>
+               <span className="text-lg font-normal text-gray-600 ml-2">al mese</span>
+            </div>
+         </div>
       </div>
-   </div>
-)
+   )
+}
 
 const ProductDetailsList = ({ details }) => (
-   <ul className="space-y-4 mb-8 text-left">
+   <ul className="space-y-4 mb-8 text-left px-6">
       {details.map(({ key, value }) => (
          <li className="flex items-center" key={key}>
             <Check className="text-primary mr-2" />
@@ -59,18 +74,18 @@ const OfferFullCards = ({ products, navigate }) => {
    }
 
    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-12">
+      <div className="flex flex-wrap gap-2 mb-12 justify-center">
          {products.map((product, idx) => (
             <Card
                key={product.guid || idx}
                className="relative overflow-hidden rounded-3xl min-w-0 max-w-[350px] w-full mx-auto"
             >
                <ProductCardHeader image={cardHeader} title={product.productName || product.label} />
-               <div className="p-6 pt-2">
+               <div className="px-0 py-6">
                   <ProductDetailsList details={getDetailsList(product, t('en') || 'it')} />
                   <ProductPrice price={product.price} />
                   <Button
-                     className="w-full bg-primary hover:bg-purple-700 rounded-3xl"
+                     className="w-[80%] bg-primary hover:bg-purple-700 rounded-3xl px-6"
                      onClick={async () => {
                         await addProduct(product.guid, dispatch, tofId, product.parentGuid)
                         navigate('/telco/offer-detail', { state: { offer: product.productName || product.label } })

@@ -10,9 +10,10 @@ interface ProductListProps {
    onAdd: (product: any) => void
    onRemove: (product: any) => void
    cart: any
+   includedProducts?: string[]
 }
 
-const ProductList: React.FC<ProductListProps> = ({ products, onAdd, onRemove, cart }) => {
+const ProductList: React.FC<ProductListProps> = ({ products, onAdd, onRemove, cart, includedProducts }) => {
    if (!products || products.length === 0) {
       return <div className="text-gray-400 italic">Nessun prodotto</div>
    }
@@ -26,6 +27,7 @@ const ProductList: React.FC<ProductListProps> = ({ products, onAdd, onRemove, ca
                onAdd={onAdd}
                onRemove={onRemove}
                added={cartContainsGuid(cart, product.guid)}
+               includedProducts={includedProducts}
             />
          ))}
       </>
@@ -34,6 +36,7 @@ const ProductList: React.FC<ProductListProps> = ({ products, onAdd, onRemove, ca
 
 interface AddonClusterProps {
    cluster: any
+   includedProducts?: string[]
 }
 
 function cartContainsGuid(cartObj: any, guid: string): boolean {
@@ -42,7 +45,7 @@ function cartContainsGuid(cartObj: any, guid: string): boolean {
    return Object.values(cartObj).some(value => cartContainsGuid(value, guid))
 }
 
-const AddonCluster: React.FC<AddonClusterProps> = ({ cluster }) => {
+const AddonCluster: React.FC<AddonClusterProps> = ({ cluster, includedProducts }) => {
    const dispatch = useDispatch()
    const tofId = useSelector(selectTofId)
    const cart = useSelector((state: any) => state.quote.cart)
@@ -65,6 +68,7 @@ const AddonCluster: React.FC<AddonClusterProps> = ({ cluster }) => {
                onAdd={handleAddProduct}
                onRemove={handleRemoveProduct}
                cart={cart}
+               includedProducts={includedProducts}
             />
          </div>
       </Card>

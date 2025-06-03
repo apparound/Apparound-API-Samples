@@ -2,23 +2,33 @@ import StepIndicatorTelco from './StepIndicatorTelco'
 import Navbar from '../components/Navbar'
 import OfferHeader from '../components/Offers/OfferHeader'
 import Footer from '@/components/Footer'
-import { useMediaQuery } from 'react-responsive'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { selectCart, selectMainProduct } from '@/sites/retail/features/quoteSlice'
+import {
+   selectCart,
+   selectMainProduct,
+   selectQuoteMontlyPrice,
+   selectQuotePrice,
+   selectTree,
+} from '@/sites/retail/features/quoteSlice'
 import { useEffect, useState } from 'react'
 import Addons from './Addons'
 import OfferPriceBox from '../components/OfferBox'
+import CustomerModal from '@/sites/utilities/components/custom/Summary/Customer/Modal.jsx'
+import { findNode, findNodeForKey } from '@/hooks/useQuote'
 
 const OfferDetail = () => {
-   const isMobile = useMediaQuery({ maxWidth: 767 })
    const { t } = useTranslation()
    const [offerTitle, setOfferTitle] = useState('')
    const cart = useSelector(selectCart)
+   const tree = useSelector(selectTree)
    const [addons, setAddons] = useState([])
 
    const mainProduct = useSelector(selectMainProduct)
    const [products, setProducts] = useState([])
+   const quotePrice = useSelector(selectQuotePrice)
+   const quoteMonthlyPrice = useSelector(selectQuoteMontlyPrice)
+   const [showCustomerModal, setShowCustomerModal] = useState(false)
 
    useEffect(() => {
       if (mainProduct?.clusters) {
@@ -33,15 +43,35 @@ const OfferDetail = () => {
          return
       }
 
-      const cartGuids = Object.keys(cart[Object.keys(cart)[0]] || {})
+      let cartGuids: string[] = Array.isArray(cart)
+         ? cart
+         : typeof cart === 'object' && cart !== null
+         ? Object.keys(cart[Object.keys(cart)[0]] || {})
+         : []
+
       const selectedProduct = products.find((p: any) => cartGuids.includes(p.guid))
-      if (selectedProduct && Array.isArray(selectedProduct.clusters)) {
+      let newAddons: any[] = []
+      if (selectedProduct?.clusters) {
          setOfferTitle(t(selectedProduct.description))
-         setAddons(selectedProduct.clusters)
-         return
+         newAddons = [...selectedProduct.clusters]
       }
-      setAddons([])
-   }, [products, cart])
+
+      if (tree) {
+         const treeProducts = cartGuids.map(guid => findNodeForKey('guid', guid, tree)).filter(node => node)
+         if (treeProducts.length > 0) {
+            const carrelloObj = {
+               id: 27744,
+               label: 'Carrello',
+               shortName: 'Carrello',
+               products: treeProducts,
+            }
+            setAddons([carrelloObj, ...newAddons])
+            return
+         }
+      }
+
+      setAddons(newAddons)
+   }, [products, cart, tree])
 
    return (
       <div className="min-h-screen bg-white">
@@ -49,9 +79,16 @@ const OfferDetail = () => {
          <StepIndicatorTelco step={3} />
 
          <OfferHeader title={offerTitle} />
-         {addons.length > 0 && <Addons addons={addons} />}
+         {addons.length > 0 && (
+            <Addons addons={addons} includedProducts={addons[0]?.products?.map((p: any) => p.guid) || []} />
+         )}
 
-         <OfferPriceBox activationPrice="30,00" monthlyPrice="38,99" onActivate={() => {}} />
+         <OfferPriceBox
+            activationPrice={quotePrice.toString()}
+            monthlyPrice={quoteMonthlyPrice.toString()}
+            onActivate={() => setShowCustomerModal(true)}
+         />
+         {showCustomerModal && <CustomerModal showModal={showCustomerModal} setShowModal={setShowCustomerModal} />}
 
          <Footer />
       </div>

@@ -5,9 +5,10 @@ import { useTranslation } from 'react-i18next'
 
 interface AddonsProps {
    addons: any[]
+   includedProducts?: string[]
 }
 
-const Addons: React.FC<AddonsProps> = ({ addons }) => {
+const Addons: React.FC<AddonsProps> = ({ addons, includedProducts }) => {
    const { t } = useTranslation()
 
    return (
@@ -15,7 +16,7 @@ const Addons: React.FC<AddonsProps> = ({ addons }) => {
          <h2 className="text-2xl font-bold text-center text-primary mb-8">{t('Dettagli offerta')}</h2>
          <div className="space-y-8">
             {addons.map((cluster: any) => (
-               <AddonCluster key={cluster.id} cluster={cluster} />
+               <AddonCluster key={cluster.id} cluster={cluster} includedProducts={includedProducts} />
             ))}
          </div>
       </div>

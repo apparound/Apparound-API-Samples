@@ -205,12 +205,19 @@ export const selectSizeProducts = getSelected => state => {
 }
 
 export const selectFlatCart = createSelector([selectCart], cart => flatCart(cart))
+
 export const selectQuotePrice = state => {
    return state.quote?.quote?.netOneOffPriceWithVatAmount
 }
+
+export const selectQuoteMontlyPrice = state => {
+   return state.quote?.quote?.netRecurringPriceWithVatAmount
+}
+
 export const selectAddedToCart = state => {
    return state.quote?.addedToCart
 }
+
 export const selectColorProduct = state => {
    const mainProduct = state.quote.tree?.find(item => item.guid === Object.keys(state.quote.cart)[0])
    const selectedSizeGuid = Object.keys(state.quote.cart[Object.keys(state.quote.cart || {})[0]] || {})[0]
@@ -221,6 +228,7 @@ export const selectColorProduct = state => {
 
    return colorCluster?.products?.find(product => cartItems.includes(product.guid))
 }
+
 export const selectCartClusters = createSelector(
    [selectMainProduct, selectCart, selectFlatCart],
    (mainProduct, cart, flatCart) => {
