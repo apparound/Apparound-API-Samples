@@ -14,13 +14,35 @@ const iconMap: Record<string, string> = {
    'protezione rete fissa': 'mdiPhone',
 }
 
+const DEFAULT_SIZE_CLASS = 'w-8 h-8'
+
+interface ProductIconProps {
+   name?: string
+   iconName?: string
+   sizeClass?: string
+}
+
 class ProductIcon {
-   static get(name: string, size = 1.4, color = '#7c4bc6') {
-      const foundKey = Object.keys(iconMap).find(key => name.toLowerCase().includes(key.toLowerCase()))
-      const iconKey = foundKey ? iconMap[foundKey] : undefined
-      const path = iconKey ? mdiIcons[iconKey] : null
-      if (!path) return <div style={{ width: `${size}em`, height: `${size}em` }} />
-      return <Icon path={path} size={size} color={color} />
+   static get({ name, iconName, sizeClass = DEFAULT_SIZE_CLASS }: ProductIconProps) {
+      let path: string | null = null
+      if (iconName) {
+         path = mdiIcons[iconName] || null
+      } else if (name) {
+         const foundKey = Object.keys(iconMap).find(key => name.toLowerCase().includes(key.toLowerCase()))
+         const iconKey = foundKey ? iconMap[foundKey] : undefined
+         path = iconKey ? mdiIcons[iconKey] : null
+      }
+      const colorClass = 'text-primary'
+      if (!path) return <div className={`flex items-center justify-center ${sizeClass} ${colorClass}`} />
+      return <Icon path={path} className={`${sizeClass} ${colorClass}`} />
+   }
+
+   static getByIconName(iconName: string, sizeClass = DEFAULT_SIZE_CLASS) {
+      return ProductIcon.get({ iconName, sizeClass })
+   }
+
+   static getByName(name: string, sizeClass = DEFAULT_SIZE_CLASS) {
+      return ProductIcon.get({ name, sizeClass })
    }
 }
 

@@ -9,9 +9,7 @@ import { hideLoader, showLoader } from '@/sites/retail/features/appSlice'
 
 const Footer = ({ formRef }) => {
    const { t } = useTranslation()
-
    const navigate = useRelativeNavigate()
-
    const dispatch = useDispatch()
 
    const contractData = useSelector(selectContract)
@@ -32,6 +30,7 @@ const Footer = ({ formRef }) => {
          dispatch(hideLoader())
       }
    }, [contractData.id])
+
    return (
       <div className="flex justify-center">
          <div className="w-full lg:w-[250px]">

@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from 'react'
 import Addons from './Addons'
 import OfferPriceBox from '../components/OfferBox'
-import CustomerModal from '@/sites/utilities/components/custom/Summary/Customer/Modal.jsx'
+import CustomerModal from '../components/CustomerModal'
 import { findNodeForKey } from '@/hooks/useQuote'
 
 const OfferDetail = () => {
@@ -66,13 +66,15 @@ const OfferDetail = () => {
                label: t('Attivazione offerta'),
                price: quotePrice,
                guid: crypto.randomUUID(),
+               config: {
+                  mdiIcon: 'mdiRocketLaunch',
+               },
             }
             treeProducts = [activationProduct, ...treeProducts]
             //Aggiungo fake product attivazione
             const carrelloObj = {
                id: 2,
-               label: 'Carrello',
-               shortName: 'Carrello',
+               label: t('Carrello'),
                products: treeProducts,
             }
             setAddons([carrelloObj, ...newAddons])

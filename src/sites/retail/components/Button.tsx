@@ -16,7 +16,7 @@ interface ButtonI {
    rightIcon?: iconI
    full?: boolean
    auto?: boolean
-   className?: string // aggiunto per supportare className custom
+   className?: string
 }
 
 interface variantsI {

@@ -1,6 +1,7 @@
 import React from 'react'
 import { mdiPlusCircle, mdiCloseCircleOutline } from '@mdi/js'
 import Button from '@/sites/retail/components/Button'
+import ProductIcon from '../ProductIcon'
 
 interface ProductRowProps {
    product: any
@@ -26,7 +27,7 @@ const ProductRow: React.FC<ProductRowProps> = ({
       <>
          <div className="flex items-center justify-between py-2 px-1">
             <div className="flex items-center gap-3">
-               {/* {ProductIcon.get(product.label.toLowerCase())} */}
+               {ProductIcon.getByIconName(product.config?.mdiIcon)}
                <div className="font-light text-gray-900">{product.label}</div>
             </div>
             <div className="flex items-center gap-2 min-w-[80px] font-semibold text-gray-700 justify-end">

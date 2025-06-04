@@ -6,6 +6,8 @@ import {
    updateStartingProducts as updateStartingProducts,
    addProduct as addProductAction,
    deleteProduct as deleteProductAction,
+   updateQuote,
+   updateContract,
 } from '@/sites/retail/features/quoteSlice'
 
 export const initQuote = async (dispatch: any) => {
@@ -53,5 +55,23 @@ export const deleteProduct = async (productGuid: string, dispatch: any) => {
 
 export const setProductQuantity = async (productGuid: string, quantity: number, dispatch: any) => {
    await fetchData(`/setProductQuantity/productGuid/${productGuid}/qty/${quantity}`, 'post')
-   // Qui puoi eventualmente aggiornare lo stato globale se necessario
+}
+
+export const saveContract = async (contract, customer, dispatch) => {
+   await fetchData('/updateCustomerQuote', 'post', {
+      customer: {
+         ...customer,
+         properties: {
+            ...customer,
+         },
+      },
+   })
+
+   const quote = await fetchData('/finalizeQuote', 'post')
+
+   dispatch(updateQuote(quote.quote))
+
+   const currentContract = await fetchData('/saveContract', 'post', { contract })
+
+   dispatch(updateContract(currentContract.contract))
 }
