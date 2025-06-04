@@ -33,8 +33,10 @@
    "Fattura online": "Online bill",
    "Ricevi la bolletta via email in formato digitale, rapido ed ecologico": "Receive your bill via email in digital format, fast and eco-friendly",
    "Metodo di pagamento": "Payment method",
+   "SEPA": "SEPA",
+   "Addebito automatico sul conto corrente alla scadenza": "Automatic debit from your bank account on the due date",
    "Bollettino postale": "Postal bulletin",
-   "Pagamento manuale presso, tabaccherie o online": "Pagamento manuale presso, tabaccherie o online",
+   "Pagamento manuale presso poste, tabaccherie o online": "Manual payment at post offices, tobacconists or online",
    "Informazioni fornitura": "Supply information",
    "Nome": "First name",
    "Cognome": "Last name",
@@ -188,5 +190,6 @@
    "Scarica l'app per gestire la tua offerta": "Download the app to manage your offer",
    "Tariffe trasparenti, senza costi nascosti": "Transparent tariffs, no hidden costs",
    "Assistenza rapida, sempre disponibile": "Fast support, always available",
-   "Copertura": "Coverage"
+   "Copertura": "Coverage",
+   "Dati personali": "Personal data"
 }

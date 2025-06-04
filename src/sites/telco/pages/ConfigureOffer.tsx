@@ -1,5 +1,4 @@
 import Navbar from '@/sites/telco/components/Navbar'
-import { useMediaQuery } from 'react-responsive'
 import OfferHeader from '@/sites/telco/components/Offers/OfferHeader'
 import Footer from '@/components/Footer'
 import { useSelector } from 'react-redux'

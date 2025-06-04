@@ -57,6 +57,17 @@ export const setProductQuantity = async (productGuid: string, quantity: number, 
    await fetchData(`/setProductQuantity/productGuid/${productGuid}/qty/${quantity}`, 'post')
 }
 
+export const updateCustomerQuote = async (customer, dispatch) => {
+   await fetchData('/updateCustomerQuote', 'post', {
+      customer: {
+         ...customer,
+         properties: {
+            ...customer,
+         },
+      },
+   })
+}
+
 export const saveContract = async (contract, customer, dispatch) => {
    await fetchData('/updateCustomerQuote', 'post', {
       customer: {

@@ -4,10 +4,11 @@ import useRelativeNavigate from '@/utils/navigate'
 import CustomerForm from '@/components/Customer/Form'
 import { useDispatch, useSelector } from 'react-redux'
 import { hideLoader, showLoader } from '@/sites/retail/features/appSlice'
-import { selectContract, selectCustomer } from '@/sites/retail/features/quoteSlice'
-import { saveContract } from '../hooks/apparoundData'
+import { selectCustomer } from '@/sites/retail/features/quoteSlice'
+import { updateCustomerQuote } from '../hooks/apparoundData'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from 'react-i18next'
+import { updateCustomer } from '@/sites/retail/features/quoteSlice'
 
 const CustomerModal = ({ showModal, setShowModal }) => {
    const navigate = useRelativeNavigate()
@@ -15,23 +16,17 @@ const CustomerModal = ({ showModal, setShowModal }) => {
    const [formIsValid, setFormIsValid] = useState(false)
    const dispatch = useDispatch()
 
-   const contractData = useSelector(selectContract)
    const fullCustomerData = useSelector(selectCustomer)
    const [customerData, setCustomerData] = useState([])
 
    const handleCustomerDataChange = (value, name) => {
       if (!formRef.current) return
-      if (!fullCustomerData || !fullCustomerData.hasOwnProperty(name)) {
-         setCustomerData(prevData => ({
-            ...prevData,
-            [name]: value,
-         }))
-         return
-      }
       setCustomerData(prevData => ({
          ...prevData,
          [name]: value,
       }))
+
+      dispatch(updateCustomer({ [name]: value }))
    }
 
    useEffect(() => {
@@ -43,16 +38,11 @@ const CustomerModal = ({ showModal, setShowModal }) => {
          return formRef.current.reportValidity()
       }
       dispatch(showLoader())
-      saveContract(contractData, customerData, dispatch)
+      updateCustomerQuote(fullCustomerData, dispatch)
       setShowModal(false)
+      navigate('/contract')
+      dispatch(hideLoader())
    }
-
-   useEffect(() => {
-      if (contractData.id > -1) {
-         navigate('/contract')
-         dispatch(hideLoader())
-      }
-   }, [contractData.id])
 
    const { t } = useTranslation()
 
