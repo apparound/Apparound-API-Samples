@@ -9,6 +9,7 @@ interface ProductRowProps {
    onAdd: (product: any) => void
    onRemove?: (product: any) => void
    includedProducts?: string[]
+   loading?: boolean
 }
 
 const ProductRow: React.FC<ProductRowProps> = ({
@@ -18,6 +19,7 @@ const ProductRow: React.FC<ProductRowProps> = ({
    onAdd,
    onRemove,
    includedProducts,
+   loading = false,
 }) => {
    const isIncluded = includedProducts?.includes(product.guid)
    return (
@@ -36,13 +38,14 @@ const ProductRow: React.FC<ProductRowProps> = ({
                   : 'Incluso'}
                {!isIncluded && (
                   <Button
-                     className="w-full bg-white focus:outline-none"
+                     className="w-full bg-white focus:outline-none relative"
                      onClick={() => (added ? onRemove && onRemove(product) : onAdd(product))}
                      leftIcon={{
                         path: added ? mdiCloseCircleOutline : mdiPlusCircle,
                         size: 1.4,
-                        className: 'text-primary',
+                        className: `text-primary${loading ? (added ? ' animate-spin-reverse' : ' animate-spin') : ''}`,
                      }}
+                     disabled={loading}
                   />
                )}
             </div>

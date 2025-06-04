@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import comuni from '@/assets/comuni.json'
 import CheckCoverageForm from './CheckCoverageForm'
 import FiberTechnology from './FiberTechnology'
-import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { updateContractProperties } from '@/sites/retail/features/quoteSlice'
+import { useDispatch } from 'react-redux'
 
 interface CheckCoverageProps {
    onCoverageResponse?: (response: any) => void
@@ -13,6 +14,7 @@ const CheckCoverage = ({ onCoverageResponse }: CheckCoverageProps) => {
    const { t } = useTranslation()
    const [formData, setFormData] = useState({ provincia: '', comune: '', cap: '', indirizzo: '' })
    const [response, setResponse] = useState(null)
+   const dispatch = useDispatch()
 
    const province = [...new Set(comuni.map((comune: { provincia: { nome: string } }) => comune.provincia.nome))].sort()
    const comuniByProvincia = formData.provincia
@@ -62,6 +64,16 @@ const CheckCoverage = ({ onCoverageResponse }: CheckCoverageProps) => {
       }
       setResponse(res)
       if (onCoverageResponse) onCoverageResponse(res)
+
+      // Aggiorna le proprietà del contract su redux
+      dispatch(
+         updateContractProperties({
+            addressContract_province: formData.provincia,
+            addressContract_city: formData.comune,
+            addressContract_zipCode: formData.cap,
+            addressContract_address: formData.indirizzo,
+         })
+      )
    }
 
    useEffect(() => {

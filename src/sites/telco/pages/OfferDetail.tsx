@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react'
 import Addons from './Addons'
 import OfferPriceBox from '../components/OfferBox'
 import CustomerModal from '@/sites/utilities/components/custom/Summary/Customer/Modal.jsx'
-import { findNode, findNodeForKey } from '@/hooks/useQuote'
+import { findNodeForKey } from '@/hooks/useQuote'
 
 const OfferDetail = () => {
    const { t } = useTranslation()
@@ -51,16 +51,26 @@ const OfferDetail = () => {
 
       const selectedProduct = products.find((p: any) => cartGuids.includes(p.guid))
       let newAddons: any[] = []
+
       if (selectedProduct?.clusters) {
          setOfferTitle(t(selectedProduct.description))
          newAddons = [...selectedProduct.clusters]
       }
 
       if (tree) {
-         const treeProducts = cartGuids.map(guid => findNodeForKey('guid', guid, tree)).filter(node => node)
+         let treeProducts = cartGuids.map(guid => findNodeForKey('guid', guid, tree)).filter(node => node)
          if (treeProducts.length > 0) {
+            // Hardcoded activation product
+            const activationProduct = {
+               id: 1,
+               label: t('Attivazione offerta'),
+               price: quotePrice,
+               guid: crypto.randomUUID(),
+            }
+            treeProducts = [activationProduct, ...treeProducts]
+            //Aggiungo fake product attivazione
             const carrelloObj = {
-               id: 27744,
+               id: 2,
                label: 'Carrello',
                shortName: 'Carrello',
                products: treeProducts,

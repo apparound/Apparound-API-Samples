@@ -3,7 +3,9 @@ import { Card } from '@/components/ui/card'
 import ProductRow from './ProductRow'
 import { addProduct } from '@/sites/telco/hooks/apparoundData'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectTofId } from '@/sites/retail/features/quoteSlice'
+import { selectContractProperties, selectTofId } from '@/sites/retail/features/quoteSlice'
+import FiberTechnology from '../CheckCoverage/FiberTechnology'
+import { useTranslation } from 'react-i18next'
 
 interface ProductListProps {
    products: any[]
@@ -11,9 +13,22 @@ interface ProductListProps {
    onRemove: (product: any) => void
    cart: any
    includedProducts?: string[]
+   cluster?: any
+   loadingMap?: { [guid: string]: boolean }
 }
 
-const ProductList: React.FC<ProductListProps> = ({ products, onAdd, onRemove, cart, includedProducts }) => {
+const ProductList: React.FC<ProductListProps> = ({
+   products,
+   onAdd,
+   onRemove,
+   cart,
+   includedProducts,
+   cluster,
+   loadingMap,
+}) => {
+   const contractProperties = useSelector(selectContractProperties)
+   const { t } = useTranslation()
+
    if (!products || products.length === 0) {
       return <div className="text-gray-400 italic">Nessun prodotto</div>
    }
@@ -28,8 +43,20 @@ const ProductList: React.FC<ProductListProps> = ({ products, onAdd, onRemove, ca
                onRemove={onRemove}
                added={cartContainsGuid(cart, product.guid)}
                includedProducts={includedProducts}
+               loading={!!loadingMap?.[product.guid]}
             />
          ))}
+
+         {cluster?.label === 'Carrello' && (
+            <>
+               <div className="font-bold text-lg text-gray-800 mt-8 mb-3 flex items-center">{t('Copertura')}</div>
+               <div className="font-medium text-sm text-left text-gray-900 mb-2">
+                  {contractProperties?.addressContract_address}, {contractProperties?.addressContract_zipCode}{' '}
+                  {contractProperties?.addressContract_city} ({contractProperties?.addressContract_province})
+               </div>
+               <FiberTechnology />
+            </>
+         )}
       </>
    )
 }
@@ -49,14 +76,25 @@ const AddonCluster: React.FC<AddonClusterProps> = ({ cluster, includedProducts }
    const dispatch = useDispatch()
    const tofId = useSelector(selectTofId)
    const cart = useSelector((state: any) => state.quote.cart)
+   const [loadingMap, setLoadingMap] = React.useState<{ [guid: string]: boolean }>({})
 
    const handleAddProduct = async (product: any) => {
-      await addProduct(product.guid, dispatch, tofId, product.parentGuid)
+      setLoadingMap(prev => ({ ...prev, [product.guid]: true }))
+      try {
+         await addProduct(product.guid, dispatch, tofId, product.parentGuid)
+      } finally {
+         setLoadingMap(prev => ({ ...prev, [product.guid]: false }))
+      }
    }
 
    const handleRemoveProduct = async (product: any) => {
-      const { deleteProduct } = await import('@/sites/telco/hooks/apparoundData')
-      await deleteProduct(product.guid, dispatch)
+      setLoadingMap(prev => ({ ...prev, [product.guid]: true }))
+      try {
+         const { deleteProduct } = await import('@/sites/telco/hooks/apparoundData')
+         await deleteProduct(product.guid, dispatch)
+      } finally {
+         setLoadingMap(prev => ({ ...prev, [product.guid]: false }))
+      }
    }
 
    return (
@@ -69,6 +107,8 @@ const AddonCluster: React.FC<AddonClusterProps> = ({ cluster, includedProducts }
                onRemove={handleRemoveProduct}
                cart={cart}
                includedProducts={includedProducts}
+               cluster={cluster}
+               loadingMap={loadingMap}
             />
          </div>
       </Card>
