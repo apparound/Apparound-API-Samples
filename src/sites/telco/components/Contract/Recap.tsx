@@ -6,16 +6,19 @@ import { PriceBox } from '../OfferBox'
 import { useSelector } from 'react-redux'
 import { selectQuoteMontlyPrice, selectQuotePrice } from '@/sites/retail/features/quoteSlice'
 import { useMediaQuery } from 'react-responsive'
+import RecapProductList from './RecapProductList'
+import { useTranslation } from 'react-i18next'
 
-interface RiepilogoProps {
+interface RecapProps {
    className?: string
    children?: React.ReactNode
 }
 
-const Riepilogo = ({ className = '', children }: RiepilogoProps) => {
+const Recap = ({ className = '', children }: RecapProps) => {
    const quotePrice = useSelector(selectQuotePrice)
    const quoteMonthlyPrice = useSelector(selectQuoteMontlyPrice)
    const isMobile = useMediaQuery({ maxWidth: 767 })
+   const { t } = useTranslation()
 
    return (
       <Card className={`bg-white rounded-2xl shadow-lg border border-gray-200 ${className}`}>
@@ -25,8 +28,8 @@ const Riepilogo = ({ className = '', children }: RiepilogoProps) => {
                {'Riepilogo'}
             </h3>
          </div>
-         {children ? children : <div className="text-gray-500">Nessun dato disponibile</div>}
 
+         <RecapProductList />
          <div className="bg-primary/20 p-6">
             <PriceBox
                label="Attivazione"
@@ -43,15 +46,15 @@ const Riepilogo = ({ className = '', children }: RiepilogoProps) => {
          </div>
 
          <Button
-            className="mx-2 my-4"
+            className="mx-4 my-4 w-[80%] bg-white border-2 border-primary text-primary hover:bg-purple-700 hover:text-white rounded-3xl px-6"
             onClick={() => {
                console.log("Procedi con l'ordine")
             }}
          >
-            Procedi con l'ordine
+            {t('Visualizza PDF Offerta').toUpperCase()}
          </Button>
       </Card>
    )
 }
 
-export default Riepilogo
+export default Recap

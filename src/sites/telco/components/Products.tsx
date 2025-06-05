@@ -78,7 +78,7 @@ const Products: React.FC<ProductsProps> = ({
                         }
                      })
                   }}
-                  icon={ProductIcon.get(product.description.toLowerCase())}
+                  icon={ProductIcon.getByName(product.description.toLowerCase())}
                />
             )
          })}

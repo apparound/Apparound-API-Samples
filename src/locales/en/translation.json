@@ -191,5 +191,9 @@
    "Tariffe trasparenti, senza costi nascosti": "Transparent tariffs, no hidden costs",
    "Assistenza rapida, sempre disponibile": "Fast support, always available",
    "Copertura": "Coverage",
-   "Dati personali": "Personal data"
+   "Dati personali": "Personal data",
+   "Documento": "Document",
+   "Fronte documento": "Document front",
+   "Retro documento": "Document back",
+   "Tipo documento": "Document type"
 }

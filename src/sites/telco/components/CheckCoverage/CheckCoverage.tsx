@@ -65,7 +65,6 @@ const CheckCoverage = ({ onCoverageResponse }: CheckCoverageProps) => {
       setResponse(res)
       if (onCoverageResponse) onCoverageResponse(res)
 
-      // Aggiorna le proprietà del contract su redux
       dispatch(
          updateContractProperties({
             addressContract_province: formData.provincia,

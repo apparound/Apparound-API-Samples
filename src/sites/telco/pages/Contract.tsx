@@ -4,8 +4,7 @@ import OfferHeader from '../components/Offers/OfferHeader'
 import { useSelector } from 'react-redux'
 import { selectTofId, selectTofList } from '@/sites/retail/features/quoteSlice'
 import ContractData from '../components/Contract/ContractData'
-import { useTranslation } from 'react-i18next'
-import Riepilogo from '../components/Contract/Riepilogo'
+import Recap from '../components/Contract/Recap'
 
 const Contract = () => {
    const tofId = useSelector(selectTofId)
@@ -22,7 +21,7 @@ const Contract = () => {
                <ContractData />
             </div>
             <div className="lg:basis-[40%] max-w-md w-full mx-auto">
-               <Riepilogo />
+               <Recap />
             </div>
          </div>
          <Footer />
