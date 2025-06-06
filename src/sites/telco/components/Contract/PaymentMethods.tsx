@@ -3,11 +3,11 @@ import SectionTitle from '../SectionTitle'
 import { useTranslation } from 'react-i18next'
 
 interface PaymentMethodProps {
-   value: string
+   value: number
    label: string
    description: string
    checked: boolean
-   onChange: (value: string) => void
+   onChange: (value: number) => void
 }
 
 const PaymentMethod: React.FC<PaymentMethodProps> = ({ value, label, description, checked, onChange }) => (
@@ -28,8 +28,8 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({ value, label, description
 )
 
 interface PaymentMethodsProps {
-   value: string
-   onChange: (value: string) => void
+   value: number
+   onChange: (value: number) => void
 }
 
 const PaymentMethods: React.FC<PaymentMethodsProps> = ({ value, onChange }) => {
@@ -38,17 +38,17 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({ value, onChange }) => {
       <div>
          <SectionTitle text={t('Metodo di pagamento')} />
          <PaymentMethod
-            value="SEPA"
-            label={t('SEPA')}
-            description={t('Addebito automatico sul conto corrente alla scadenza')}
-            checked={value === 'SEPA'}
+            value={1}
+            label={t('Bollettino postale')}
+            description={t('Pagamento manuale presso poste, tabaccherie o online')}
+            checked={value === 1}
             onChange={onChange}
          />
          <PaymentMethod
-            value="Bollettino"
-            label={t('Bollettino postale')}
-            description={t('Pagamento manuale presso poste, tabaccherie o online')}
-            checked={value === 'Bollettino'}
+            value={2}
+            label={t('SEPA')}
+            description={t('Addebito automatico sul conto corrente alla scadenza')}
+            checked={value === 2}
             onChange={onChange}
          />
       </div>

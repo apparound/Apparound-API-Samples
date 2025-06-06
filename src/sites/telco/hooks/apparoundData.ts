@@ -86,3 +86,15 @@ export const saveContract = async (contract, customer, dispatch) => {
 
    dispatch(updateContract(currentContract.contract))
 }
+
+export const getPdfQuote = async (sessionId: string) => {
+   const response = await fetch(`/getPdfQuote`, {
+      method: 'GET',
+      headers: {
+         'x-sessionid': sessionId,
+      },
+   })
+   if (!response.ok) throw new Error('Errore nel recupero del PDF')
+   const blob = await response.blob()
+   return blob
+}

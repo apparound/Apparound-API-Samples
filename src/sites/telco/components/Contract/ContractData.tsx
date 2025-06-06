@@ -5,8 +5,8 @@ import PaymentMethods from './PaymentMethods'
 import { useTranslation } from 'react-i18next'
 import React, { useState } from 'react'
 import DocumentData from './DocumentData'
-import { useSelector } from 'react-redux'
-import { selectContract, selectCustomer } from '@/sites/retail/features/quoteSlice'
+import { useSelector, useDispatch } from 'react-redux'
+import { selectContract, selectCustomer, updateContractProperties } from '@/sites/retail/features/quoteSlice'
 
 interface ContractDataProps {
    className?: string
@@ -14,9 +14,16 @@ interface ContractDataProps {
 
 const ContractData: React.FC<ContractDataProps> = ({ className = '' }) => {
    const { t } = useTranslation()
-   const [paymentMethod, setPaymentMethod] = useState('SEPA')
+   const [paymentMethod, setPaymentMethod] = useState(0)
    const contract = useSelector(selectContract)
    const customer = useSelector(selectCustomer)
+   const dispatch = useDispatch()
+
+   const handlePaymentMethodChange = (value: number) => {
+      setPaymentMethod(value)
+      dispatch(updateContractProperties({ headlessPaymentType: value }))
+      console.log('Contract:', contract)
+   }
 
    return (
       <div className={className}>
@@ -25,7 +32,7 @@ const ContractData: React.FC<ContractDataProps> = ({ className = '' }) => {
             <ContractCustomerForm className="mt-4" />
             <SectionTitle text="Numero di telefono fisso" />
             <DocumentData />
-            <PaymentMethods value={paymentMethod} onChange={setPaymentMethod} />
+            <PaymentMethods value={paymentMethod} onChange={handlePaymentMethodChange} />
          </Card>
       </div>
    )
