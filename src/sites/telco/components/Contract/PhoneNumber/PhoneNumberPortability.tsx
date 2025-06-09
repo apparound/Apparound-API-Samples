@@ -1,10 +1,11 @@
-import { selectFlatCart, selectTree } from '@/sites/retail/features/quoteSlice'
+import { selectFlatCartWithQuantities, selectTree } from '@/sites/retail/features/quoteSlice'
 import SectionTitle from '../../SectionTitle'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { findNodeForKey } from '@/hooks/useQuote'
 import { useTranslation } from 'react-i18next'
 import OperatorSelect from './OperatorSelect'
+import NumberLines from './NumberLines'
 
 interface PortabilityOptionProps {
    value: string
@@ -29,25 +30,38 @@ const PortabilityOption: React.FC<PortabilityOptionProps> = ({ value, label, che
 
 const PhoneNumberPortability: React.FC = () => {
    const { t } = useTranslation()
-   const flatCart = useSelector(selectFlatCart)
+   const flatCart = useSelector(selectFlatCartWithQuantities)
    const tree = useSelector(selectTree)
-   let treeProducts = flatCart.map(guid => findNodeForKey('guid', guid, tree)).filter(node => node)
+   let treeProducts = flatCart.map(item => findNodeForKey('guid', item.guid, tree)).filter(node => node)
 
    const hasPortability = treeProducts.some((node: any) => node.config && node.config.isPortability == '1')
    const setQuantityProduct = treeProducts.find((node: any) => node.config && node.config.isQuantity == '1')
+   const setQuantity = setQuantityProduct
+      ? flatCart.find(item => item.guid === setQuantityProduct.guid)?.quantity || 0
+      : 0
 
    const [selected, setSelected] = useState('new')
    const [operator, setOperator] = useState('')
    const [phoneNumbers, setPhoneNumbers] = useState<string[]>([])
+   const [phoneIds, setPhoneIds] = useState<string[]>([])
 
    React.useEffect(() => {
-      if (selected === 'portability' && setQuantityProduct) {
-         setPhoneNumbers(Array(setQuantityProduct.quantity).fill(''))
+      if (selected === 'portability' && setQuantity > 0) {
+         setPhoneNumbers(Array(setQuantity).fill(''))
+         setPhoneIds(Array(setQuantity).fill(''))
       }
-   }, [selected, setQuantityProduct])
+   }, [selected, setQuantity])
 
    const handlePhoneNumberChange = (index: number, value: string) => {
       setPhoneNumbers(prev => {
+         const updated = [...prev]
+         updated[index] = value
+         return updated
+      })
+   }
+
+   const handlePhoneIdChange = (index: number, value: string) => {
+      setPhoneIds(prev => {
          const updated = [...prev]
          updated[index] = value
          return updated
@@ -76,19 +90,15 @@ const PhoneNumberPortability: React.FC = () => {
                {selected === 'portability' && (
                   <>
                      <OperatorSelect value={operator} onChange={setOperator} label={t('Operatore di provenienza')} />
-                     {setQuantityProduct && (
-                        <div className="flex flex-col gap-2 mt-2">
-                           {Array.from({ length: setQuantityProduct.quantity }).map((_, idx) => (
-                              <input
-                                 key={idx}
-                                 type="text"
-                                 className="border rounded px-2 py-1"
-                                 placeholder={t('Numero di telefono') + ' ' + (idx + 1)}
-                                 value={phoneNumbers[idx] || ''}
-                                 onChange={e => handlePhoneNumberChange(idx, e.target.value)}
-                              />
-                           ))}
-                        </div>
+                     {setQuantity > 0 && (
+                        <NumberLines
+                           quantity={setQuantity}
+                           phoneNumbers={phoneNumbers}
+                           phoneIds={phoneIds}
+                           onPhoneNumberChange={handlePhoneNumberChange}
+                           onPhoneIdChange={handlePhoneIdChange}
+                           t={t}
+                        />
                      )}
                   </>
                )}

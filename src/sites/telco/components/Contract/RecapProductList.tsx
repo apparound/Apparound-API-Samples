@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { getAddons } from '@/sites/telco/pages/getAddons'
 import { useSelector } from 'react-redux'
-import { selectCart, selectMainProduct, selectQuotePrice, selectTree } from '@/sites/retail/features/quoteSlice'
+import {
+   selectCart,
+   selectFlatCart,
+   selectMainProduct,
+   selectQuotePrice,
+   selectTree,
+} from '@/sites/retail/features/quoteSlice'
 import { useTranslation } from 'react-i18next'
 
 interface RecapProductListProps {}
@@ -28,6 +34,7 @@ const ProductRow: React.FC<{ label: string; price?: number }> = ({ label, price 
 const RecapProductList: React.FC<RecapProductListProps> = () => {
    const tree = useSelector(selectTree)
    const cart = useSelector(selectCart)
+   const flatCart = useSelector(selectFlatCart)
    const quotePrice = useSelector(selectQuotePrice)
    const { t } = useTranslation()
    const mainProduct = useSelector(selectMainProduct)
@@ -40,13 +47,31 @@ const RecapProductList: React.FC<RecapProductListProps> = () => {
          const lastCluster = mainProduct.clusters[mainProduct.clusters.length - 1]
          const newProducts = lastCluster.products || []
          setProducts(newProducts)
-         const newAddons = getAddons({ products: newProducts, cart, tree, quotePrice, setOfferTitle, t })
+         let newAddons = getAddons({ products: newProducts, cart, tree, quotePrice, setOfferTitle, t })
+
+         newAddons = newAddons.map((addon: any) => {
+            if (Array.isArray(addon.products)) {
+               const filteredProducts = addon.products.filter((p: any) => {
+                  if (p.label === t('Attivazione offerta')) return true
+                  return !p.guid || flatCart.includes(p.guid)
+               })
+               return { ...addon, products: filteredProducts }
+            }
+            return addon
+         })
+
+         newAddons = newAddons.filter((addon: any) => {
+            if (Array.isArray(addon.products)) {
+               return addon.products.length > 0
+            }
+            return true
+         })
          setAddons(newAddons)
       } else {
          setProducts([])
          setAddons([])
       }
-   }, [mainProduct, cart, tree, quotePrice, setOfferTitle, t])
+   }, [mainProduct, cart, tree, quotePrice, setOfferTitle, t, flatCart])
 
    if (!addons.length) {
       return <div className="text-gray-500">Nessun prodotto disponibile</div>

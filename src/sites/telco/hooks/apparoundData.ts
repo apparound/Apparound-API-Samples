@@ -6,6 +6,7 @@ import {
    updateStartingProducts as updateStartingProducts,
    addProduct as addProductAction,
    deleteProduct as deleteProductAction,
+   setProductQuantityReducer as setProductQuantityAction,
    updateQuote,
    updateContract,
 } from '@/sites/retail/features/quoteSlice'
@@ -55,6 +56,8 @@ export const deleteProduct = async (productGuid: string, dispatch: any) => {
 
 export const setProductQuantity = async (productGuid: string, quantity: number, dispatch: any) => {
    await fetchData(`/setProductQuantity/productGuid/${productGuid}/qty/${quantity}`, 'post')
+
+   dispatch(setProductQuantityAction({ productGuid, quantity }))
 }
 
 export const updateCustomerQuote = async (customer, dispatch) => {

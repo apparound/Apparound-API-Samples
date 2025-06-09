@@ -50,8 +50,8 @@ const ConfigureOffer = () => {
       if (cart) {
          const updatedSwitchStates = { ...switchStates }
          Object.keys(cart).forEach(clusterGuid => {
-            Object.keys(cart[clusterGuid]).forEach(productGuid => {
-               if (cart[clusterGuid][productGuid]) {
+            Object.keys(cart[clusterGuid]?.children || {}).forEach(productGuid => {
+               if (cart[clusterGuid]?.children[productGuid]) {
                   updatedSwitchStates[productGuid] = true
                }
             })
