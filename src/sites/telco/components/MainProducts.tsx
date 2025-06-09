@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react'
-import { ApparoundData } from '@/hooks/use-apparound-data'
 import OfferCard from '@/sites/telco/components/Offers/OfferCard'
 import { getImageUrl } from '@/utils/utils'
 

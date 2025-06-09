@@ -195,5 +195,11 @@
    "Documento": "Document",
    "Fronte documento": "Document front",
    "Retro documento": "Document back",
-   "Tipo documento": "Document type"
+   "Tipo documento": "Document type",
+   "Numero di telefono fisso": "Landline number",
+   "Portabilità presente": "Portability present",
+   "Sì": "Yes",
+   "No": "No",
+   "Nuovo numero": "New number",
+   "Portabilità numero esistente": "Port existing number"
 }

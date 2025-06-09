@@ -34,7 +34,6 @@ const Recap = ({ className = '' }: RecapProps) => {
    const sessionId = useSelector((state: any) => state.quote.sessionId)
 
    const viewOffer = async () => {
-      // Mapping tra proprietà contratto e customer
       const mapping = {
          firstName: 'firstName',
          lastName: 'lastName',
