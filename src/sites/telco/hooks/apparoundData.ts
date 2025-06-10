@@ -91,8 +91,7 @@ export const saveContract = async (contract, customer, dispatch) => {
 }
 
 export const getPdfQuote = async (sessionId: string) => {
-   const response = await fetch(`/getPdfQuote`, {
-      method: 'GET',
+   const response = await fetchData(`/getPdfQuote`, 'get', {
       headers: {
          'x-sessionid': sessionId,
       },
@@ -100,4 +99,10 @@ export const getPdfQuote = async (sessionId: string) => {
    if (!response.ok) throw new Error('Errore nel recupero del PDF')
    const blob = await response.blob()
    return blob
+}
+
+export const SERVER_URL: string = import.meta.env.MODE === 'development' ? 'http://localhost:3000' : ''
+
+export const getPdfUrl = async (sessionId: string) => {
+   return `${SERVER_URL}/getPdfQuote?sessionId=${sessionId}`
 }

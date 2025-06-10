@@ -178,7 +178,8 @@ app.post('/finalizeQuote', async (req: any, res: any) => {
 
 app.get('/getPdfQuote', async (req: any, res: any) => {
    try {
-      const sessionId: string = req.query.sessionId?.toString() || ''
+      let sessionId: string = req.query.sessionId?.toString() || ''
+      if (sessionId == '') sessionId = getSessionIdFromHeaders(req)
       const response: any = await new ApparoundUtils().getPdfQuote(sessionId)
       res.set('Content-Type', response.headers.getContentType() || 'application/pdf')
       res.send(Buffer.from(response.data, 'binary'))

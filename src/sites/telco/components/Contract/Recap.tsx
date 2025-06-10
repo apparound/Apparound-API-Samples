@@ -14,7 +14,7 @@ import {
 import { useMediaQuery } from 'react-responsive'
 import RecapProductList from './RecapProductList'
 import { useTranslation } from 'react-i18next'
-import { getPdfQuote, saveContract } from '../../hooks/apparoundData'
+import { getPdfQuote, getPdfUrl, saveContract } from '../../hooks/apparoundData'
 import { use } from 'i18next'
 
 interface RecapProps {
@@ -55,7 +55,10 @@ const Recap = ({ className = '' }: RecapProps) => {
       }
 
       await saveContract(contractData, customerData, dispatch)
-      getPdfQuote(sessionId)
+
+      const pdfUrl = await getPdfUrl(sessionId)
+      window.open(pdfUrl, '_blank')
+      //getPdfQuote(sessionId)
    }
 
    return (

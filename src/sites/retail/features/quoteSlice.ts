@@ -223,11 +223,14 @@ export const selectMainProduct = createSelector(
    }
 )
 export const selectSizeProducts = getSelected => state => {
-   const mainProduct = state.quote.tree?.find(item => item.guid === Object.keys(state.quote.cart)[0])
-   const selectedSizeGuid = Object.keys(state.quote.cart[Object.keys(state.quote.cart || {})[0]] || {})[0]
+   const cart = state.quote.cart || {}
+   const tree = state.quote.tree || []
+   const mainGuid = Object.keys(cart)[0]
+   const mainProduct = tree.find(item => item.guid === mainGuid)
+   const mainProductInCart = cart[mainGuid] || {}
+   const selectedSizeGuid = Object.keys(mainProductInCart.children || {})[0]
    const mainCluster = mainProduct?.clusters?.find(cluster => cluster.label === config.mainClusterLabel) || {}
    const toReturn = mainCluster?.products || []
-
    return getSelected ? toReturn.find(item => item.guid === selectedSizeGuid) : toReturn
 }
 
@@ -248,14 +251,17 @@ export const selectAddedToCart = state => {
 }
 
 export const selectColorProduct = state => {
-   const mainProduct = state.quote.tree?.find(item => item.guid === Object.keys(state.quote.cart)[0])
-   const selectedSizeGuid = Object.keys(state.quote.cart[Object.keys(state.quote.cart || {})[0]] || {})[0]
+   const cart = state.quote.cart || {}
+   const tree = state.quote.tree || []
+   const mainGuid = Object.keys(cart)[0]
+   const mainProduct = tree.find(item => item.guid === mainGuid)
+   const mainProductInCart = cart[mainGuid] || {}
+   const selectedSizeGuid = Object.keys(mainProductInCart.children || {})[0]
    const mainCluster = mainProduct?.clusters?.find(cluster => cluster.label === config.mainClusterLabel) || {}
    const selectedSize = mainCluster?.products?.find(item => item.guid === selectedSizeGuid)
+   const selectedSizeInCart = mainProductInCart.children[selectedSizeGuid] || {}
    const colorCluster = selectedSize?.clusters?.find(cluster => cluster.label === config.colorClusterLabel) || {}
-   const cartItems = flatCart(state.quote.cart || {})
-
-   return colorCluster?.products?.find(product => cartItems.includes(product.guid))
+   return colorCluster?.products?.find(product => selectedSizeInCart.children && selectedSizeInCart.children[product.guid])
 }
 
 export const selectCartClusters = createSelector(
@@ -263,17 +269,20 @@ export const selectCartClusters = createSelector(
    (mainProduct, cart, flatCart) => {
       if (!cart || !flatCart || !mainProduct) return null
 
-      const selectedSizeGuid = Object.keys(cart[Object.keys(cart || {})[0]] || {})[0]
+      const getFirstKey = obj => Object.keys(obj || {})[0]
+      const mainGuid = getFirstKey(cart)
+      const mainProductInCart = cart[mainGuid] || {}
+      const selectedSizeGuid = getFirstKey(mainProductInCart.children)
       const mainCluster = mainProduct?.clusters?.find(cluster => cluster.label === config.mainClusterLabel) || {}
       const selectedSize = mainCluster?.products?.find(item => item.guid === selectedSizeGuid)
-
+      const selectedSizeInCart = mainProductInCart.children[selectedSizeGuid] || {}
       return {
          mainCluster,
          selectedSize,
          clusters:
             selectedSize?.clusters?.map(cluster => ({
                ...cluster,
-               selectedProduct: cluster?.products?.find(item => flatCart.includes(item.guid)),
+               selectedProduct: cluster?.products?.find(item => selectedSizeInCart.children && selectedSizeInCart.children[item.guid]),
             })) || [],
       }
    }

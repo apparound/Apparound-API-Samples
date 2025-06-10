@@ -12,7 +12,7 @@ import Spinner from '@/components/Spinner'
 
 const ContractSignature = () => {
    const navigate = useRelativeNavigate()
-   const { t } = useTranslation() // Inizializza useTranslation
+   const { t } = useTranslation()
    const [iframeLoaded, setIframeLoaded] = useState(false)
    return (
       <div className="min-h-screen flex flex-col justify-center max-h-screen overflow-hidden">
