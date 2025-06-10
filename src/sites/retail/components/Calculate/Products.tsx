@@ -23,7 +23,7 @@ const Products = ({ size, setSize }: ProductsPropsI) => {
    const [productSelected, setProductSelected] = useState(false)
    const selectProduct = async (product: any) => {
       dispatch(showLoader())
-      for (const guid of Object.keys(cart[product.parentGuid])) {
+      for (const guid of Object.keys(cart[product.parentGuid]?.children || {})) {
          await deleteProduct(guid, dispatch)
       }
       await addProduct(product.guid, dispatch, product.parentGuid)

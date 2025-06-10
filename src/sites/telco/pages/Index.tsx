@@ -1,13 +1,13 @@
 import Navbar from '@/sites/telco/components/Navbar'
 import Offers from '@/sites/telco/components/Offers/Offers'
 import { useNavigate } from 'react-router-dom'
-import HeroCarousel from '@/sites/telco/components/HeroCarousel'
 import Footer from '@/components/Footer'
 import { useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { reset as resetQuote } from '@/sites/retail/features/quoteSlice'
 import { showLoader, reset as resetApp } from '@/sites/retail/features/appSlice'
 import { initQuote } from '@/sites/telco/hooks/apparoundData'
+import HomeCarousel from '@/sites/telco/components/Carousels/HomeCarousel'
 
 const Index = () => {
    const navigate = useNavigate()
@@ -30,7 +30,7 @@ const Index = () => {
    return (
       <div className="min-h-screen bg-white flex flex-col">
          <Navbar />
-         <HeroCarousel />
+         <HomeCarousel />
          <Offers onNavigate={navigate} isLoading={isLoading} />
          <Footer />
       </div>

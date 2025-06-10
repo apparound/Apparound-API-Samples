@@ -1,4 +1,3 @@
-import React from 'react'
 import Offer from '@/sites/utilities/components/custom/CartSignature/Offer'
 import { Button } from '@/sites/utilities/components/ui/button'
 import { SERVER_URL } from '@/sites/utilities/hooks/use-apparound-data'

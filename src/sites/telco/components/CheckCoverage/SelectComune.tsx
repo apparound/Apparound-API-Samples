@@ -1,10 +1,12 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useTranslation } from 'react-i18next'
 
 const SelectComune = ({ comuniByProvincia, handleComuneChange, isDisabled }) => {
+   const { t } = useTranslation()
    return (
       <Select name="comune" onValueChange={handleComuneChange} disabled={isDisabled}>
          <SelectTrigger>
-            <SelectValue placeholder="Comune" />
+            <SelectValue placeholder={t('Comune')} />
          </SelectTrigger>
          <SelectContent>
             {comuniByProvincia.map(comune => (

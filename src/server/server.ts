@@ -110,7 +110,7 @@ app.delete('/removeProduct/productGuid/:productGuid', async (req: any, res: any)
    }
 })
 
-app.post('/setProductQuantity/productGuid/:productGuid/qty/:quantity', async (req: any, res: any) => {
+app.post('/setProductQuantity/productGuid/:productGuid/qty/:productQuantity', async (req: any, res: any) => {
    try {
       const sessionId: string = getSessionIdFromHeaders(req)
       const productGuid: string = req.params?.productGuid?.toString() || null
@@ -159,7 +159,7 @@ app.post('/updateCustomerQuote', async (req: any, res: any) => {
    try {
       const sessionId: string = getSessionIdFromHeaders(req)
       const customerData = req.body?.customer || {}
-      const response: any = await new ApparoundUtils().updateCustormer(sessionId, customerData)
+      const response: any = await new ApparoundUtils().updateCustomer(sessionId, customerData)
       res.json(response)
    } catch (error: any) {
       res.status(500).send(error)
@@ -178,7 +178,8 @@ app.post('/finalizeQuote', async (req: any, res: any) => {
 
 app.get('/getPdfQuote', async (req: any, res: any) => {
    try {
-      const sessionId: string = req.query.sessionId?.toString() || ''
+      let sessionId: string = req.query.sessionId?.toString() || ''
+      if (sessionId == '') sessionId = getSessionIdFromHeaders(req)
       const response: any = await new ApparoundUtils().getPdfQuote(sessionId)
       res.set('Content-Type', response.headers.getContentType() || 'application/pdf')
       res.send(Buffer.from(response.data, 'binary'))

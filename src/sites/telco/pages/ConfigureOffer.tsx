@@ -1,6 +1,4 @@
 import Navbar from '@/sites/telco/components/Navbar'
-import StepIndicator from '@/sites/utilities/components/custom/StepIndicator'
-import { useMediaQuery } from 'react-responsive'
 import OfferHeader from '@/sites/telco/components/Offers/OfferHeader'
 import Footer from '@/components/Footer'
 import { useSelector } from 'react-redux'
@@ -17,11 +15,10 @@ import { useDispatch } from 'react-redux'
 import MainProducts from '@/sites/telco/components/MainProducts'
 import Products from '@/sites/telco/components/Products'
 import { useTranslation } from 'react-i18next'
-import { customSteps } from '@/sites/telco/config'
+import StepIndicatorTelco from './StepIndicatorTelco'
 
 const ConfigureOffer = () => {
    const { t } = useTranslation()
-   const isMobile = useMediaQuery({ maxWidth: 767 })
    const startingProducts = useSelector(selectStartingProducts)
    const tofId = useSelector(selectTofId)
    const dispatch = useDispatch()
@@ -31,15 +28,18 @@ const ConfigureOffer = () => {
    const [selectedOfferGuid, setSelectedOfferGuid] = useState<string | null>(null)
    const cart = useSelector(selectCart)
    const tofList = useSelector(selectTofList)
+   const [addingMainProductGuid, setAddingMainProductGuid] = useState<string | null>(null)
 
    const offerTitle = tofList?.find((tof: any) => String(tof.id) === String(tofId))?.name || ''
    const headerTitle = offerTitle ? `Offerte ${offerTitle}` : 'Offerte'
 
    useEffect(() => {
       if (mainProduct?.clusters) {
-         setProducts(mainProduct.clusters[0].products)
+         const clusters = mainProduct.clusters.slice(0, -1)
+         const allProducts = clusters.flatMap(cluster => cluster.products)
+         setProducts(allProducts)
          const initialSwitches = {}
-         mainProduct.clusters[0].products.forEach(p => {
+         allProducts.forEach(p => {
             initialSwitches[p.guid] = false
          })
          setSwitchStates(initialSwitches)
@@ -50,8 +50,8 @@ const ConfigureOffer = () => {
       if (cart) {
          const updatedSwitchStates = { ...switchStates }
          Object.keys(cart).forEach(clusterGuid => {
-            Object.keys(cart[clusterGuid]).forEach(productGuid => {
-               if (cart[clusterGuid][productGuid]) {
+            Object.keys(cart[clusterGuid]?.children || {}).forEach(productGuid => {
+               if (cart[clusterGuid]?.children[productGuid]) {
                   updatedSwitchStates[productGuid] = true
                }
             })
@@ -77,6 +77,7 @@ const ConfigureOffer = () => {
 
    const handleSelectMainProduct = async (guid: string) => {
       if (selectedOfferGuid) {
+         setProducts([])
          await deleteProduct(selectedOfferGuid, dispatch)
       }
       setSelectedOfferGuid(guid)
@@ -87,14 +88,8 @@ const ConfigureOffer = () => {
    }
    return (
       <div className="min-h-screen bg-white">
-         <Navbar showTofList={true} />
-         <div className="w-full">
-            {!isMobile ? (
-               <StepIndicator step={1} customSteps={customSteps} />
-            ) : (
-               <div className="border-t-2 w-full" style={{ borderColor: '#f4f4f4' }}></div>
-            )}
-         </div>
+         <Navbar showTofList={true} onSelectMainProduct={handleSelectMainProduct} />
+         <StepIndicatorTelco step={1} />
 
          <OfferHeader title={headerTitle} />
 
@@ -108,6 +103,8 @@ const ConfigureOffer = () => {
                addProduct={addProduct}
                dispatch={dispatch}
                tofId={tofId}
+               addingProductGuid={addingMainProductGuid}
+               setAddingProductGuid={setAddingMainProductGuid}
             />
 
             <Products

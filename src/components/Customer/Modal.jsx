@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Modal from '@/components/Modal'
 import { createCustomer } from '@/utils/treeManager'
 import useRelativeNavigate from '@/utils/navigate'
@@ -22,7 +22,6 @@ const CustomerModal = ({ showModal, setShowModal }) => {
          return formRef.current?.reportValidity()
       }
 
-      // TODO submit and redirect
       try {
          await createCustomer(customerData)
 

@@ -10,10 +10,11 @@ import { store } from './store'
 import { persistor } from './persistor'
 import Index from './pages/Index'
 import ConfigureOffer from '@/sites/telco/pages/ConfigureOffer'
-import Business from '@/sites/telco/pages/Business'
 import OffertaHome from './pages/OffertaHome'
+import OfferDetail from './pages/OfferDetail'
 import NotFound from './pages/NotFound'
 import './App.css'
+import Contract from './pages/Contract'
 
 const queryClient = new QueryClient()
 
@@ -40,7 +41,9 @@ const App = () => {
                      <Route path="/" element={<Index />} />
                      <Route path="configure-offer" element={<ConfigureOffer />} />
                      <Route path="offerta-home" element={<OffertaHome />} />
+                     <Route path="offer-detail" element={<OfferDetail />} />
                      <Route path="*" element={<NotFound />} />
+                     <Route path="contract" element={<Contract />} />
                   </Routes>
                </TooltipProvider>
             </QueryClientProvider>

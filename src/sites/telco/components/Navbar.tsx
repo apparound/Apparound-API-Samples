@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom'
 
 interface NavbarProps {
    showTofList?: boolean
+   onSelectMainProduct?: (guid: string) => void // nuova prop opzionale
 }
 
-const Navbar = ({ showTofList = false }: NavbarProps) => {
+const Navbar = ({ showTofList = false, onSelectMainProduct }: NavbarProps) => {
    const tofList = useSelector(selectTofList)
    const dispatch = useDispatch()
    const navigate = useNavigate()
@@ -35,6 +36,9 @@ const Navbar = ({ showTofList = false }: NavbarProps) => {
                      style={{ boxShadow: 'none' }}
                      onClick={async () => {
                         await getProductsFromTof(dispatch, item.id)
+                        if (onSelectMainProduct) {
+                           onSelectMainProduct(item.id)
+                        }
                         navigate('/telco/configure-offer')
                      }}
                   >
