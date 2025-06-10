@@ -208,5 +208,13 @@
    "Sì": "Sì",
    "No": "No",
    "Nuovo numero": "Nuovo numero",
-   "Portabilità numero esistente": "Portabilità numero esistente"
+   "Portabilità numero esistente": "Portabilità numero esistente",
+   "Data rilascio": "Data rilascio",
+   "Data scadenza": "Data scadenza",
+   "Carica fronte documento": "Carica fronte documento",
+   "Carica retro documento": "Carica retro documento",
+   "Inserisci il numero": "Inserisci il numero",
+   "Visualizza PDF Offerta": "Visualizza PDF Offerta",
+   "Mobile Light": "Mobile Light",
+   "Attivazione offerta": "Attivazione offerta"
 }

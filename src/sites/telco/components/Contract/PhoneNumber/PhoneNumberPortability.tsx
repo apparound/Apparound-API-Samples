@@ -70,39 +70,41 @@ const PhoneNumberPortability: React.FC = () => {
 
    return (
       <div className="w-full">
-         <SectionTitle text={t('Numero di telefono fisso')} />
          {hasPortability && (
-            <div className="mt-4 flex flex-col gap-4">
-               <div className="flex gap-6">
-                  <PortabilityOption
-                     value="new"
-                     label={t('Nuovo numero')}
-                     checked={selected === 'new'}
-                     onChange={setSelected}
-                  />
-                  <PortabilityOption
-                     value="portability"
-                     label={t('Portabilità numero esistente')}
-                     checked={selected === 'portability'}
-                     onChange={setSelected}
-                  />
+            <>
+               <SectionTitle text={t('Numero di telefono fisso')} />
+               <div className="mt-4 flex flex-col gap-4">
+                  <div className="flex gap-6">
+                     <PortabilityOption
+                        value="new"
+                        label={t('Nuovo numero')}
+                        checked={selected === 'new'}
+                        onChange={setSelected}
+                     />
+                     <PortabilityOption
+                        value="portability"
+                        label={t('Portabilità numero esistente')}
+                        checked={selected === 'portability'}
+                        onChange={setSelected}
+                     />
+                  </div>
+                  {selected === 'portability' && (
+                     <>
+                        <OperatorSelect value={operator} onChange={setOperator} label={t('Operatore di provenienza')} />
+                        {setQuantity > 0 && (
+                           <NumberLines
+                              quantity={setQuantity}
+                              phoneNumbers={phoneNumbers}
+                              phoneIds={phoneIds}
+                              onPhoneNumberChange={handlePhoneNumberChange}
+                              onPhoneIdChange={handlePhoneIdChange}
+                              t={t}
+                           />
+                        )}
+                     </>
+                  )}
                </div>
-               {selected === 'portability' && (
-                  <>
-                     <OperatorSelect value={operator} onChange={setOperator} label={t('Operatore di provenienza')} />
-                     {setQuantity > 0 && (
-                        <NumberLines
-                           quantity={setQuantity}
-                           phoneNumbers={phoneNumbers}
-                           phoneIds={phoneIds}
-                           onPhoneNumberChange={handlePhoneNumberChange}
-                           onPhoneIdChange={handlePhoneIdChange}
-                           t={t}
-                        />
-                     )}
-                  </>
-               )}
-            </div>
+            </>
          )}
       </div>
    )

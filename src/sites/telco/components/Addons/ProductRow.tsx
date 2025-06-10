@@ -2,6 +2,7 @@ import React from 'react'
 import { mdiPlusCircle, mdiCloseCircleOutline } from '@mdi/js'
 import Button from '@/sites/retail/components/Button'
 import ProductIcon from '../ProductIcon'
+import { getProductPriceString } from '@/utils/utils'
 
 interface ProductRowProps {
    product: any
@@ -31,12 +32,7 @@ const ProductRow: React.FC<ProductRowProps> = ({
                <div className="font-light text-gray-900">{product.label}</div>
             </div>
             <div className="flex items-center gap-2 min-w-[80px] font-semibold text-gray-700 justify-end">
-               {product.price && product.price > 0
-                  ? product.price.toLocaleString('it-IT', {
-                       style: 'currency',
-                       currency: 'EUR',
-                    })
-                  : 'Incluso'}
+               {getProductPriceString(product)}
                {!isIncluded && (
                   <Button
                      className="w-full bg-white focus:outline-none relative"

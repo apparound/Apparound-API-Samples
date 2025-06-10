@@ -5,6 +5,7 @@ import FiberTechnology from './FiberTechnology'
 import { useTranslation } from 'react-i18next'
 import { updateContractProperties } from '@/sites/retail/features/quoteSlice'
 import { useDispatch } from 'react-redux'
+import { getProvince, getComuniByProvincia } from '@/utils/comuniUtils'
 
 interface CheckCoverageProps {
    onCoverageResponse?: (response: any) => void
@@ -16,14 +17,8 @@ const CheckCoverage = ({ onCoverageResponse }: CheckCoverageProps) => {
    const [response, setResponse] = useState(null)
    const dispatch = useDispatch()
 
-   const province = [...new Set(comuni.map((comune: { provincia: { nome: string } }) => comune.provincia.nome))].sort()
-   const comuniByProvincia = formData.provincia
-      ? comuni
-           .filter(
-              (comune: { provincia: { nome: string }; nome: string }) => comune.provincia.nome === formData.provincia
-           )
-           .sort((a, b) => a.nome.localeCompare(b.nome))
-      : []
+   const province = getProvince()
+   const comuniByProvincia = getComuniByProvincia(formData.provincia)
 
    const handleInputChange = e => {
       const { name, value } = e.target

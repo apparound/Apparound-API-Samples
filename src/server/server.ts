@@ -110,7 +110,7 @@ app.delete('/removeProduct/productGuid/:productGuid', async (req: any, res: any)
    }
 })
 
-app.post('/setProductQuantity/productGuid/:productGuid/qty/:quantity', async (req: any, res: any) => {
+app.post('/setProductQuantity/productGuid/:productGuid/qty/:productQuantity', async (req: any, res: any) => {
    try {
       const sessionId: string = getSessionIdFromHeaders(req)
       const productGuid: string = req.params?.productGuid?.toString() || null

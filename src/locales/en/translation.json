@@ -201,5 +201,13 @@
    "Sì": "Yes",
    "No": "No",
    "Nuovo numero": "New number",
-   "Portabilità numero esistente": "Port existing number"
+   "Portabilità numero esistente": "Port existing number",
+   "Data rilascio": "Issue date",
+   "Data scadenza": "Expiry date",
+   "Carica fronte documento": "Upload document front",
+   "Carica retro documento": "Upload document back",
+   "Inserisci il numero": "Enter the number",
+   "Visualizza PDF Offerta": "View quote PDF",
+   "Mobile Light": "Mobile Light",
+   "Attivazione offerta": "Offer activation"
 }

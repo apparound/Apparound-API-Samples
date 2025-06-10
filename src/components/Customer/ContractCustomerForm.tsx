@@ -1,6 +1,8 @@
+import React from 'react'
 import { selectCustomer, updateCustomer } from '@/sites/retail/features/quoteSlice'
 import SectionTitle from '@/sites/telco/components/SectionTitle'
 import { useSelector, useDispatch } from 'react-redux'
+import { getProvince, getComuniByProvincia } from '@/utils/comuniUtils'
 
 interface ContractCustomerFormProps {
    className?: string
@@ -48,6 +50,8 @@ const FormInput = ({
 const ContractCustomerForm = ({ className = '' }: ContractCustomerFormProps) => {
    const dispatch = useDispatch()
    const customer = useSelector(selectCustomer)
+   const provinceList = React.useMemo(() => getProvince(), [])
+   const comuniList = React.useMemo(() => getComuniByProvincia(customer?.customAddress_province ?? ''), [customer?.customAddress_province])
    return (
       <>
          <SectionTitle text="Dati personali" />
@@ -67,23 +71,32 @@ const ContractCustomerForm = ({ className = '' }: ContractCustomerFormProps) => 
                      required
                      className="border border-gray-300 rounded px-3 py-2 w-full"
                      value={customer?.customAddress_province ?? ''}
-                     onChange={e => dispatch(updateCustomer({ customAddress_province: e.target.value }))}
+                     onChange={e => dispatch(updateCustomer({ customAddress_province: e.target.value, customAddress_city: '' }))}
                   >
                      <option value="" disabled>
                         Provincia
                      </option>
-                     {/* Opzioni province */}
+                     {provinceList.map(provincia => (
+                        <option key={provincia} value={provincia}>
+                           {provincia}
+                        </option>
+                     ))}
                   </select>
                   <select
                      required
                      className="border border-gray-300 rounded px-3 py-2 w-full"
                      value={customer?.customAddress_city ?? ''}
                      onChange={e => dispatch(updateCustomer({ customAddress_city: e.target.value }))}
+                     disabled={!customer?.customAddress_province}
                   >
                      <option value="" disabled>
                         Comune
                      </option>
-                     {/* Opzioni comuni */}
+                     {comuniList.map(comune => (
+                        <option key={comune.nome} value={comune.nome}>
+                           {comune.nome}
+                        </option>
+                     ))}
                   </select>
                   <FormInput required placeholder="CAP" mapField="customAddress_zipCode" />
                </div>

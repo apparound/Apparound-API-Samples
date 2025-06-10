@@ -9,6 +9,7 @@ import {
    selectTree,
 } from '@/sites/retail/features/quoteSlice'
 import { useTranslation } from 'react-i18next'
+import { getProductPriceString } from '@/utils/utils'
 
 interface RecapProductListProps {}
 
@@ -16,17 +17,17 @@ const AddonTitle: React.FC<{ label: string }> = ({ label }) => (
    <span className="font-semibold text-left text-lg truncate w-full">{label}</span>
 )
 
-const ProductRow: React.FC<{ label: string; price?: number }> = ({ label, price }) => {
+const ProductRow: React.FC<{ label: string; price?: number; product?: any }> = ({ label, price, product }) => {
    let priceString = ''
-   if (price !== undefined) {
-      priceString = price % 1 === 0 ? `${price},00` : price.toFixed(2).replace('.', ',')
+   if (product) {
+      priceString = getProductPriceString(product)
+   } else if (price !== undefined) {
+      priceString = price % 1 === 0 ? `${price},00` : price.toFixed(2).replace('.', ',') + ' €'
    }
    return (
       <li className="flex items-center text-base list-none p-0 m-0 gap-2 min-w-0 w-full">
          <span className="truncate max-w-full text-left flex-1">{label}</span>
-         {price !== undefined && (
-            <span className="flex-shrink-0 whitespace-nowrap text-right min-w-[80px]">{priceString} €</span>
-         )}
+         {priceString && <span className="flex-shrink-0 whitespace-nowrap text-right min-w-[80px]">{priceString}</span>}
       </li>
    )
 }
@@ -88,7 +89,12 @@ const RecapProductList: React.FC<RecapProductListProps> = () => {
                   {addon.products && Array.isArray(addon.products) && (
                      <ul className="pr-4 pb-2 mt-1 w-full">
                         {addon.products.map((p: any, i: number) => (
-                           <ProductRow key={p.guid || p.id || i} label={p.label || p.description} price={p.price} />
+                           <ProductRow
+                              key={p.guid || p.id || i}
+                              label={p.label || p.description}
+                              price={p.price}
+                              product={p}
+                           />
                         ))}
                      </ul>
                   )}
