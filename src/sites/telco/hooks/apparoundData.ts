@@ -6,6 +6,9 @@ import {
    updateStartingProducts as updateStartingProducts,
    addProduct as addProductAction,
    deleteProduct as deleteProductAction,
+   setProductQuantityReducer as setProductQuantityAction,
+   updateQuote,
+   updateContract,
 } from '@/sites/retail/features/quoteSlice'
 
 export const initQuote = async (dispatch: any) => {
@@ -53,5 +56,48 @@ export const deleteProduct = async (productGuid: string, dispatch: any) => {
 
 export const setProductQuantity = async (productGuid: string, quantity: number, dispatch: any) => {
    await fetchData(`/setProductQuantity/productGuid/${productGuid}/qty/${quantity}`, 'post')
-   // Qui puoi eventualmente aggiornare lo stato globale se necessario
+
+   dispatch(setProductQuantityAction({ productGuid, quantity }))
+}
+
+export const updateCustomerQuote = async (customer, dispatch) => {
+   await fetchData('/updateCustomerQuote', 'post', {
+      customer: {
+         ...customer,
+         properties: {
+            ...customer,
+         },
+      },
+   })
+}
+
+export const saveContract = async (contract, customer, dispatch) => {
+   await fetchData('/updateCustomerQuote', 'post', {
+      customer: {
+         ...customer,
+         properties: {
+            ...customer,
+         },
+      },
+   })
+
+   const quote = await fetchData('/finalizeQuote', 'post')
+
+   dispatch(updateQuote(quote.quote))
+
+   const currentContract = await fetchData('/saveContract', 'post', { contract })
+
+   dispatch(updateContract(currentContract.contract))
+}
+
+export const getPdfQuote = async (sessionId: string) => {
+   const response = await fetch(`/getPdfQuote`, {
+      method: 'GET',
+      headers: {
+         'x-sessionid': sessionId,
+      },
+   })
+   if (!response.ok) throw new Error('Errore nel recupero del PDF')
+   const blob = await response.blob()
+   return blob
 }

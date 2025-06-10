@@ -302,7 +302,7 @@ export class ApparoundUtils {
       return response.customerQuoteId || -1
    }
 
-   async updateCustormer(sessionId: string, customerData: any): Promise<any> {
+   async updateCustomer(sessionId: string, customerData: any): Promise<any> {
       const token = SESSION_LIST[sessionId].TOKEN
       const customerId = SESSION_LIST[sessionId].CUSTOMER_ID
       const currentQuoteId = SESSION_LIST[sessionId].CUSTOMER_QUOTE_ID

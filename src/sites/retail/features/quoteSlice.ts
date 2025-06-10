@@ -3,7 +3,10 @@ import { config } from '@/sites/retail/config'
 import { Product } from '@/interfaces/Product'
 
 interface cartI {
-   [key: string]: cartI
+   [key: string]: {
+      quantity: number
+      children: cartI
+   }
 }
 
 interface contractDataI {
@@ -57,28 +60,31 @@ const addProductsToParent = (tree: any[], clusters: any[], productGuid: string) 
 const createCartFromQuote = children => {
    const toReturn = {}
    children.forEach(child => {
-      toReturn[child.uniqueGuid] = createCartFromQuote(child.children) || {}
+      toReturn[child.uniqueGuid] = {
+         quantity: child.quantity || 0,
+         children: createCartFromQuote(child.children || []),
+      }
    })
-
    return toReturn
 }
 
 const addProductKeyToCart = (cart: cartI, parentGuid: string, productGuid: string) => {
    if (parentGuid) {
       if (cart[parentGuid]) {
-         cart[parentGuid] = {
-            ...(cart[parentGuid] || {}),
-            [productGuid]: {},
+         const parent = cart[parentGuid]
+         if (!parent.children[productGuid]) {
+            parent.children[productGuid] = { quantity: 1, children: {} }
          }
       } else {
          Object.entries(cart).forEach(([key, value]) => {
-            cart[key] = addProductKeyToCart(value, parentGuid, productGuid)
+            cart[key].children = addProductKeyToCart(value.children, parentGuid, productGuid)
          })
       }
    } else {
-      cart[productGuid] = {}
+      if (!cart[productGuid]) {
+         cart[productGuid] = { quantity: 1, children: {} }
+      }
    }
-
    return cart
 }
 
@@ -87,17 +93,34 @@ const deleteProductR = (cart: cartI, guid: string) => {
       delete cart[guid]
    } else {
       Object.entries(cart).forEach(([key, value]) => {
-         cart[key] = deleteProductR(value, guid)
+         value.children = deleteProductR(value.children, guid)
       })
    }
-
    return cart
 }
 
-const flatCart = (cart: Record<string, any>): string[] => {
+const flatCart = (cart: cartI): string[] => {
    if (!cart || typeof cart !== 'object') return []
+   return [...Object.keys(cart), ...Object.values(cart).flatMap(item => flatCart(item.children))]
+}
 
-   return [...Object.keys(cart), ...Object.values(cart).flatMap(flatCart)]
+const flatCartWithQuantities = (cart: cartI): { guid: string; quantity: number }[] => {
+   if (!cart || typeof cart !== 'object') return []
+   return Object.entries(cart).flatMap(([guid, item]) => [
+      { guid, quantity: item.quantity },
+      ...flatCartWithQuantities(item.children),
+   ])
+}
+
+const setProductQuantity = (cart: cartI, productGuid: string, quantity: number): cartI => {
+   if (cart[productGuid]) {
+      cart[productGuid].quantity = quantity
+   } else {
+      Object.values(cart).forEach(item => {
+         setProductQuantity(item.children, productGuid, quantity)
+      })
+   }
+   return cart
 }
 
 export const quoteSlice = createSlice({
@@ -182,6 +205,10 @@ export const quoteSlice = createSlice({
       deleteProduct: (state, { payload }) => {
          state.cart = deleteProductR(state.cart, payload.productGuid)
       },
+      setProductQuantityReducer: (state, { payload }) => {
+         const { productGuid, quantity } = payload
+         state.cart = setProductQuantity(state.cart, productGuid, quantity)
+      },
    },
 })
 
@@ -205,6 +232,8 @@ export const selectSizeProducts = getSelected => state => {
 }
 
 export const selectFlatCart = createSelector([selectCart], cart => flatCart(cart))
+
+export const selectFlatCartWithQuantities = createSelector([selectCart], cart => flatCartWithQuantities(cart))
 
 export const selectQuotePrice = state => {
    return state.quote?.quote?.netOneOffPriceWithVatAmount
@@ -285,6 +314,7 @@ export const {
    updateQuote,
    updateContract,
    updateStartingProducts,
+   setProductQuantityReducer,
 } = quoteSlice.actions
 
 export default quoteSlice.reducer

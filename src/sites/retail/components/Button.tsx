@@ -16,7 +16,7 @@ interface ButtonI {
    rightIcon?: iconI
    full?: boolean
    auto?: boolean
-   className?: string // aggiunto per supportare className custom
+   className?: string
 }
 
 interface variantsI {
@@ -32,19 +32,32 @@ const variants: variantsI = {
    6: 'w-[30px] h-[30px]',
 }
 
-const Button = ({ disabled, label, variant = 1, onClick, leftIcon, rightIcon, full, auto, className }: ButtonI) => {
+const Button = ({
+   disabled,
+   label,
+   variant = 1,
+   onClick,
+   leftIcon,
+   rightIcon,
+   full,
+   auto,
+   className,
+   children,
+}: ButtonI & { children?: React.ReactNode }) => {
    return (
       <button
          className={`block ${auto ? '!w-auto px-4' : ''} ${full ? 'w-full' : ''} ${
             variants[variant || 1] || variants[1]
          } ${disabled ? 'opacity-50' : ''} ${className || ''}`}
          onClick={onClick}
+         disabled={disabled}
       >
          <div className="flex gap-1 items-center">
             {leftIcon ? <Icon {...leftIcon} /> : null}
             {label ? <div className="w-full text-center">{label}</div> : null}
             {rightIcon ? <Icon {...rightIcon} /> : null}
          </div>
+         {children}
       </button>
    )
 }

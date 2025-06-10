@@ -159,7 +159,7 @@ app.post('/updateCustomerQuote', async (req: any, res: any) => {
    try {
       const sessionId: string = getSessionIdFromHeaders(req)
       const customerData = req.body?.customer || {}
-      const response: any = await new ApparoundUtils().updateCustormer(sessionId, customerData)
+      const response: any = await new ApparoundUtils().updateCustomer(sessionId, customerData)
       res.json(response)
    } catch (error: any) {
       res.status(500).send(error)

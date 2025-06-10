@@ -1,5 +1,4 @@
 import Navbar from '@/sites/telco/components/Navbar'
-import { useMediaQuery } from 'react-responsive'
 import OfferHeader from '@/sites/telco/components/Offers/OfferHeader'
 import Footer from '@/components/Footer'
 import { useSelector } from 'react-redux'
@@ -51,8 +50,8 @@ const ConfigureOffer = () => {
       if (cart) {
          const updatedSwitchStates = { ...switchStates }
          Object.keys(cart).forEach(clusterGuid => {
-            Object.keys(cart[clusterGuid]).forEach(productGuid => {
-               if (cart[clusterGuid][productGuid]) {
+            Object.keys(cart[clusterGuid]?.children || {}).forEach(productGuid => {
+               if (cart[clusterGuid]?.children[productGuid]) {
                   updatedSwitchStates[productGuid] = true
                }
             })

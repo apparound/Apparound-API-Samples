@@ -1,21 +1,21 @@
 import React, { useState } from 'react'
 import { addProduct, deleteProduct, setProductQuantity } from '@/sites/telco/hooks/apparoundData'
-import { mdiSim } from '@mdi/js'
-import Icon from '@mdi/react'
+import ProductIcon from './ProductIcon'
 
 interface Product {
    guid: string
    description: string
    parentGuid: string
+   config: any
 }
-interface SimSwitchProps {
+interface QuantitySwitchProps {
    product: Product
    value: number
    dispatch: any
    tofId: any
 }
 
-const SimSwitch: React.FC<SimSwitchProps> = ({ product, value, dispatch, tofId }) => {
+const QuantitySwitch: React.FC<QuantitySwitchProps> = ({ product, value, dispatch, tofId }) => {
    const [internalValue, setInternalValue] = useState<number>(value)
 
    const handleChange = async (newVal: number) => {
@@ -36,7 +36,7 @@ const SimSwitch: React.FC<SimSwitchProps> = ({ product, value, dispatch, tofId }
    return (
       <div className="flex items-center justify-between p-4 bg-white rounded-2xl w-full max-w-3xl shadow-md">
          <div className="flex items-center gap-3">
-            <Icon path={mdiSim} size={1.4} color="#7c4bc6" />
+            {ProductIcon.getByIconName(product.config.mdiIcon, 'w-8 h-8')}
             <span className="text-black text-lg">{product.description}</span>
          </div>
          <input
@@ -50,4 +50,4 @@ const SimSwitch: React.FC<SimSwitchProps> = ({ product, value, dispatch, tofId }
    )
 }
 
-export default SimSwitch
+export default QuantitySwitch

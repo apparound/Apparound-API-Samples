@@ -1,7 +1,7 @@
 import CheckCoverage from '@/sites/telco/components/CheckCoverage/CheckCoverage'
 import ProductSwitch from '@/sites/telco/components/ProductSwitch'
 import ProductIcon from '@/sites/telco/components/ProductIcon'
-import SimSwitch from '@/sites/telco/components/SimSwitch'
+import QuantitySwitch from '@/sites/telco/components/QuantitySwitch'
 import { useState, useEffect } from 'react'
 import { deleteProduct } from '@/sites/telco/hooks/apparoundData'
 import { useTranslation } from 'react-i18next'
@@ -48,9 +48,9 @@ const Products: React.FC<ProductsProps> = ({
             if (product.description === 'Verifica copertura') {
                return <CheckCoverage key={product.guid} onCoverageResponse={handleCoverageResponse} />
             }
-            if (product.description.toLowerCase() === 'sim/esim') {
+            if (product.config.isQuantity == true) {
                return (
-                  <SimSwitch
+                  <QuantitySwitch
                      key={product.guid}
                      product={product}
                      value={simValues[product.guid] || 0}
@@ -78,7 +78,7 @@ const Products: React.FC<ProductsProps> = ({
                         }
                      })
                   }}
-                  icon={ProductIcon.get(product.description.toLowerCase())}
+                  icon={ProductIcon.getByName(product.description.toLowerCase())}
                />
             )
          })}
