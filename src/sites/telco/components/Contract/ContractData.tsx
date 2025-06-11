@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import React, { useState } from 'react'
 import DocumentData from './DocumentData/DocumentData'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectContract, selectCustomer, updateContractProperties } from '@/sites/retail/features/quoteSlice'
+import { selectContract, updateContractProperties } from '@/sites/retail/features/quoteSlice'
 import PhoneNumberPortability from './PhoneNumber/PhoneNumberPortability'
 
 interface ContractDataProps {
@@ -16,7 +16,6 @@ const ContractData: React.FC<ContractDataProps> = ({ className = '' }) => {
    const { t } = useTranslation()
    const [paymentMethod, setPaymentMethod] = useState(0)
    const contract = useSelector(selectContract)
-   const customer = useSelector(selectCustomer)
    const dispatch = useDispatch()
 
    const handlePaymentMethodChange = (value: number) => {

@@ -3,6 +3,7 @@ import { selectCustomer, updateCustomer } from '@/sites/retail/features/quoteSli
 import SectionTitle from '@/sites/telco/components/SectionTitle'
 import { useSelector, useDispatch } from 'react-redux'
 import { getProvince, getComuniByProvincia } from '@/utils/comuniUtils'
+import { useTranslation } from 'react-i18next'
 
 interface ContractCustomerFormProps {
    className?: string
@@ -51,7 +52,12 @@ const ContractCustomerForm = ({ className = '' }: ContractCustomerFormProps) => 
    const dispatch = useDispatch()
    const customer = useSelector(selectCustomer)
    const provinceList = React.useMemo(() => getProvince(), [])
-   const comuniList = React.useMemo(() => getComuniByProvincia(customer?.customAddress_province ?? ''), [customer?.customAddress_province])
+   const comuniList = React.useMemo(
+      () => getComuniByProvincia(customer?.customAddress_province ?? ''),
+      [customer?.customAddress_province]
+   )
+   const { t } = useTranslation()
+
    return (
       <>
          <SectionTitle text="Dati personali" />
@@ -65,13 +71,15 @@ const ContractCustomerForm = ({ className = '' }: ContractCustomerFormProps) => 
                <FormInput required placeholder="Telefono *" mapField="phoneNumber" />
             </div>
             <div>
-               <label className="text-left block font-bold mb-1 mt-2">Indirizzo *</label>
+               <label className="text-left block font-bold mb-1 mt-2">{t('Indirizzo')} *</label>
                <div className="flex flex-col md:flex-row gap-4 mb-2">
                   <select
                      required
                      className="border border-gray-300 rounded px-3 py-2 w-full"
                      value={customer?.customAddress_province ?? ''}
-                     onChange={e => dispatch(updateCustomer({ customAddress_province: e.target.value, customAddress_city: '' }))}
+                     onChange={e =>
+                        dispatch(updateCustomer({ customAddress_province: e.target.value, customAddress_city: '' }))
+                     }
                   >
                      <option value="" disabled>
                         Provincia
@@ -105,7 +113,7 @@ const ContractCustomerForm = ({ className = '' }: ContractCustomerFormProps) => 
             <div className="flex items-center mt-2">
                <input type="checkbox" id="indirizzoUguale" className="accent-primary w-4 h-4" />
                <label htmlFor="indirizzoUguale" className="ml-2 text-sm">
-                  L'indirizzo di residenza è uguale a quello di fatturazione
+                  {t("L'indirizzo di residenza è uguale a quello di fatturazione")}
                </label>
             </div>
          </form>

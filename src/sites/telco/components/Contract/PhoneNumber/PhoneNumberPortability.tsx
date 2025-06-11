@@ -72,7 +72,7 @@ const PhoneNumberPortability: React.FC = () => {
       <div className="w-full">
          {hasPortability && (
             <>
-               <SectionTitle text={t('Numero di telefono fisso')} />
+               <SectionTitle text="Numero di telefono fisso" />
                <div className="mt-4 flex flex-col gap-4">
                   <div className="flex gap-6">
                      <PortabilityOption

@@ -14,6 +14,19 @@ const DocumentInput: React.FC<DocumentInputProps> = ({ id, type = 'text', placeh
    const isDate = type === 'date'
    const [inputType, setInputType] = React.useState(isDate ? 'text' : type)
 
+   const inputClassName = 'outline outline-1 outline-gray-200'
+   const labelClassName = 'text-gray-800 text-sm'
+
+   const commonTextProps = {
+      label: placeholder,
+      name: id,
+      value,
+      onChange,
+      min,
+      className: inputClassName,
+      labelClassName,
+   }
+
    React.useEffect(() => {
       if (!isDate) setInputType(type)
    }, [type, isDate])
@@ -21,12 +34,8 @@ const DocumentInput: React.FC<DocumentInputProps> = ({ id, type = 'text', placeh
    if (isDate) {
       return (
          <Text
-            label={placeholder}
-            name={id}
+            {...commonTextProps}
             inputType={inputType}
-            value={value}
-            onChange={onChange}
-            min={min}
             onFocus={e => {
                setInputType('date')
                setTimeout(() => {
@@ -38,13 +47,10 @@ const DocumentInput: React.FC<DocumentInputProps> = ({ id, type = 'text', placeh
             onBlur={e => {
                if (!e.target.value) setInputType('text')
             }}
-            className="flex"
          />
       )
    }
-   return (
-      <Text label={placeholder} name={id} inputType={type} className="flex w-full" value={value} onChange={onChange} />
-   )
+   return <Text {...commonTextProps} inputType={type} />
 }
 
 export default DocumentInput

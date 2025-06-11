@@ -1,6 +1,7 @@
 import React from 'react'
 import { useMediaQuery } from 'react-responsive'
 import Button from '@/sites/retail/components/Button'
+import { useTranslation } from 'react-i18next'
 
 interface OfferPriceBoxProps {
    activationPrice: string
@@ -16,6 +17,8 @@ export const PriceBox: React.FC<{ label: string; price: string; isMobile: boolea
 }) => {
    const [intPart, decPart] = price.split(',')
    const decimals = decPart !== undefined ? decPart.padEnd(2, '0') : '00'
+   const { t } = useTranslation()
+
    if (labelLeftPriceRight) {
       return (
          <div
@@ -23,7 +26,7 @@ export const PriceBox: React.FC<{ label: string; price: string; isMobile: boolea
                isMobile ? 'text-center' : 'text-left'
             }`}
          >
-            <div className={`font-bold ${isMobile ? 'text-base' : 'text-2xl'} mr-2 self-end`}>{label}</div>
+            <div className={`font-bold ${isMobile ? 'text-base' : 'text-2xl'} mr-2 self-end`}>{t(label)}</div>
             <div className={`font-bold ${isMobile ? 'text-2xl' : 'text-5xl'} leading-none`}>
                {intPart}
                <span className={`font-normal ${isMobile ? 'text-lg' : 'text-2xl'}`}>,{decimals} €</span>
@@ -31,7 +34,7 @@ export const PriceBox: React.FC<{ label: string; price: string; isMobile: boolea
          </div>
       )
    }
-   // layout verticale (default)
+
    return (
       <div className={`min-w-[120px] ${isMobile ? 'text-center' : 'text-left'}`}>
          <div className={`font-bold ${isMobile ? 'text-base' : 'text-2xl'} ${isMobile ? 'text-center' : ''}`}>
@@ -51,6 +54,7 @@ export const PriceBox: React.FC<{ label: string; price: string; isMobile: boolea
 
 export const OfferPriceBox: React.FC<OfferPriceBoxProps> = ({ activationPrice, monthlyPrice, onActivate }) => {
    const isMobile = useMediaQuery({ maxWidth: 767 })
+   const { t } = useTranslation()
    return (
       <div
          className={`bg-[#eae6f0] ${isMobile ? 'py-6 px-3' : 'py-8'} flex items-center justify-center rounded-none ${
@@ -63,13 +67,13 @@ export const OfferPriceBox: React.FC<OfferPriceBoxProps> = ({ activationPrice, m
                   isMobile ? 'gap-0' : 'gap-20'
                }`}
             >
-               <PriceBox label="Attivazione" price={activationPrice} isMobile={isMobile} />
-               <PriceBox label="Al mese" price={monthlyPrice} isMobile={isMobile} />
+               <PriceBox label={t('Attivazione')} price={activationPrice} isMobile={isMobile} />
+               <PriceBox label={t('Al mese')} price={monthlyPrice} isMobile={isMobile} />
             </div>
             <div className={isMobile ? 'w-full mt-4' : 'ml-8 w-1/4'}>
                <Button
                   className="w-full bg-primary hover:bg-purple-700 rounded-3xl"
-                  label="ATTIVA ORA"
+                  label={t('Attiva ora').toUpperCase()}
                   onClick={onActivate}
                />
             </div>
