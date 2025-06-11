@@ -10,9 +10,10 @@ import PhoneNumberPortability from './PhoneNumber/PhoneNumberPortability'
 
 interface ContractDataProps {
    className?: string
+   readOnly?: boolean
 }
 
-const ContractData: React.FC<ContractDataProps> = ({ className = '' }) => {
+const ContractData: React.FC<ContractDataProps> = ({ className = '', readOnly = false }) => {
    const { t } = useTranslation()
    const [paymentMethod, setPaymentMethod] = useState(0)
    const contract = useSelector(selectContract)
@@ -28,9 +29,9 @@ const ContractData: React.FC<ContractDataProps> = ({ className = '' }) => {
       <div className={className}>
          <div className="text-primary text-center font-bold ml-2 mb-4 text-2xl">Contratto per attivazione offerta</div>
          <Card className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
-            <ContractCustomerForm className="mt-4" />
+            <ContractCustomerForm className="mt-4" readOnly={readOnly} />
             <PhoneNumberPortability />
-            <DocumentData />
+            <DocumentData readonly={readOnly} />
             <PaymentMethods value={paymentMethod} onChange={handlePaymentMethodChange} />
          </Card>
       </div>

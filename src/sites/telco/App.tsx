@@ -15,6 +15,7 @@ import OfferDetail from './pages/OfferDetail'
 import NotFound from './pages/NotFound'
 import './App.css'
 import Contract from './pages/Contract'
+import ContractSignature from './pages/ContractSignature'
 
 const queryClient = new QueryClient()
 
@@ -44,6 +45,7 @@ const App = () => {
                      <Route path="offer-detail" element={<OfferDetail />} />
                      <Route path="*" element={<NotFound />} />
                      <Route path="contract" element={<Contract />} />
+                     <Route path="contract-signature" element={<ContractSignature />} />
                   </Routes>
                </TooltipProvider>
             </QueryClientProvider>

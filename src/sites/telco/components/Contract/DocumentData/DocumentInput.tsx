@@ -8,9 +8,10 @@ interface DocumentInputProps {
    value?: string
    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
    min?: string
+   readonly?: boolean
 }
 
-const DocumentInput: React.FC<DocumentInputProps> = ({ id, type = 'text', placeholder, value, onChange, min }) => {
+const DocumentInput: React.FC<DocumentInputProps> = ({ id, type = 'text', placeholder, value, onChange, min, readonly = false }) => {
    const isDate = type === 'date'
    const [inputType, setInputType] = React.useState(isDate ? 'text' : type)
 
@@ -25,6 +26,7 @@ const DocumentInput: React.FC<DocumentInputProps> = ({ id, type = 'text', placeh
       min,
       className: inputClassName,
       labelClassName,
+      readonly,
    }
 
    React.useEffect(() => {

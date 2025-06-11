@@ -19,6 +19,7 @@ interface TextProps {
       | ((e: React.ChangeEvent<HTMLInputElement>) => void)
    onFocus?: (event: React.FocusEvent<HTMLInputElement>, name: string) => void
    onBlur?: (event: React.FocusEvent<HTMLInputElement>, name: string) => void
+   readonly?: boolean
 }
 
 const Text = ({
@@ -33,11 +34,13 @@ const Text = ({
    onBlur,
    className,
    labelClassName,
+   readonly = false,
 }: TextProps) => {
    const { t } = useTranslation()
 
-   const baseClasses = `block bg-white px-3 py-1.5 pt-4 w-full min-w-[250px] rounded-md outline outline-1 -outline-offset-1 outline-primary placeholder:text-gray-900 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6 peer invalid:outline-red-300`
-   const combinedClasses = cn(baseClasses, className)
+   const baseClasses = `bg-white px-3 py-1.5 pt-4 w-full min-w-[250px] rounded-md placeholder:text-gray-900 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6 peer invalid:outline-red-300`
+   const borderOutlineClasses = readonly ? 'border-0 outline-0' : 'outline outline-1 -outline-offset-1 outline-primary'
+   const combinedClasses = cn('block', borderOutlineClasses, baseClasses, className)
 
    const labelBaseClasses =
       'absolute text-gray-400 text-lg dark:text-gray-400 duration-300 transform -translate-y-5.5 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-primary peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-5.5 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1'
@@ -63,6 +66,7 @@ const Text = ({
             required={required}
             value={value || ''}
             min={min}
+            disabled={readonly}
          />
          <label htmlFor={name} className={combinedLabelClasses}>
             {t(label)}

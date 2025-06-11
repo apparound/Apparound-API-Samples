@@ -8,7 +8,7 @@ import DocumentTypeSelect from './DocumentTypeSelect'
 import cartaBack from '@/sites/telco/assets/misc/CartaBack.jpeg'
 import cartaFront from '@/sites/telco/assets/misc/CartaFront.jpeg'
 
-const DocumentData: React.FC = () => {
+const DocumentData: React.FC<{ readonly?: boolean }> = ({ readonly = false }) => {
    const { t } = useTranslation()
 
    const [documentType, setDocumentType] = React.useState<string | undefined>(undefined)
@@ -51,6 +51,7 @@ const DocumentData: React.FC = () => {
                      placeholder="Numero documento"
                      value={documentNumber}
                      onChange={e => setDocumentNumber(e.target.value)}
+                     readonly={readonly}
                   />
                </div>
                <div className="flex flex-row gap-4">
@@ -61,6 +62,7 @@ const DocumentData: React.FC = () => {
                         placeholder="Data rilascio"
                         value={releaseDate}
                         onChange={handleReleaseDateChange}
+                        readonly={readonly}
                      />
                   </div>
                   <div className="flex flex-col w-full">
@@ -71,6 +73,7 @@ const DocumentData: React.FC = () => {
                         value={expiryDate}
                         onChange={e => setExpiryDate(e.target.value)}
                         min={getMinExpiryDate()}
+                        readonly={readonly}
                      />
                   </div>
                </div>
@@ -82,6 +85,7 @@ const DocumentData: React.FC = () => {
                   title={t('Carica fronte documento')}
                   onButtonClick={() => setFrontImage(cartaFront)}
                   imageSrc={frontImage}
+                  readOnly={readonly}
                />
                <div className="border-t border-gray-200 my-2" />
                <DocumentUploadRow
@@ -90,6 +94,7 @@ const DocumentData: React.FC = () => {
                   title={t('Carica retro documento')}
                   onButtonClick={() => setBackImage(cartaBack)}
                   imageSrc={backImage}
+                  readOnly={readonly}
                />
             </div>
          </Card>
