@@ -572,10 +572,10 @@ export class ApparoundUtils {
             3000,
             true
          )
-         if (response.code === 'ECONNABORTED' || response.response?.status === 102) return this.getPdfQuote(sessionId)
+         if (response.code === 'ECONNABORTED' || response.status === 202) return this.getPdfQuote(sessionId)
          return response
       } catch (error: any) {
-         if (error.code === 'ECONNABORTED' || error.response.status === 102) return this.getPdfQuote(sessionId)
+         if (error.code === 'ECONNABORTED' || error.status === 202) return this.getPdfQuote(sessionId)
          throw new Error('Failed to fetch PDF quote: ' + error.message)
       }
    }
