@@ -63,16 +63,17 @@ const PhoneNumberPortability: React.FC = () => {
       handleArrayChange(setPhoneIds, index, value, 'phoneIds')
    }
 
-   // Funzione per chiamare setProductConfiguration
    const handleInputBlur = async () => {
-      // Qui dovresti recuperare sessionId e productGuid dal contesto o dai props
-      const sessionId = localStorage.getItem('sessionId') || ''
       const productGuid = setQuantityProduct?.guid || ''
-      if (!sessionId || !productGuid) return
       const apparoundData = new ApparoundData()
+
+      const data = (phoneConfigRef.current.phoneNumbers || []).map((phoneNumber, idx) => ({
+         phoneNumber,
+         phoneId: phoneConfigRef.current.phoneIds[idx] || '',
+      }))
       try {
          await apparoundData.fetchData(`/setProductConfiguration/productGuid/${productGuid}`, 'post', {
-            configuration: phoneConfigRef.current,
+            configuration: data,
          })
       } catch (e) {
          // Gestione errore
