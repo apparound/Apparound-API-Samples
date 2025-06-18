@@ -52,9 +52,9 @@ const ContractCustomerAddress = ({
    dispatch,
    t,
 }: ContractCustomerAddressProps) => (
-   <div>
+   <div className="flex flex-col">
       <label className="text-left block font-bold mb-1 mt-2">{t('Indirizzo')} *</label>
-      <div className="flex flex-col md:flex-row gap-4 mb-2">
+      <div className="flex flex-col md:flex-row gap-4 mb-4">
          {readOnly ? (
             <>
                <FormInput required placeholder="Provincia" value={customer?.customAddress_province ?? ''} readOnly />

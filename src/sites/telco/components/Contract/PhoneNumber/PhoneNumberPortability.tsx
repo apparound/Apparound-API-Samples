@@ -1,4 +1,4 @@
-import { selectFlatCartWithQuantities, selectTree } from '@/sites/retail/features/quoteSlice'
+import { selectFlatCartWithQuantities, selectQuote, selectTree } from '@/sites/retail/features/quoteSlice'
 import SectionTitle from '../../SectionTitle'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -6,33 +6,14 @@ import { findNodeForKey } from '@/hooks/useQuote'
 import { useTranslation } from 'react-i18next'
 import OperatorSelect from './OperatorSelect'
 import NumberLines from './NumberLines'
-
-interface PortabilityOptionProps {
-   value: string
-   label: string
-   checked: boolean
-   onChange: (value: string) => void
-}
-
-const PortabilityOption: React.FC<PortabilityOptionProps> = ({ value, label, checked, onChange }) => (
-   <label className="flex items-center gap-2 cursor-pointer mb-2">
-      <input
-         type="radio"
-         name="phoneType"
-         value={value}
-         checked={checked}
-         onChange={() => onChange(value)}
-         className="mt-1 accent-purple-700"
-      />
-      <span className="text-gray-700">{label}</span>
-   </label>
-)
+import PortabilityOption from './PortabilityOption'
 
 const PhoneNumberPortability: React.FC = () => {
    const { t } = useTranslation()
    const flatCart = useSelector(selectFlatCartWithQuantities)
    const tree = useSelector(selectTree)
    let treeProducts = flatCart.map(item => findNodeForKey('guid', item.guid, tree)).filter(node => node)
+   const quote = useSelector(selectQuote)
 
    const hasPortability = treeProducts.some((node: any) => node.config && node.config.isPortability == '1')
    const setQuantityProduct = treeProducts.find((node: any) => node.config && node.config.isQuantity == '1')
@@ -52,20 +33,20 @@ const PhoneNumberPortability: React.FC = () => {
       }
    }, [selected, setQuantity])
 
-   const handlePhoneNumberChange = (index: number, value: string) => {
-      setPhoneNumbers(prev => {
+   const handleArrayChange = (setter: React.Dispatch<React.SetStateAction<string[]>>, index: number, value: string) => {
+      setter(prev => {
          const updated = [...prev]
          updated[index] = value
          return updated
       })
    }
 
+   const handlePhoneNumberChange = (index: number, value: string) => {
+      handleArrayChange(setPhoneNumbers, index, value)
+   }
+
    const handlePhoneIdChange = (index: number, value: string) => {
-      setPhoneIds(prev => {
-         const updated = [...prev]
-         updated[index] = value
-         return updated
-      })
+      handleArrayChange(setPhoneIds, index, value)
    }
 
    return (
@@ -98,7 +79,6 @@ const PhoneNumberPortability: React.FC = () => {
                               phoneIds={phoneIds}
                               onPhoneNumberChange={handlePhoneNumberChange}
                               onPhoneIdChange={handlePhoneIdChange}
-                              t={t}
                            />
                         )}
                      </>

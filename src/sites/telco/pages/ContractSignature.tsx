@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom'
 const ContractSignature: React.FC = () => {
    const [iframeLoaded, setIframeLoaded] = React.useState(false)
    const quote = useSelector(selectQuote)
+   const state = useSelector((state: any) => state)
+   const sessionId = useSelector((state: any) => state.sessionId)
    const quoteId = quote?.quoteId
    const { t } = useTranslation()
    const navigate = useNavigate()
@@ -26,7 +28,7 @@ const ContractSignature: React.FC = () => {
             <div className="bg-white rounded-2xl shadow-lg p-4 w-full max-w-4xl">
                <iframe
                   onLoad={() => setIframeLoaded(true)}
-                  src={`${SERVER_URL}/apparoundimages/v2/quote/${quoteId}/pdf`}
+                  src={`${SERVER_URL}/apparoundimages/v2/quote/${quoteId}/pdf?sessionId=${sessionId}`}
                   className="min-h-[760px] w-full rounded-xl border"
                   width="100%"
                   height="100%"

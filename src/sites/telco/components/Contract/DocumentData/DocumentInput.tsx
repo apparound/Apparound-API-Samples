@@ -11,12 +11,20 @@ interface DocumentInputProps {
    readonly?: boolean
 }
 
-const DocumentInput: React.FC<DocumentInputProps> = ({ id, type = 'text', placeholder, value, onChange, min, readonly = false }) => {
+const DocumentInput: React.FC<DocumentInputProps> = ({
+   id,
+   type = 'text',
+   placeholder,
+   value,
+   onChange,
+   min,
+   readonly = false,
+}) => {
    const isDate = type === 'date'
    const [inputType, setInputType] = React.useState(isDate ? 'text' : type)
 
-   const inputClassName = 'outline outline-1 outline-gray-200'
-   const labelClassName = 'text-gray-800 text-sm'
+   const inputClassName = 'outline outline-1 outline-[#CCCCCC]'
+   const labelClassName = 'text-sm'
 
    const commonTextProps = {
       label: placeholder,

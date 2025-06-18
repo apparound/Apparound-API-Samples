@@ -8,6 +8,7 @@ interface FormInputProps {
    placeholder: string
    type?: string
    className?: string
+   labelClassName?: string
    mapField?: string
    [key: string]: any
 }
@@ -16,7 +17,8 @@ const FormInput = ({
    required = false,
    placeholder,
    type = 'text',
-   className = '',
+   className = 'outline outline-1 outline-[#CCCCCC]',
+   labelClassName = '',
    mapField,
    readOnly = false,
    min,
@@ -37,6 +39,8 @@ const FormInput = ({
          required={required}
          label={placeholder}
          inputType={type}
+         className={className}
+         labelClassName={labelClassName}
          name={mapField || ''}
          value={value}
          min={min}
