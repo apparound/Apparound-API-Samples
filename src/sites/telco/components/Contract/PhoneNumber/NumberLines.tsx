@@ -7,6 +7,7 @@ interface NumberLinesProps {
    phoneIds: string[]
    onPhoneNumberChange: (index: number, value: string) => void
    onPhoneIdChange: (index: number, value: string) => void
+   onInputBlur?: (index: number, type: 'phoneNumber' | 'phoneId') => void
 }
 
 const NumberLines: React.FC<NumberLinesProps> = ({
@@ -15,6 +16,7 @@ const NumberLines: React.FC<NumberLinesProps> = ({
    phoneIds,
    onPhoneNumberChange,
    onPhoneIdChange,
+   onInputBlur,
 }) => {
    const { t } = useTranslation()
    return (
@@ -27,6 +29,7 @@ const NumberLines: React.FC<NumberLinesProps> = ({
                   placeholder={t('Numero di telefono') + ' ' + (idx + 1)}
                   value={phoneNumbers[idx] || ''}
                   onChange={e => onPhoneNumberChange(idx, e.target.value)}
+                  onBlur={() => onInputBlur && onInputBlur(idx, 'phoneNumber')}
                />
                <input
                   type="text"
@@ -34,6 +37,7 @@ const NumberLines: React.FC<NumberLinesProps> = ({
                   placeholder={t('Identificativo') + ' ' + (idx + 1)}
                   value={phoneIds[idx] || ''}
                   onChange={e => onPhoneIdChange(idx, e.target.value)}
+                  onBlur={() => onInputBlur && onInputBlur(idx, 'phoneId')}
                />
             </div>
          ))}
