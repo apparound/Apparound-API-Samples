@@ -64,7 +64,7 @@ export class ApparoundUtils {
       sessionId: any,
       token: any,
       api: string,
-      method: 'get' | 'post' | 'put' | 'delete',
+      method: 'get' | 'post' | 'put' | 'delete' | 'patch',
       bodyRequest?: any,
       responseType: 'json' | 'arraybuffer' = 'json',
       timeout: number = 0,
@@ -92,6 +92,9 @@ export class ApparoundUtils {
                break
             case 'delete':
                response = await axios.delete(url, config)
+               break
+            case 'patch':
+               response = await axios.patch(url, config)
                break
             default:
                throw new Error('Invalid HTTP method')
@@ -572,12 +575,33 @@ export class ApparoundUtils {
             3000,
             true
          )
-         if (response.code === 'ECONNABORTED' || response.response?.status === 202) return this.getPdfQuote(sessionId)
+         if (response.code === 'ECONNABORTED' || response.status === 202) return this.getPdfQuote(sessionId)
          return response
       } catch (error: any) {
-         if (error.code === 'ECONNABORTED' || error.response.status === 202) return this.getPdfQuote(sessionId)
+         if (error.code === 'ECONNABORTED' || error.status === 202) return this.getPdfQuote(sessionId)
          throw new Error('Failed to fetch PDF quote: ' + error.message)
       }
+   }
+
+   async setProductConfiguration(sessionId: string, productGuid: string, data: any): Promise<any> {
+      const cpqId = SESSION_LIST[sessionId].CPQ_ID
+      const quoteId = SESSION_LIST[sessionId].QUOTE_ID
+      const quote = await this.getQuote(sessionId, cpqId, quoteId)
+
+      const productNode = this.findNodeByGuid(quote, productGuid)
+      const basket = this.findCartByProductGuid(quote, productGuid)
+
+      if (!productNode || !basket) throw new Error('Product node or parent node not found in the quote.')
+
+      const response = await this.fetchData(sessionId, null, `/v2/quote/${quoteId}/productconfiguration`, 'patch', {
+         nodeId: productNode?.nodeId || null,
+         basketId: basket?.id || null,
+         productId: productNode?.productId || null,
+         data: data || [],
+      })
+
+      this.saveSessionQuote(response.quote, sessionId)
+      return response
    }
 
    async addProductLegacy(sessionId: string, productGuid: string, parentGuid?: string): Promise<any> {

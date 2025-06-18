@@ -110,6 +110,18 @@ app.delete('/removeProduct/productGuid/:productGuid', async (req: any, res: any)
    }
 })
 
+app.post('/setProductConfiguration/productGuid/:productGuid', async (req: any, res: any) => {
+   try {
+      const sessionId: string = getSessionIdFromHeaders(req)
+      const productGuid: string = req.params?.productGuid?.toString() || null
+      const configuration: any = req.body?.configuration || {}
+      const response: any = await new ApparoundUtils().setProductConfiguration(sessionId, productGuid, configuration)
+      res.json(response)
+   } catch (error: any) {
+      res.status(500).send(error)
+   }
+})
+
 app.post('/setProductQuantity/productGuid/:productGuid/qty/:productQuantity', async (req: any, res: any) => {
    try {
       const sessionId: string = getSessionIdFromHeaders(req)
