@@ -94,7 +94,7 @@ export class ApparoundUtils {
                response = await axios.delete(url, config)
                break
             case 'patch':
-               response = await axios.patch(url, config)
+               response = await axios.patch(url, bodyRequest, config)
                break
             default:
                throw new Error('Invalid HTTP method')
@@ -387,7 +387,7 @@ export class ApparoundUtils {
       const quoteId = SESSION_LIST[sessionId].QUOTE_ID
 
       const quote = await this.getQuote(sessionId, cpqId, quoteId)
-      const cart = this.findCartByKey(quote, 'baskedId', cartId)
+      const cart = this.findCartByKey(quote, 'basketId', cartId)
 
       if (cart) {
          return {
@@ -425,7 +425,7 @@ export class ApparoundUtils {
       const quoteId = SESSION_LIST[sessionId].QUOTE_ID
 
       const quote = await this.getQuote(sessionId, cpqId, quoteId)
-      const cart = this.findCartByKey(quote, 'baskedId,', cartId)
+      const cart = this.findCartByKey(quote, 'basketId,', cartId)
 
       if (cart) return this.flattenCartProducts(cart.root[0])
       return []
@@ -527,8 +527,8 @@ export class ApparoundUtils {
       }
    }
 
-   async getQuote(sessionId: string, cpqId: number, quoteId: number): Promise<any> {
-      if (SESSION_LIST[sessionId].QUOTE) return SESSION_LIST[sessionId].QUOTE
+   async getQuote(sessionId: string, cpqId: number, quoteId: number, skipCachedQuote?: boolean): Promise<any> {
+      if (!skipCachedQuote && SESSION_LIST[sessionId].QUOTE) return SESSION_LIST[sessionId].QUOTE
       const response: any = await this.fetchData(sessionId, null, `/v2/cpq/${cpqId}/quote/${quoteId}`, 'get')
       return response?.quote || null
    }
@@ -595,13 +595,17 @@ export class ApparoundUtils {
 
       const response = await this.fetchData(sessionId, null, `/v2/quote/${quoteId}/productconfiguration`, 'patch', {
          nodeId: productNode?.nodeId || null,
-         basketId: basket?.id || null,
+         basketId: basket?.basketId || null,
          productId: productNode?.productId || null,
          data: data || [],
       })
 
-      this.saveSessionQuote(response.quote, sessionId)
-      return response
+      const updatedQuote = await this.getQuote(sessionId, cpqId, quoteId, true)
+
+      this.saveSessionQuote(updatedQuote, sessionId)
+      return {
+         quote: updatedQuote,
+      }
    }
 
    async addProductLegacy(sessionId: string, productGuid: string, parentGuid?: string): Promise<any> {
@@ -697,7 +701,11 @@ export class ApparoundUtils {
       const nodes = quoteJsonQ.find('uniqueGuid', function (this: any) {
          return this == guid
       })
-      if (nodes.length == 1) return quoteJsonQ.pathValue(nodes.jsonQ_current[0].path.slice(0, 2))
+      if (nodes.length == 1) {
+         const response = quoteJsonQ.pathValue(nodes.jsonQ_current[0].path.slice(0, 2))
+         if (Array.isArray(response) && response.length > 0) return response[0]
+         else return response
+      }
       return null
    }
 
