@@ -71,13 +71,14 @@ const PhoneNumberPortability: React.FC = () => {
          phoneNumber,
          phoneId: phoneConfigRef.current.phoneIds[idx] || '',
       }))
+
+      const allFilled = data.every(item => item.phoneNumber && item.phoneId)
+      if (!allFilled) return
       try {
          await apparoundData.fetchData(`/setProductConfiguration/productGuid/${productGuid}`, 'post', {
             configuration: data,
          })
-      } catch (e) {
-         // Gestione errore
-      }
+      } catch (e) {}
    }
 
    return (

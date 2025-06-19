@@ -23,7 +23,7 @@ const DocumentInput: React.FC<DocumentInputProps> = ({
    const isDate = type === 'date'
    const [inputType, setInputType] = React.useState(isDate ? 'text' : type)
 
-   const inputClassName = 'outline outline-1 outline-[#CCCCCC]'
+   const inputClassName = '!outline-[#CCCCCC]'
    const labelClassName = 'text-sm'
 
    const commonTextProps = {
