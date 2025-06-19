@@ -31,12 +31,14 @@ const Contract = props => {
             <div className="lg:basis-[60%] min-w-0">
                <ContractData readOnly={readOnly} />
                <hr className="my-6 border-gray-300" />
-               <Button
-                  className="w-[40%] bg-primary hover:bg-purple-700 rounded-3xl px-6"
-                  onClick={() => concludeOffer()}
-               >
-                  {t('Concludi attivazione').toUpperCase()}
-               </Button>
+               {!readOnly && (
+                  <Button
+                     className="w-[40%] bg-primary hover:bg-purple-700 rounded-3xl px-6"
+                     onClick={() => concludeOffer()}
+                  >
+                     {t('Concludi attivazione').toUpperCase()}
+                  </Button>
+               )}
             </div>
             <div className="lg:basis-[40%] max-w-md w-full mx-auto">
                <Recap />
