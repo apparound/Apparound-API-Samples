@@ -217,5 +217,7 @@
    "Seleziona operatore": "Select operator",
    "Operatore di provenienza": "Previous operator",
    "L'indirizzo di residenza è uguale a quello di fatturazione": "The residence address is the same as the billing address",
-   "Concludi attivazione": "Complete activation"
+   "Concludi attivazione": "Complete activation",
+   "Attenzione": "Warning",
+   "Per favore compila tutti i campi obbligatori.": "Please fill in all required fields."
 }

@@ -17,16 +17,32 @@ interface QuantitySwitchProps {
 
 const QuantitySwitch: React.FC<QuantitySwitchProps> = ({ product, value, dispatch, tofId }) => {
    const [internalValue, setInternalValue] = useState<number>(value)
+   const [isAdding, setIsAdding] = useState(false)
+   const lastQueuedValue = React.useRef<number | null>(null)
 
    const handleChange = async (newVal: number) => {
       const prevVal = internalValue
       setInternalValue(newVal)
 
       if (prevVal === 0 && newVal > 0) {
+         if (isAdding) {
+            lastQueuedValue.current = newVal
+            return
+         }
+         setIsAdding(true)
          await addProduct(product.guid, dispatch, tofId, product.parentGuid)
-      }
+         console.log(`Added product ${product.guid} with parent ${product.parentGuid}`)
+         setIsAdding(false)
 
-      if (newVal > 0) {
+         if (lastQueuedValue.current !== null) {
+            await setProductQuantity(product.guid, lastQueuedValue.current, dispatch)
+            lastQueuedValue.current = null
+         } else {
+            await setProductQuantity(product.guid, newVal, dispatch)
+         }
+      } else if (isAdding) {
+         lastQueuedValue.current = newVal
+      } else if (newVal > 0) {
          await setProductQuantity(product.guid, newVal, dispatch)
       } else {
          await deleteProduct(product.guid, dispatch)

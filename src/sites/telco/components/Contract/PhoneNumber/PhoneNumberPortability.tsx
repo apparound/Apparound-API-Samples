@@ -1,6 +1,6 @@
 import { selectFlatCartWithQuantities, selectQuote, selectTree } from '@/sites/retail/features/quoteSlice'
 import SectionTitle from '../../SectionTitle'
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react'
 import { useSelector } from 'react-redux'
 import { findNodeForKey } from '@/hooks/useQuote'
 import { useTranslation } from 'react-i18next'
@@ -8,8 +8,9 @@ import OperatorSelect from './OperatorSelect'
 import NumberLines from './NumberLines'
 import PortabilityOption from './PortabilityOption'
 import { ApparoundData } from '@/sites/utilities/hooks/use-apparound-data'
+import { setRedOutline } from '@/lib/setRedOutline'
 
-const PhoneNumberPortability: React.FC = () => {
+const PhoneNumberPortability: React.FC<any> = forwardRef((props, ref) => {
    const { t } = useTranslation()
    const flatCart = useSelector(selectFlatCartWithQuantities)
    const tree = useSelector(selectTree)
@@ -81,6 +82,27 @@ const PhoneNumberPortability: React.FC = () => {
       } catch (e) {}
    }
 
+   // Validazione campi obbligatori
+   const validate = () => {
+      let valid = true
+      if (selected === 'portability' && setQuantity > 0) {
+         phoneNumbers.forEach((num, idx) => {
+            const input = document.querySelector(`input[name='phoneNumber-${idx}']`) as HTMLInputElement
+            if (input) setRedOutline(input, !num)
+            if (!num) {
+               valid = false
+            }
+            const idInput = document.querySelector(`input[name='phoneId-${idx}']`) as HTMLInputElement
+            if (idInput) setRedOutline(idInput, !phoneIds[idx])
+            if (!phoneIds[idx]) {
+               valid = false
+            }
+         })
+      }
+      return valid
+   }
+   useImperativeHandle(ref, () => ({ validate }))
+
    return (
       <div className="w-full">
          {hasPortability && (
@@ -121,6 +143,6 @@ const PhoneNumberPortability: React.FC = () => {
          )}
       </div>
    )
-}
+})
 
 export default PhoneNumberPortability

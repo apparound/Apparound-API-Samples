@@ -25,6 +25,7 @@ const NumberLines: React.FC<NumberLinesProps> = ({
             <div key={idx} className="flex gap-2">
                <input
                   type="text"
+                  name={`phoneNumber-${idx}`}
                   className="border rounded px-2 py-1 flex-1"
                   placeholder={t('Numero di telefono') + ' ' + (idx + 1)}
                   value={phoneNumbers[idx] || ''}
@@ -33,6 +34,7 @@ const NumberLines: React.FC<NumberLinesProps> = ({
                />
                <input
                   type="text"
+                  name={`phoneId-${idx}`}
                   className="border rounded px-2 py-1 flex-1"
                   placeholder={t('Identificativo') + ' ' + (idx + 1)}
                   value={phoneIds[idx] || ''}
