@@ -7,18 +7,19 @@ import React from 'react'
 
 interface TelcoContainerProps {
    children: React.ReactNode
+   subtitle?: string
 }
 
-const TelcoContainer: React.FC<TelcoContainerProps> = ({ children }) => {
+const TelcoContainer: React.FC<TelcoContainerProps> = ({ children, subtitle }) => {
    const tofId = useSelector(selectTofId)
    const tofList = useSelector(selectTofList)
    const offerTitle = tofList?.find((tof: any) => String(tof.id) === String(tofId))?.name || ''
    const headerTitle = offerTitle ? `Offerte ${offerTitle}` : 'Offerte'
 
    return (
-      <div className="min-h-screen bg-white flex flex-col">
+      <div className="min-h-screen w-full bg-white flex flex-col">
          <Navbar />
-         <OfferHeader title={headerTitle} />
+         <OfferHeader title={headerTitle} subtitle={subtitle} />
          {children}
          <Footer />
       </div>

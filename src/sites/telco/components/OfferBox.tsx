@@ -61,7 +61,11 @@ export const OfferPriceBox: React.FC<OfferPriceBoxProps> = ({ activationPrice, m
             isMobile ? 'my-4' : 'my-8'
          }`}
       >
-         <div className={`w-[60vw] flex ${isMobile ? 'flex-col' : 'flex-row'} items-center justify-between`}>
+         <div
+            className={`max-w-[650px] min-w-[350px] flex ${
+               isMobile ? 'flex-col' : 'flex-row'
+            } items-center justify-between`}
+         >
             <div
                className={`flex flex-1 ${isMobile ? 'justify-between' : 'justify-start'} items-center ${
                   isMobile ? 'gap-0' : 'gap-20'
@@ -72,7 +76,7 @@ export const OfferPriceBox: React.FC<OfferPriceBoxProps> = ({ activationPrice, m
             </div>
             <div className={isMobile ? 'w-full mt-4' : 'ml-8 w-1/4'}>
                <Button
-                  className="w-full bg-primary hover:bg-purple-700 rounded-3xl"
+                  className="w-full min-w-[150px] bg-primary hover:bg-purple-700 rounded-3xl"
                   label={t('Attiva ora').toUpperCase()}
                   onClick={onActivate}
                />

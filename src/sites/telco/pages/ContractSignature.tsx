@@ -6,15 +6,16 @@ import { SERVER_URL } from '@/utils/fetcher'
 import { Button } from '@/sites/utilities/components/ui/button'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { ApparoundData } from '@/hooks/use-apparound-data'
 
 const ContractSignature: React.FC = () => {
    const [iframeLoaded, setIframeLoaded] = React.useState(false)
    const quote = useSelector(selectQuote)
-   const state = useSelector((state: any) => state)
-   const sessionId = useSelector((state: any) => state.sessionId)
+   const sessionId = useSelector((state: any) => state.quote.sessionId)
    const quoteId = quote?.quoteId
    const { t } = useTranslation()
    const navigate = useNavigate()
+   const quotePdfUrl = `${SERVER_URL}/apparoundimages/v2/quote/${new ApparoundData().getQuoteId()}/pdf`
 
    const concludeOffer = () => {
       navigate('/telco/contract', { state: { readOnly: true } })
@@ -28,7 +29,7 @@ const ContractSignature: React.FC = () => {
             <div className="bg-white rounded-2xl shadow-lg p-4 w-full max-w-4xl">
                <iframe
                   onLoad={() => setIframeLoaded(true)}
-                  src={`${SERVER_URL}/apparoundimages/v2/quote/${quoteId}/pdf?sessionId=${sessionId}`}
+                  src={quotePdfUrl}
                   className="min-h-[760px] w-full rounded-xl border"
                   width="100%"
                   height="100%"

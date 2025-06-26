@@ -4,21 +4,39 @@ import { useTranslation } from 'react-i18next'
 
 interface OfferHeaderProps {
    title: string
+   subtitle?: string
 }
 
-const OfferHeader = ({ title }: OfferHeaderProps) => {
+const OfferHeader = ({ title, subtitle }: OfferHeaderProps) => {
    const { t } = useTranslation()
    const translatedTitle = t(title)
    const isBusiness = translatedTitle === 'Business offers'
+   const headerHeight = subtitle ? 'h-[360px]' : 'h-[300px]'
    return (
-      <header
-         className="relative h-[300px] bg-gradient-to-r from-purple-600 to-blue-500 flex items-center justify-center bg-cover bg-center"
-         style={{
-            backgroundImage: `url(${isBusiness ? BusinessBanner : PrivatoBanner})`,
-         }}
+      <>
+         <header
+            className={`relative ${headerHeight} bg-gradient-to-r from-purple-600 to-blue-500 flex flex-col items-center justify-center bg-cover bg-center`}
+            style={{
+               backgroundImage: `url(${isBusiness ? BusinessBanner : PrivatoBanner})`,
+            }}
+         >
+            <h1 className="text-4xl font-bold text-white">{translatedTitle}</h1>
+         </header>
+         <OfferHeaderFooter subtitle={subtitle} />
+      </>
+   )
+}
+
+const OfferHeaderFooter = ({ subtitle }: { subtitle?: string }) => {
+   const hasSubtitle = Boolean(subtitle)
+   return (
+      <div
+         className={`w-full ${
+            hasSubtitle ? 'h-[50px]' : 'h-5'
+         } bg-gradient-to-r from-[#734F96] via-[#734F96] to-[#0181C4] flex items-center justify-center relative`}
       >
-         <h1 className="text-4xl font-bold text-white">{translatedTitle}</h1>
-      </header>
+         {hasSubtitle && <div className="text-2xl text-white font-medium max-w-2xl text-center w-full">{subtitle}</div>}
+      </div>
    )
 }
 

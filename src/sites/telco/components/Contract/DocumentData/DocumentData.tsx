@@ -63,9 +63,9 @@ const DocumentData: React.FC<{ readonly?: boolean } & React.RefAttributes<any>> 
       return (
          <>
             <SectionTitle text="Documento" />
-            <Card className="bg-white p-4 shadow-none border-0" ref={formRef}>
-               <div className="flex flex-col gap-4 mb-4">
-                  <div className="flex flex-row gap-4">
+            <Card className="bg-white p-2 sm:p-4 shadow-none border-0" ref={formRef}>
+               <div className="flex flex-col gap-3 sm:gap-4 mb-3 sm:mb-4">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                      <DocumentTypeSelect value={documentType} onChange={setDocumentType} />
                      <DocumentInput
                         id="numero-doc"
@@ -75,7 +75,7 @@ const DocumentData: React.FC<{ readonly?: boolean } & React.RefAttributes<any>> 
                         readonly={readonly}
                      />
                   </div>
-                  <div className="flex flex-row gap-4">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                      <div className="flex flex-col w-full">
                         <DocumentInput
                            id="data-rilascio"
@@ -99,7 +99,7 @@ const DocumentData: React.FC<{ readonly?: boolean } & React.RefAttributes<any>> 
                      </div>
                   </div>
                </div>
-               <div className="rounded-xl border border-gray-200 p-4 flex flex-col gap-4">
+               <div className="rounded-xl border border-gray-200 p-2 sm:p-4 flex flex-col gap-3 sm:gap-4">
                   <DocumentUploadRow
                      label={t('Fronte documento')}
                      alt="Fronte documento"
@@ -108,7 +108,7 @@ const DocumentData: React.FC<{ readonly?: boolean } & React.RefAttributes<any>> 
                      imageSrc={frontImage}
                      readOnly={readonly}
                   />
-                  <div className="border-t border-gray-200 my-2" />
+                  <div className="border-t border-gray-200 my-1 sm:my-2" />
                   <DocumentUploadRow
                      label={t('Retro documento')}
                      alt="Retro documento"

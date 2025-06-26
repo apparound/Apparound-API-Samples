@@ -21,6 +21,9 @@ const Contract = props => {
 
    const contractDataRef = useRef<any>(null)
 
+   // Determina il sottotitolo in base allo stato readOnly
+   const subtitle = readOnly ? t('Contratto firmato e offerta attivata!') : t('Offerta confermata e inviata via email!')
+
    const concludeOffer = async () => {
       if (contractDataRef.current && contractDataRef.current.validateAll) {
          const valid = contractDataRef.current.validateAll()
@@ -39,14 +42,14 @@ const Contract = props => {
    }
 
    return (
-      <TelcoContainer>
+      <TelcoContainer subtitle={subtitle}>
          <div className="mx-4 mb-12 mt-14 flex flex-col lg:flex-row gap-6">
             <div className="lg:basis-[60%] min-w-0">
                <ContractData readOnly={readOnly} ref={contractDataRef} />
                <hr className="my-6 border-gray-300" />
                {!readOnly && (
                   <Button
-                     className="w-[40%] bg-primary hover:bg-purple-700 rounded-3xl px-6"
+                     className="min-w-[50%] max-w-[60%] bg-primary hover:bg-purple-700 rounded-3xl px-6"
                      onClick={() => concludeOffer()}
                   >
                      {t('Concludi attivazione').toUpperCase()}
