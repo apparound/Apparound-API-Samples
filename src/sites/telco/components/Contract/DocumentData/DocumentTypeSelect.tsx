@@ -17,7 +17,7 @@ const DocumentTypeSelect: React.FC<DocumentTypeSelectProps> = ({ value, onChange
    const { t } = useTranslation()
    return (
       <Select name="tipo-doc" onValueChange={onChange} value={value}>
-         <SelectTrigger>
+         <SelectTrigger className="h-15 bg-white">
             <SelectValue placeholder={t('Tipo documento')} />
          </SelectTrigger>
          <SelectContent>

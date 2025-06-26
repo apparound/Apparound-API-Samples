@@ -64,7 +64,7 @@ export class ApparoundUtils {
       sessionId: any,
       token: any,
       api: string,
-      method: 'get' | 'post' | 'put' | 'delete',
+      method: 'get' | 'post' | 'put' | 'delete' | 'patch',
       bodyRequest?: any,
       responseType: 'json' | 'arraybuffer' = 'json',
       timeout: number = 0,
@@ -92,6 +92,9 @@ export class ApparoundUtils {
                break
             case 'delete':
                response = await axios.delete(url, config)
+               break
+            case 'patch':
+               response = await axios.patch(url, bodyRequest, config)
                break
             default:
                throw new Error('Invalid HTTP method')
@@ -384,7 +387,7 @@ export class ApparoundUtils {
       const quoteId = SESSION_LIST[sessionId].QUOTE_ID
 
       const quote = await this.getQuote(sessionId, cpqId, quoteId)
-      const cart = this.findCartByKey(quote, 'baskedId', cartId)
+      const cart = this.findCartByKey(quote, 'basketId', cartId)
 
       if (cart) {
          return {
@@ -422,7 +425,7 @@ export class ApparoundUtils {
       const quoteId = SESSION_LIST[sessionId].QUOTE_ID
 
       const quote = await this.getQuote(sessionId, cpqId, quoteId)
-      const cart = this.findCartByKey(quote, 'baskedId,', cartId)
+      const cart = this.findCartByKey(quote, 'basketId,', cartId)
 
       if (cart) return this.flattenCartProducts(cart.root[0])
       return []
@@ -524,8 +527,8 @@ export class ApparoundUtils {
       }
    }
 
-   async getQuote(sessionId: string, cpqId: number, quoteId: number): Promise<any> {
-      if (SESSION_LIST[sessionId].QUOTE) return SESSION_LIST[sessionId].QUOTE
+   async getQuote(sessionId: string, cpqId: number, quoteId: number, skipCachedQuote?: boolean): Promise<any> {
+      if (!skipCachedQuote && SESSION_LIST[sessionId].QUOTE) return SESSION_LIST[sessionId].QUOTE
       const response: any = await this.fetchData(sessionId, null, `/v2/cpq/${cpqId}/quote/${quoteId}`, 'get')
       return response?.quote || null
    }
@@ -572,11 +575,36 @@ export class ApparoundUtils {
             3000,
             true
          )
-         if (response.code === 'ECONNABORTED' || response.response?.status === 102) return this.getPdfQuote(sessionId)
+         if (response.code === 'ECONNABORTED' || response.status === 202) return this.getPdfQuote(sessionId)
          return response
       } catch (error: any) {
-         if (error.code === 'ECONNABORTED' || error.response.status === 102) return this.getPdfQuote(sessionId)
+         if (error.code === 'ECONNABORTED' || error.status === 202) return this.getPdfQuote(sessionId)
          throw new Error('Failed to fetch PDF quote: ' + error.message)
+      }
+   }
+
+   async setProductConfiguration(sessionId: string, productGuid: string, data: any): Promise<any> {
+      const cpqId = SESSION_LIST[sessionId].CPQ_ID
+      const quoteId = SESSION_LIST[sessionId].QUOTE_ID
+      const quote = await this.getQuote(sessionId, cpqId, quoteId)
+
+      const productNode = this.findNodeByGuid(quote, productGuid)
+      const basket = this.findCartByProductGuid(quote, productGuid)
+
+      if (!productNode || !basket) throw new Error('Product node or parent node not found in the quote.')
+
+      const response = await this.fetchData(sessionId, null, `/v2/quote/${quoteId}/productconfiguration`, 'patch', {
+         nodeId: productNode?.nodeId || null,
+         basketId: basket?.basketId || null,
+         productId: productNode?.productId || null,
+         data: data || [],
+      })
+
+      const updatedQuote = await this.getQuote(sessionId, cpqId, quoteId, true)
+
+      this.saveSessionQuote(updatedQuote, sessionId)
+      return {
+         quote: updatedQuote,
       }
    }
 
@@ -673,7 +701,11 @@ export class ApparoundUtils {
       const nodes = quoteJsonQ.find('uniqueGuid', function (this: any) {
          return this == guid
       })
-      if (nodes.length == 1) return quoteJsonQ.pathValue(nodes.jsonQ_current[0].path.slice(0, 2))
+      if (nodes.length == 1) {
+         const response = quoteJsonQ.pathValue(nodes.jsonQ_current[0].path.slice(0, 2))
+         if (Array.isArray(response) && response.length > 0) return response[0]
+         else return response
+      }
       return null
    }
 

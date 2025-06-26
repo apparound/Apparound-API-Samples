@@ -36,7 +36,7 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({ value, onChange }) => {
    const { t } = useTranslation()
    return (
       <div>
-         <SectionTitle text={t('Metodo di pagamento')} />
+         <SectionTitle text="Metodo di pagamento" />
          <PaymentMethod
             value={1}
             label={t('Bollettino postale')}

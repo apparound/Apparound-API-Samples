@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { SERVER_URL } from './fetcher'
 import { DateTime } from 'luxon'
 
@@ -35,17 +36,19 @@ export const getShippingDate = (i18n: any) => {
 }
 
 export function getProductPriceString(product: any): string {
+   const { t } = useTranslation()
+
    if (product.price && product.price > 0) {
       return `${product.price.toLocaleString('it-IT', {
          style: 'currency',
          currency: 'EUR',
-      })}/mese`
+      })}/${t('Mese')}`
    } else if (product.activationPrice && product.activationPrice > 0) {
       return product.activationPrice.toLocaleString('it-IT', {
          style: 'currency',
          currency: 'EUR',
       })
    } else {
-      return 'Incluso'
+      return t('Incluso')
    }
 }

@@ -1,116 +1,81 @@
-import React from 'react'
-import { selectCustomer, updateCustomer } from '@/sites/retail/features/quoteSlice'
+import React, { useImperativeHandle, useRef } from 'react'
+import { selectCustomer } from '@/sites/retail/features/quoteSlice'
 import SectionTitle from '@/sites/telco/components/SectionTitle'
 import { useSelector, useDispatch } from 'react-redux'
 import { getProvince, getComuniByProvincia } from '@/utils/comuniUtils'
+import { useTranslation } from 'react-i18next'
+import FormInput from './FormInput'
+import ContractCustomerAddress from './ContractCustomerAddress'
+import { setRedOutline } from '@/lib/setRedOutline'
 
 interface ContractCustomerFormProps {
    className?: string
+   readOnly?: boolean
 }
 
-interface FormInputProps {
-   required?: boolean
-   placeholder: string
-   type?: string
-   className?: string
-   mapField?: string // aggiunta la nuova proprietà
-   [key: string]: any
-}
+const ContractCustomerForm = React.forwardRef(
+   ({ className = '', readOnly = false }: ContractCustomerFormProps, ref) => {
+      const dispatch = useDispatch()
+      const customer = useSelector(selectCustomer)
+      const provinceList = React.useMemo(() => getProvince(), [])
+      const comuniList = React.useMemo(
+         () => getComuniByProvincia(customer?.customAddress_province ?? ''),
+         [customer?.customAddress_province]
+      )
+      const { t } = useTranslation()
+      const formRef = useRef<HTMLFormElement>(null)
 
-const FormInput = ({
-   required = false,
-   placeholder,
-   type = 'text',
-   className = '',
-   mapField,
-   ...props
-}: FormInputProps) => {
-   const dispatch = useDispatch()
-   const customer = useSelector(selectCustomer)
-   const value = mapField ? customer?.[mapField] ?? '' : undefined
-   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (mapField) {
-         dispatch(updateCustomer({ [mapField]: e.target.value }))
+      // Validazione campi obbligatori
+      const validate = () => {
+         let valid = true
+         if (formRef.current) {
+            const elements = Array.from(formRef.current.elements) as HTMLInputElement[]
+            elements.forEach(el => {
+               if (el.required && !el.value) {
+                  setRedOutline(el, true)
+                  valid = false
+               } else {
+                  setRedOutline(el, false)
+               }
+            })
+         }
+         return valid
       }
-      if (props.onChange) props.onChange(e)
-   }
-   return (
-      <input
-         required={required}
-         placeholder={placeholder}
-         type={type}
-         className={`border border-gray-300 rounded px-3 py-2 w-full ${className}`}
-         value={value}
-         onChange={handleChange}
-         {...props}
-      />
-   )
-}
 
-const ContractCustomerForm = ({ className = '' }: ContractCustomerFormProps) => {
-   const dispatch = useDispatch()
-   const customer = useSelector(selectCustomer)
-   const provinceList = React.useMemo(() => getProvince(), [])
-   const comuniList = React.useMemo(() => getComuniByProvincia(customer?.customAddress_province ?? ''), [customer?.customAddress_province])
-   return (
-      <>
-         <SectionTitle text="Dati personali" />
-         <form className={`space-y-4 ${className}`}>
-            <div className="flex flex-col md:flex-row gap-4">
-               <FormInput required placeholder="Nome *" mapField="firstName" />
-               <FormInput required placeholder="Cognome *" mapField="lastName" />
-            </div>
-            <div className="flex flex-col md:flex-row gap-4">
-               <FormInput required placeholder="Email *" mapField="email" />
-               <FormInput required placeholder="Telefono *" mapField="phoneNumber" />
-            </div>
-            <div>
-               <label className="text-left block font-bold mb-1 mt-2">Indirizzo *</label>
-               <div className="flex flex-col md:flex-row gap-4 mb-2">
-                  <select
-                     required
-                     className="border border-gray-300 rounded px-3 py-2 w-full"
-                     value={customer?.customAddress_province ?? ''}
-                     onChange={e => dispatch(updateCustomer({ customAddress_province: e.target.value, customAddress_city: '' }))}
-                  >
-                     <option value="" disabled>
-                        Provincia
-                     </option>
-                     {provinceList.map(provincia => (
-                        <option key={provincia} value={provincia}>
-                           {provincia}
-                        </option>
-                     ))}
-                  </select>
-                  <select
-                     required
-                     className="border border-gray-300 rounded px-3 py-2 w-full"
-                     value={customer?.customAddress_city ?? ''}
-                     onChange={e => dispatch(updateCustomer({ customAddress_city: e.target.value }))}
-                     disabled={!customer?.customAddress_province}
-                  >
-                     <option value="" disabled>
-                        Comune
-                     </option>
-                     {comuniList.map(comune => (
-                        <option key={comune.nome} value={comune.nome}>
-                           {comune.nome}
-                        </option>
-                     ))}
-                  </select>
-                  <FormInput required placeholder="CAP" mapField="customAddress_zipCode" />
+      useImperativeHandle(ref, () => ({ validate }))
+
+      return (
+         <>
+            <SectionTitle text="Dati personali" />
+            <form className={`space-y-4 ${className}`} ref={formRef}>
+               <div className="flex flex-col md:flex-row gap-4">
+                  <FormInput required placeholder="Nome" mapField="firstName" readOnly={readOnly} />
+                  <FormInput required placeholder="Cognome" mapField="lastName" readOnly={readOnly} />
                </div>
-               <FormInput required placeholder="Indirizzo e numero civico" mapField="customAddress_address" />
-            </div>
-            <div className="flex items-center mt-2">
-               <input type="checkbox" id="indirizzoUguale" className="accent-primary w-4 h-4" />
-               <label htmlFor="indirizzoUguale" className="ml-2 text-sm">
-                  L'indirizzo di residenza è uguale a quello di fatturazione
-               </label>
-            </div>
-         </form>
-      </>
-   )
-}
+               <div className="flex flex-col md:flex-row gap-4">
+                  <FormInput required placeholder="Email" mapField="email" readOnly={readOnly} />
+                  <FormInput required placeholder="Telefono" mapField="phoneNumber" readOnly={readOnly} />
+               </div>
+               <ContractCustomerAddress
+                  customer={customer}
+                  provinceList={provinceList}
+                  comuniList={comuniList}
+                  readOnly={readOnly}
+                  dispatch={dispatch}
+                  t={t}
+               />
+               {!readOnly && (
+                  <div className="flex items-center mt-2">
+                     <input type="checkbox" id="indirizzoUguale" className="accent-primary w-4 h-4" />
+                     <label htmlFor="indirizzoUguale" className="ml-2 text-sm">
+                        {t("L'indirizzo di residenza è uguale a quello di fatturazione")}
+                     </label>
+                  </div>
+               )}
+            </form>
+         </>
+      )
+   }
+)
 
 export default ContractCustomerForm

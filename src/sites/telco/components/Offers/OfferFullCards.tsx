@@ -59,10 +59,10 @@ const OfferFullCards = ({ products, navigate }) => {
    function getDetailsList(product, lang) {
       if (product.features && product.features.length > 0) {
          return product.features.map((feature, i) => ({ key: i, value: feature }))
-      } else if (product.config && product.config.details) {
+      } else if (product.config && product.config.headlessDescription) {
          let detailsArr = []
          try {
-            detailsArr = JSON.parse(product.config.details)
+            detailsArr = JSON.parse(product.config.headlessDescription)
          } catch (e) {
             detailsArr = []
          }
