@@ -14,6 +14,7 @@ const CustomerModal = ({ showModal, setShowModal }) => {
    const navigate = useRelativeNavigate()
    const formRef = useRef(null)
    const [formIsValid, setFormIsValid] = useState(false)
+   const [formSubmitted, setFormSubmitted] = useState(false)
    const dispatch = useDispatch()
 
    const fullCustomerData = useSelector(selectCustomer)
@@ -35,6 +36,7 @@ const CustomerModal = ({ showModal, setShowModal }) => {
 
    const onSubmit = () => {
       if (!formRef.current.checkValidity()) {
+         setFormSubmitted(true)
          return formRef.current.reportValidity()
       }
       dispatch(showLoader())
@@ -59,11 +61,11 @@ const CustomerModal = ({ showModal, setShowModal }) => {
                   onChange={handleCustomerDataChange}
                   formRef={formRef}
                   onSubmit={onSubmit}
+                  formSubmitted={formSubmitted}
                />
             }
             footer={<CustomerFooter onSubmit={onSubmit} />}
          />
-         <CustomerFooter onSubmit={onSubmit} />
       </>
    )
 }
@@ -75,7 +77,7 @@ const CustomerFooter = ({ onSubmit }) => {
       <div className="flex justify-center">
          <div className="flex w-full lg:w-[250px] justify-center align-center">
             <Button className="w-[80%] bg-primary hover:bg-purple-700 rounded-3xl px-6" onClick={onSubmit}>
-               {t('Invia')}
+               {t('Invia').toUpperCase()}
             </Button>
          </div>
       </div>

@@ -55,7 +55,7 @@ export function getAddons({ products, cart, tree, quotePrice, setOfferTitle, t }
          //Aggiungo fake product attivazione
          const carrelloObj = {
             id: 2,
-            label: t('Carrello'),
+            label: t('Offerta'),
             products: treeProducts,
          }
          return [carrelloObj, ...newAddons]

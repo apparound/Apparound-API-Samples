@@ -78,21 +78,23 @@ const OfferFullCards = ({ products, navigate }) => {
          {products.map((product, idx) => (
             <Card
                key={product.guid || idx}
-               className="relative overflow-hidden rounded-3xl min-w-0 max-w-[350px] w-full mx-auto shadow-kiki-shadow"
+               className="relative overflow-hidden rounded-3xl min-w-0 max-w-[350px] w-full mx-auto shadow-kiki-shadow flex flex-col"
             >
                <ProductCardHeader image={cardHeader} title={product.productName || product.label} />
-               <div className="px-0 py-6">
+               <div className="flex-1 flex flex-col px-0 py-6">
                   <ProductDetailsList details={getDetailsList(product, t('en') || 'it')} />
-                  <ProductPrice price={product.price} />
-                  <Button
-                     className="w-[80%] bg-primary hover:bg-purple-700 rounded-3xl px-6"
-                     onClick={async () => {
-                        await addProduct(product.guid, dispatch, tofId, product.parentGuid)
-                        navigate('/telco/offer-detail', { state: { offer: product.productName || product.label } })
-                     }}
-                  >
-                     {t('SCOPRI E ATTIVA').toUpperCase()}
-                  </Button>
+                  <div className="mt-auto flex flex-col items-center gap-2">
+                     <ProductPrice price={product.price} />
+                     <Button
+                        className="w-[80%] bg-primary hover:bg-purple-700 rounded-3xl px-6"
+                        onClick={async () => {
+                           await addProduct(product.guid, dispatch, tofId, product.parentGuid)
+                           navigate('/telco/offer-detail', { state: { offer: product.productName || product.label } })
+                        }}
+                     >
+                        {t('SCOPRI E ATTIVA').toUpperCase()}
+                     </Button>
+                  </div>
                </div>
             </Card>
          ))}

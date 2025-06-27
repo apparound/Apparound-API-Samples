@@ -22,7 +22,7 @@ const ContractSignature: React.FC = () => {
    }
 
    return (
-      <TelcoContainer>
+      <TelcoContainer step={4}>
          <h2 className="text-primary text-2xl font-semibold mb-2 mt-8">{t('Firma contratto')}</h2>
          <p className="text-sm text-gray-600 mb-4">Leggi il contratto e procedi in fondo con la firma</p>
          <div className="flex justify-center items-center w-full">

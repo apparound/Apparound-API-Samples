@@ -84,7 +84,7 @@ const Products: React.FC<ProductsProps> = ({
          })}
          <button
             type="button"
-            className="w-[60%] mt-6 bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-3xl shadow transition-all disabled:opacity-50"
+            className="w-[60%] max-w-[250px] mt-6 bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-3xl shadow transition-all disabled:opacity-50"
             onClick={() => window.location.assign('/telco/offerta-home')}
             disabled={!discoverEnabled}
          >

@@ -9,6 +9,7 @@ import { saveContractData } from '../components/Contract/hooks/saveContractData'
 import TelcoContainer from '../components/TelcoContainer'
 import React, { useRef } from 'react'
 import { toast } from '@/components/ui/use-toast'
+import StepIndicatorTelco from './StepIndicatorTelco'
 
 const Contract = props => {
    const navigate = useNavigate()
@@ -42,25 +43,27 @@ const Contract = props => {
    }
 
    return (
-      <TelcoContainer subtitle={subtitle}>
-         <div className="mx-4 mb-12 mt-14 flex flex-col lg:flex-row gap-6">
-            <div className="lg:basis-[60%] min-w-0">
-               <ContractData readOnly={readOnly} ref={contractDataRef} />
-               <hr className="my-6 border-gray-300" />
-               {!readOnly && (
-                  <Button
-                     className="min-w-[50%] max-w-[60%] bg-primary hover:bg-purple-700 rounded-3xl px-6"
-                     onClick={() => concludeOffer()}
-                  >
-                     {t('Concludi attivazione').toUpperCase()}
-                  </Button>
-               )}
+      <>
+         <TelcoContainer subtitle={subtitle} step={readOnly ? 5 : 3}>
+            <div className="mx-4 mb-12 mt-14 flex flex-col lg:flex-row gap-6">
+               <div className="lg:basis-[60%] min-w-0">
+                  <ContractData readOnly={readOnly} ref={contractDataRef} />
+                  <hr className="my-6 border-gray-300" />
+                  {!readOnly && (
+                     <Button
+                        className="min-w-[50%] max-w-[60%] bg-primary hover:bg-purple-700 rounded-3xl px-6"
+                        onClick={() => concludeOffer()}
+                     >
+                        {t('Concludi attivazione').toUpperCase()}
+                     </Button>
+                  )}
+               </div>
+               <div className="lg:basis-[40%] max-w-md w-full mx-auto">
+                  <Recap />
+               </div>
             </div>
-            <div className="lg:basis-[40%] max-w-md w-full mx-auto">
-               <Recap />
-            </div>
-         </div>
-      </TelcoContainer>
+         </TelcoContainer>
+      </>
    )
 }
 

@@ -98,7 +98,7 @@ const AddonCluster: React.FC<AddonClusterProps> = ({ cluster, includedProducts }
    }
 
    return (
-      <Card className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+      <Card className="bg-white rounded-2xl shadow-kiki-shadow p-6">
          <div className="font-bold text-lg text-gray-800 mb-3 flex items-center">{cluster.label}</div>
          <div>
             <ProductList
