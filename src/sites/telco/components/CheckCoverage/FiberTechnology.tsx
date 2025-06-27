@@ -2,6 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import Icon from '@mdi/react'
 import { mdiDownload, mdiUpload } from '@mdi/js'
+import fttcImage from '@/sites/telco/assets/images/fttc_image.png'
 
 const Info = ({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) => (
    <div className="flex flex-row items-center gap-3 text-left">
@@ -18,28 +19,36 @@ const Info = ({ icon, label, value }: { icon: React.ReactNode; label: string; va
 const FiberTechnology = () => {
    const { t } = useTranslation()
    return (
-      <div className="mt-8 flex flex-col sm:flex-row items-center bg-[#f6f6f8] rounded-2xl shadow p-4 sm:p-6">
+      <div className="mt-8 flex flex-col sm:flex-row items-center bg-[#f6f6f8] rounded-2xl p-4 sm:p-6">
          <div className="flex-shrink-0 mb-4 sm:mb-0 sm:mr-6">
             <img
-               src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=facearea&w=400&h=300"
+               src={fttcImage}
                alt="FTTC"
-               className="rounded-xl w-full max-w-xs h-32 object-cover sm:w-48"
+               className="rounded-xl w-full max-w-lg h-56 object-contain sm:w-80 bg-none"
             />
          </div>
          <div className="w-full">
             <div className="flex items-baseline gap-2">
-               <h4 className="text-xl sm:text-2xl font-bold text-[#7c4bc6]">
+               <h4 className="text-xl sm:text-2xl font-bold text-primary">
                   {t('Tecnologia FTTC Fiber to the Cabinet')}
                </h4>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 my-4 sm:my-8">
                <Info
-                  icon={<Icon path={mdiDownload} size={1.2} color="#7c4bc6" />}
+                  icon={
+                     <span className="text-primary">
+                        <Icon path={mdiDownload} size={1.2} />
+                     </span>
+                  }
                   label="Download"
                   value={t('Velocità FTTC download')}
                />
                <Info
-                  icon={<Icon path={mdiUpload} size={1.2} color="#7c4bc6" />}
+                  icon={
+                     <span className="text-primary">
+                        <Icon path={mdiUpload} size={1.2} />
+                     </span>
+                  }
                   label="Upload"
                   value={t('Velocita FTTC upload')}
                />

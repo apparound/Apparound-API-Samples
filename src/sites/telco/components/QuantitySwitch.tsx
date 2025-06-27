@@ -50,7 +50,7 @@ const QuantitySwitch: React.FC<QuantitySwitchProps> = ({ product, value, dispatc
    }
 
    return (
-      <div className="flex items-center justify-between p-4 bg-white rounded-2xl w-full max-w-3xl shadow-md">
+      <div className="flex items-center justify-between p-4 bg-white rounded-2xl w-full max-w-3xl shadow-kiki-shadow">
          <div className="flex items-center gap-3">
             {ProductIcon.getByIconName(product.config.mdiIcon, 'w-8 h-8')}
             <span className="text-black text-lg">{product.description}</span>

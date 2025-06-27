@@ -35,7 +35,7 @@ const CheckCoverageForm = ({
          </div>
          <Button
             type="submit"
-            className="w-full bg-primary hover:bg-purple-700 text-white"
+            className="mx-4 my-4 w-[80%] bg-white border-2 border-primary text-primary hover:bg-purple-700 hover:text-white rounded-3xl px-6"
             disabled={!(formData.provincia && formData.comune && formData.cap && formData.indirizzo)}
          >
             {t('Verifica copertura').toUpperCase()}

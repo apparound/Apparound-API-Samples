@@ -24,7 +24,7 @@ const HeroCarousel = ({ items }: HeroCarouselProps) => {
             }}
             plugins={[
                Autoplay({
-                  delay: 10000,
+                  delay: 5000,
                }),
             ]}
          >
@@ -34,7 +34,7 @@ const HeroCarousel = ({ items }: HeroCarouselProps) => {
                      <div className="h-[400px] max-h-[400px]">
                         <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
                      </div>
-                     <div className="h-[100px] max-h-[100px] flex items-center text-white bg-gradient-to-t from-transparent to-transparent ">
+                     <div className="h-[100px] max-h-[100px] flex items-center text-white bg-gradient-to-r from-[#734F96] via-[#734F96] to-[#0181C4] ">
                         <h1 className="text-2xl md:text-4xl font-bold mx-8">{t(item.title)}</h1>
                      </div>
                   </CarouselItem>

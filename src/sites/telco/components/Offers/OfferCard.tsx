@@ -13,8 +13,8 @@ interface OfferCardProps {
 const OfferCard: React.FC<OfferCardProps> = ({ imageSrc, title, onClick, selected, loading }) => {
    return (
       <Card
-         className={`w-[350px] cursor-pointer relative rounded-2xl border-0 ${
-            selected ? 'shadow-[0_0_12px_2px_theme(colors.primary.DEFAULT)]' : 'hover:shadow-lg'
+         className={`w-[350px] cursor-pointer relative rounded-2xl border-0 shadow-kiki-shadow ${
+            selected ? 'shadow-kiki-shadow' : 'shadow-kiki-shadow hover:shadow-lg'
          }`}
          onClick={onClick}
       >
@@ -26,7 +26,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ imageSrc, title, onClick, selecte
          <img
             src={cardBottom}
             alt="Card Bottom"
-            className="absolute bottom-0 left-0 w-full object-fit rounded-b-2xl"
+            className="absolute bottom-0 left-0 w-full object-fit rounded-b-2xl shadow-kiki-shadow"
             style={{ pointerEvents: 'none' }}
          />
          <h3 className="text-xl font-bold text-primary text-white absolute bottom-0 left-0 p-2 z-10 w-full rounded-xl">

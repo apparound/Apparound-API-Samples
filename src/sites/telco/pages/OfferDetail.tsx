@@ -53,7 +53,7 @@ const OfferDetail = () => {
    return (
       <div className="min-h-screen bg-white">
          <Navbar showTofList={true} />
-         <StepIndicatorTelco step={3} />
+         <StepIndicatorTelco step={2} />
 
          <OfferHeader title={offerTitle} />
          {addons.length > 0 && (

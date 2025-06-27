@@ -10,7 +10,11 @@ const SelectProvincia = ({ province, handleProvinceChange }) => {
          </SelectTrigger>
          <SelectContent>
             {province.map(provincia => (
-               <SelectItem key={provincia} value={provincia}>
+               <SelectItem
+                  key={provincia}
+                  value={provincia}
+                  className="data-[state=checked]:bg-selected data-[highlighted]:bg-selected"
+               >
                   {provincia}
                </SelectItem>
             ))}

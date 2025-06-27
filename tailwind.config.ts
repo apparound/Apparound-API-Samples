@@ -16,6 +16,7 @@ export default {
          boxShadow: {
             '1app': '0 1px 10px 0 rgb(0 0 0 / 0.15), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
             '2app': '0px 0px 10px 0px rgba(0, 0, 0, 0.25)',
+            'kiki-shadow': '0 0 12px rgba(0,0,0,0.15)',
          },
          colors: {
             border: 'hsl(var(--border))',
@@ -61,6 +62,9 @@ export default {
                'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
                border: 'hsl(var(--sidebar-border))',
                ring: 'hsl(var(--sidebar-ring))',
+            },
+            selected: {
+               DEFAULT: '#e0f2ff', // azzurro chiaro custom
             },
          },
          borderRadius: {

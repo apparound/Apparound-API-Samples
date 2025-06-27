@@ -89,7 +89,7 @@ const ConfigureOffer = () => {
    return (
       <div className="min-h-screen bg-white">
          <Navbar showTofList={true} onSelectMainProduct={handleSelectMainProduct} />
-         <StepIndicatorTelco step={1} />
+         <StepIndicatorTelco step={0} />
 
          <OfferHeader title={headerTitle} />
 

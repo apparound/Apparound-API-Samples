@@ -12,7 +12,11 @@ const SelectCap = ({ comuniByProvincia, comuneSelezionato, handleCapChange, isDi
          </SelectTrigger>
          <SelectContent>
             {caps.map(cap => (
-               <SelectItem key={cap} value={cap}>
+               <SelectItem
+                  key={cap}
+                  value={cap}
+                  className="data-[state=checked]:bg-selected data-[highlighted]:bg-selected"
+               >
                   {cap}
                </SelectItem>
             ))}
