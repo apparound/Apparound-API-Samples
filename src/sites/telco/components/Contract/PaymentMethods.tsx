@@ -18,7 +18,7 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({ value, label, description
          value={value}
          checked={checked}
          onChange={() => onChange(value)}
-         className="mt-1 accent-purple-700"
+         className="mt-1 accent-primary"
       />
       <div>
          <div className="font-bold text-base text-left text-black leading-tight">{label}</div>

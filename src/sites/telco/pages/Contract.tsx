@@ -7,9 +7,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { saveContractData } from '../components/Contract/hooks/saveContractData'
 import TelcoContainer from '../components/TelcoContainer'
-import React, { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { toast } from '@/components/ui/use-toast'
-import StepIndicatorTelco from './StepIndicatorTelco'
 
 const Contract = props => {
    const navigate = useNavigate()
@@ -19,10 +18,23 @@ const Contract = props => {
    const contractData = useSelector(selectContract)
    const customerData = useSelector(selectCustomer)
    const readOnly = location.state?.readOnly ?? props.readOnly ?? false
+   const [offerTitle, setOfferTitle] = useState<string>('')
 
    const contractDataRef = useRef<any>(null)
 
-   // Determina il sottotitolo in base allo stato readOnly
+   useEffect(() => {
+      const OFFER_TITLE_STORAGE_KEY = 'telco:offerTitle'
+      const storedOfferTitle = localStorage.getItem(OFFER_TITLE_STORAGE_KEY)
+      if (storedOfferTitle) {
+         setOfferTitle(storedOfferTitle)
+      }
+   }, [])
+
+   // Scroll to top when component mounts
+   useEffect(() => {
+      window.scrollTo(0, 0)
+   }, [])
+
    const subtitle = readOnly ? t('Contratto firmato e offerta attivata!') : t('Offerta confermata e inviata via email!')
 
    const concludeOffer = async () => {
@@ -31,7 +43,7 @@ const Contract = props => {
 
          if (!valid) {
             toast({
-               title: t('Attenzione'),
+               title: '',
                description: t('Per favore compila tutti i campi obbligatori.'),
                variant: 'destructive',
             })
@@ -44,14 +56,13 @@ const Contract = props => {
 
    return (
       <>
-         <TelcoContainer subtitle={subtitle} step={readOnly ? 5 : 3}>
+         <TelcoContainer subtitle={subtitle} step={readOnly ? 5 : 3} offerTitle={offerTitle}>
             <div className="mx-4 mb-12 mt-14 flex flex-col lg:flex-row gap-6">
                <div className="lg:basis-[60%] min-w-0">
                   <ContractData readOnly={readOnly} ref={contractDataRef} />
-                  <hr className="my-6 border-gray-300" />
                   {!readOnly && (
                      <Button
-                        className="min-w-[50%] max-w-[60%] bg-primary hover:bg-purple-700 rounded-3xl px-6"
+                        className="min-w-[250px] bg-primary hover:bg-purple-700 rounded-3xl px-6 mt-8"
                         onClick={() => concludeOffer()}
                      >
                         {t('Concludi attivazione').toUpperCase()}

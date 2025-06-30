@@ -10,13 +10,14 @@ interface TelcoContainerProps {
    children: React.ReactNode
    subtitle?: string
    step?: number
+   offerTitle?: string
 }
 
-const TelcoContainer: React.FC<TelcoContainerProps> = ({ children, subtitle, step = 3 }) => {
+const TelcoContainer: React.FC<TelcoContainerProps> = ({ children, subtitle, step = 3, offerTitle }) => {
    const tofId = useSelector(selectTofId)
    const tofList = useSelector(selectTofList)
-   const offerTitle = tofList?.find((tof: any) => String(tof.id) === String(tofId))?.name || ''
-   const headerTitle = offerTitle ? `Offerte ${offerTitle}` : 'Offerte'
+   const defaultOfferTitle = tofList?.find((tof: any) => String(tof.id) === String(tofId))?.name || ''
+   const headerTitle = offerTitle || (defaultOfferTitle ? `Offerte ${defaultOfferTitle}` : 'Offerte')
 
    return (
       <div className="min-h-screen w-full bg-white flex flex-col">

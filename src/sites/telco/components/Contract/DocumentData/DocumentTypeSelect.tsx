@@ -7,14 +7,15 @@ interface DocumentTypeSelectProps {
    onChange: (value: string) => void
 }
 
-const documentTypes = [
-   { value: 'carta-id', label: "Carta d'identità" },
-   { value: 'patente', label: 'Patente' },
-   { value: 'passaporto', label: 'Passaporto' },
-]
-
 const DocumentTypeSelect: React.FC<DocumentTypeSelectProps> = ({ value, onChange }) => {
    const { t } = useTranslation()
+
+   const documentTypes = [
+      { value: 'carta-id', label: t("Carta d'identità") },
+      { value: 'patente', label: t('Patente') },
+      { value: 'passaporto', label: t('Passaporto') },
+   ]
+
    return (
       <Select name="tipo-doc" onValueChange={onChange} value={value}>
          <SelectTrigger className="h-15 bg-white">

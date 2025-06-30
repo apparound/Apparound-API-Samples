@@ -41,7 +41,7 @@ const Text = ({
    const { t } = useTranslation()
 
    const showError = required && formSubmitted && (!value || value === '')
-   const baseClasses = `bg-white px-3 py-1.5 pt-4 w-full min-w-[250px] rounded-md placeholder:text-gray-900 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6 peer`
+   const baseClasses = `bg-white px-3 py-1.5 pt-4 w-full rounded-md placeholder:text-gray-900 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6 peer`
    const errorClass = showError ? 'outline-red-300 outline-2 outline' : ''
    const borderOutlineClasses = readonly
       ? 'border-0 outline-0'

@@ -1,4 +1,5 @@
 import { findNodeForKey } from '@/hooks/useQuote'
+import { getOfferTitle, extractCartGuids } from '@/utils/offerUtils'
 
 interface Product {
    guid: string
@@ -24,17 +25,15 @@ export function getAddons({ products, cart, tree, quotePrice, setOfferTitle, t }
       return []
    }
 
-   let cartGuids: string[] = Array.isArray(cart)
-      ? cart
-      : typeof cart === 'object' && cart !== null
-      ? Object.keys(cart[Object.keys(cart)[0]]?.children || {})
-      : []
+   const cartGuids = extractCartGuids(cart)
+
+   const offerTitle = getOfferTitle(products, cartGuids, t)
+   setOfferTitle(offerTitle)
 
    const selectedProduct = products.find((p: any) => cartGuids.includes(p.guid))
    let newAddons: any[] = []
 
    if (selectedProduct?.clusters) {
-      setOfferTitle(t(selectedProduct.description))
       newAddons = [...selectedProduct.clusters]
    }
 

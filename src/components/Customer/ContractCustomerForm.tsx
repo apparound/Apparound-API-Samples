@@ -46,15 +46,23 @@ const ContractCustomerForm = React.forwardRef(
 
       return (
          <>
-            <SectionTitle text="Dati personali" />
+            <SectionTitle text="Dati personali" className="mt-2" />
             <form className={`space-y-4 ${className}`} ref={formRef}>
                <div className="flex flex-col md:flex-row gap-4">
-                  <FormInput required placeholder="Nome" mapField="firstName" readOnly={readOnly} />
-                  <FormInput required placeholder="Cognome" mapField="lastName" readOnly={readOnly} />
+                  <div className="flex-1">
+                     <FormInput required placeholder="Nome" mapField="firstName" readOnly={readOnly} />
+                  </div>
+                  <div className="flex-1">
+                     <FormInput required placeholder="Cognome" mapField="lastName" readOnly={readOnly} />
+                  </div>
                </div>
                <div className="flex flex-col md:flex-row gap-4">
-                  <FormInput required placeholder="Email" mapField="email" readOnly={readOnly} />
-                  <FormInput required placeholder="Telefono" mapField="phoneNumber" readOnly={readOnly} />
+                  <div className="flex-1">
+                     <FormInput required placeholder="Email" mapField="email" readOnly={readOnly} />
+                  </div>
+                  <div className="flex-1">
+                     <FormInput required placeholder="Telefono" mapField="phoneNumber" readOnly={readOnly} />
+                  </div>
                </div>
                <ContractCustomerAddress
                   customer={customer}
@@ -64,14 +72,6 @@ const ContractCustomerForm = React.forwardRef(
                   dispatch={dispatch}
                   t={t}
                />
-               {!readOnly && (
-                  <div className="flex items-center mt-2">
-                     <input type="checkbox" id="indirizzoUguale" className="accent-primary w-4 h-4" />
-                     <label htmlFor="indirizzoUguale" className="ml-2 text-sm">
-                        {t("L'indirizzo di residenza è uguale a quello di fatturazione")}
-                     </label>
-                  </div>
-               )}
             </form>
          </>
       )

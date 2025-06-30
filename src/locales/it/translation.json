@@ -52,7 +52,6 @@
    "Firma contratto": "Firma contratto",
    "Sign contract": "Firma contratto",
    "Leggi il contratto e procedi in fondo con la firma": "Leggi il contratto e procedi in fondo con la firma",
-   "Read the contract and proceed to the bottom with the signature": "Leggi il contratto e procedi in fondo con la firma",
    "Frame contratto generato": "Frame contratto generato",
    "L'offerta adatta a te": "L'offerta adatta a te",
    "The right offer for you": "L'offerta adatta a te",
@@ -60,6 +59,7 @@
    "Offerta confermata e inviata via email!": "Offerta confermata e inviata via email!",
    "Controlla la casella email per scaricare il PDF dell'offerta": "Controlla la casella email per scaricare il PDF dell'offerta",
    "Contratto per attivazione offerta": "Contratto per attivazione offerta",
+   "Il tuo riepilogo": "Il tuo riepilogo",
    "Dati intestatario fornitura": "Dati intestatario fornitura",
    "Supply holder data": "Dati intestatario fornitura",
    "Seleziona il metodo di invio bolletta": "Seleziona il metodo di invio bolletta",
@@ -126,7 +126,6 @@
    "Errore": "Errore",
    "Tipo di fascia": "Tipo di fascia",
    "Importi reali da corrispondere": "Gli importi reali da corrispondere per le tue bollette saranno calcolati in base ai tuoi consumi effettivi",
-   "Il tuo riepilogo": "Il tuo riepilogo",
    "POD: codice a 14 o 15 caratteri che identifica il contatore della luce; si trova in tutte le bollette": "POD: codice a 14 o 15 caratteri che identifica il contatore della luce; si trova in tutte le bollette",
    "Ricevi la bolletta online in formato digitale rapido ed ecologico": "Ricevi la bolletta online in formato digitale rapido ed ecologico",
    "Bolletta inviata al tuo domicilio tramite posta, ideale per che preferisce un formato fisico": "Bolletta inviata al tuo domicilio tramite posta, ideale per che preferisce un formato fisico",
@@ -227,5 +226,9 @@
    "L'indirizzo di residenza è uguale a quello di fatturazione": "L'indirizzo di residenza è uguale a quello di fatturazione",
    "Concludi attivazione": "Concludi attivazione",
    "Attenzione": "Attenzione",
-   "Per favore compila tutti i campi obbligatori.": "Per favore compila tutti i campi obbligatori."
+   "Per favore compila tutti i campi obbligatori.": "Per favore compila tutti i campi obbligatori.",
+   "Chiudi": "Chiudi",
+   "Carta d'identità": "Carta d'identità",
+   "Patente": "Patente",
+   "Passaporto": "Passaporto"
 }

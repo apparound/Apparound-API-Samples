@@ -53,9 +53,9 @@ const ContractData = forwardRef<unknown, ContractDataProps>(({ className = '', r
    return (
       <div className={className}>
          <div className="text-primary text-center font-bold ml-2 mb-4 text-2xl">
-            {t('Contratto per attivazione offerta')}
+            {readOnly ? t('Il tuo riepilogo') : t('Contratto per attivazione offerta')}
          </div>
-         <Card className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+         <Card className="bg-white rounded-2xl !shadow-kiki-shadow p-6 border border-gray-200">
             <ContractCustomerForm className="mt-4" readOnly={readOnly} ref={customerFormRef} />
             <PhoneNumberPortability ref={phoneNumberRef} />
             <DocumentData readonly={readOnly} ref={documentDataRef} />
