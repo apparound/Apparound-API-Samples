@@ -16,6 +16,15 @@ interface contractDataI {
    }
 }
 
+interface documentDataI {
+   documentType?: string
+   documentNumber?: string
+   releaseDate?: string
+   expiryDate?: string
+   frontImage?: string
+   backImage?: string
+}
+
 interface initialState {
    cart: cartI
    tree?: any[]
@@ -28,6 +37,7 @@ interface initialState {
    tofId?: string
    startingProducts?: Product[]
    tofList?: any[]
+   documentData?: documentDataI
 }
 
 const initialState: initialState = {
@@ -38,6 +48,14 @@ const initialState: initialState = {
       id: -1,
       clientCreationDate: new Date().toISOString(),
       properties: {},
+   },
+   documentData: {
+      documentType: undefined,
+      documentNumber: '',
+      releaseDate: '',
+      expiryDate: '',
+      frontImage: undefined,
+      backImage: undefined,
    },
 }
 
@@ -127,7 +145,8 @@ export const quoteSlice = createSlice({
    name: 'quote',
    initialState,
    reducers: {
-      reset: () => {
+      reset: state => {
+         localStorage.removeItem('documentData')
          return initialState
       },
       initQuote: (state, { payload }) => {
@@ -209,6 +228,41 @@ export const quoteSlice = createSlice({
          const { productGuid, quantity } = payload
          state.cart = setProductQuantity(state.cart, productGuid, quantity)
       },
+      updateDocumentData: (state, { payload }) => {
+         state.documentData = {
+            ...state.documentData,
+            ...payload,
+         }
+      },
+      saveDocumentData: state => {
+         if (state.documentData) {
+            localStorage.setItem('documentData', JSON.stringify(state.documentData))
+         }
+      },
+      loadDocumentData: state => {
+         const savedData = localStorage.getItem('documentData')
+         if (savedData) {
+            try {
+               state.documentData = {
+                  ...state.documentData,
+                  ...JSON.parse(savedData),
+               }
+            } catch (error) {
+               console.error('Errore nel caricamento dei dati del documento:', error)
+            }
+         }
+      },
+      clearDocumentData: state => {
+         state.documentData = {
+            documentType: undefined,
+            documentNumber: '',
+            releaseDate: '',
+            expiryDate: '',
+            frontImage: undefined,
+            backImage: undefined,
+         }
+         localStorage.removeItem('documentData')
+      },
    },
 })
 
@@ -261,7 +315,9 @@ export const selectColorProduct = state => {
    const selectedSize = mainCluster?.products?.find(item => item.guid === selectedSizeGuid)
    const selectedSizeInCart = mainProductInCart.children[selectedSizeGuid] || {}
    const colorCluster = selectedSize?.clusters?.find(cluster => cluster.label === config.colorClusterLabel) || {}
-   return colorCluster?.products?.find(product => selectedSizeInCart.children && selectedSizeInCart.children[product.guid])
+   return colorCluster?.products?.find(
+      product => selectedSizeInCart.children && selectedSizeInCart.children[product.guid]
+   )
 }
 
 export const selectCartClusters = createSelector(
@@ -282,7 +338,9 @@ export const selectCartClusters = createSelector(
          clusters:
             selectedSize?.clusters?.map(cluster => ({
                ...cluster,
-               selectedProduct: cluster?.products?.find(item => selectedSizeInCart.children && selectedSizeInCart.children[item.guid]),
+               selectedProduct: cluster?.products?.find(
+                  item => selectedSizeInCart.children && selectedSizeInCart.children[item.guid]
+               ),
             })) || [],
       }
    }
@@ -311,6 +369,9 @@ export const selectStartingProducts = createSelector(
 )
 export const selectTofId = state => state.quote.tofId
 
+// Selettore per i dati del documento
+export const selectDocumentData = state => state.quote.documentData
+
 export const {
    reset,
    initQuote,
@@ -324,6 +385,10 @@ export const {
    updateContract,
    updateStartingProducts,
    setProductQuantityReducer,
+   updateDocumentData,
+   saveDocumentData,
+   loadDocumentData,
+   clearDocumentData,
 } = quoteSlice.actions
 
 export default quoteSlice.reducer

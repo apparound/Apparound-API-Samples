@@ -5,9 +5,10 @@ import { useTranslation } from 'react-i18next'
 interface DocumentTypeSelectProps {
    value?: string
    onChange: (value: string) => void
+   readOnly?: boolean
 }
 
-const DocumentTypeSelect: React.FC<DocumentTypeSelectProps> = ({ value, onChange }) => {
+const DocumentTypeSelect: React.FC<DocumentTypeSelectProps> = ({ value, onChange, readOnly = false }) => {
    const { t } = useTranslation()
 
    const documentTypes = [
@@ -17,7 +18,7 @@ const DocumentTypeSelect: React.FC<DocumentTypeSelectProps> = ({ value, onChange
    ]
 
    return (
-      <Select name="tipo-doc" onValueChange={onChange} value={value}>
+      <Select name="tipo-doc" onValueChange={onChange} value={value} disabled={readOnly}>
          <SelectTrigger className="h-15 bg-white">
             <SelectValue placeholder={t('Tipo documento')} />
          </SelectTrigger>

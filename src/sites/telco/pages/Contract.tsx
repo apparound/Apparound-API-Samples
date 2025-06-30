@@ -58,7 +58,12 @@ const Contract = props => {
       <>
          <TelcoContainer subtitle={subtitle} step={readOnly ? 5 : 3} offerTitle={offerTitle}>
             <div className="mx-4 mb-12 mt-14 flex flex-col lg:flex-row gap-6">
-               <div className="lg:basis-[60%] min-w-0">
+               <div className="lg:basis-[40%] max-w-md w-full mx-auto lg:order-2">
+                  <Recap />
+               </div>
+
+               {/* ContractData dopo su mobile, poi a sinistra su desktop */}
+               <div className="lg:basis-[60%] min-w-0 lg:order-1">
                   <ContractData readOnly={readOnly} ref={contractDataRef} />
                   {!readOnly && (
                      <Button
@@ -68,9 +73,6 @@ const Contract = props => {
                         {t('Concludi attivazione').toUpperCase()}
                      </Button>
                   )}
-               </div>
-               <div className="lg:basis-[40%] max-w-md w-full mx-auto">
-                  <Recap />
                </div>
             </div>
          </TelcoContainer>

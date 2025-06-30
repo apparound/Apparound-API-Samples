@@ -1,6 +1,7 @@
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import Autoplay from 'embla-carousel-autoplay'
 import { useTranslation } from 'react-i18next'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 interface CarouselItemType {
    image: string
@@ -13,11 +14,16 @@ interface HeroCarouselProps {
 
 const HeroCarousel = ({ items }: HeroCarouselProps) => {
    const { t } = useTranslation()
+   const isMobile = useIsMobile()
 
    return (
-      <section className="relative h-[500px] max-h-[500px] bg-gradient-to-r from-purple-600 to-blue-500 overflow-auto">
+      <section
+         className={`relative ${
+            isMobile ? 'h-[350px]' : 'h-[500px]'
+         } bg-gradient-to-r from-purple-600 to-blue-500 overflow-auto`}
+      >
          <Carousel
-            className="h-[500px] max-h-[500px] border-[#DCE1E6] border-b-2"
+            className="h-full border-[#DCE1E6] border-b-2"
             opts={{
                align: 'start',
                loop: true,
@@ -30,11 +36,15 @@ const HeroCarousel = ({ items }: HeroCarouselProps) => {
          >
             <CarouselContent>
                {items.map((item, index) => (
-                  <CarouselItem key={index} className="h-[500px] max-h-[500px]">
-                     <div className="h-[400px] max-h-[400px]">
+                  <CarouselItem key={index} className="h-full">
+                     <div className={isMobile ? 'h-[280px]' : 'h-[400px]'}>
                         <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
                      </div>
-                     <div className="h-[100px] max-h-[100px] flex items-center text-white bg-gradient-to-r from-[#734F96] via-[#734F96] to-[#0181C4] ">
+                     <div
+                        className={`${
+                           isMobile ? 'h-[70px]' : 'h-[100px]'
+                        } flex items-center text-white bg-gradient-to-r from-[#734F96] via-[#734F96] to-[#0181C4]`}
+                     >
                         <h1 className="text-2xl md:text-4xl font-bold mx-8">{t(item.title)}</h1>
                      </div>
                   </CarouselItem>

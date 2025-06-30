@@ -2,10 +2,10 @@ import { Card } from '@/components/ui/card'
 import ContractCustomerForm from '@/components/Customer/ContractCustomerForm'
 import PaymentMethods from './PaymentMethods'
 import { useTranslation } from 'react-i18next'
-import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react'
+import React, { useState, useRef, forwardRef, useImperativeHandle, useEffect } from 'react'
 import DocumentData from './DocumentData/DocumentData'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectContract, updateContractProperties } from '@/sites/retail/features/quoteSlice'
+import { selectContract, selectContractProperties, updateContractProperties } from '@/sites/retail/features/quoteSlice'
 import PhoneNumberPortability from './PhoneNumber/PhoneNumberPortability'
 
 interface ContractDataProps {
@@ -16,6 +16,7 @@ interface ContractDataProps {
 const ContractData = forwardRef<unknown, ContractDataProps>(({ className = '', readOnly = false }, ref) => {
    const [paymentMethod, setPaymentMethod] = useState(0)
    const contract = useSelector(selectContract)
+   const contractProperties = useSelector(selectContractProperties)
    const dispatch = useDispatch()
    const { t } = useTranslation()
 
@@ -23,10 +24,19 @@ const ContractData = forwardRef<unknown, ContractDataProps>(({ className = '', r
    const documentDataRef = useRef<any>(null)
    const phoneNumberRef = useRef<any>(null)
 
+   // Carica il payment method dal contract quando disponibile
+   useEffect(() => {
+      if (contractProperties?.headlessPaymentType) {
+         const paymentType = parseInt(contractProperties.headlessPaymentType.toString())
+         setPaymentMethod(paymentType)
+      }
+   }, [contractProperties?.headlessPaymentType])
+
    const handlePaymentMethodChange = (value: number) => {
-      setPaymentMethod(value)
-      dispatch(updateContractProperties({ headlessPaymentType: value }))
-      console.log('Contract:', contract)
+      if (!readOnly) {
+         setPaymentMethod(value)
+         dispatch(updateContractProperties({ headlessPaymentType: value }))
+      }
    }
 
    const validateAll = () => {
@@ -59,7 +69,7 @@ const ContractData = forwardRef<unknown, ContractDataProps>(({ className = '', r
             <ContractCustomerForm className="mt-4" readOnly={readOnly} ref={customerFormRef} />
             <PhoneNumberPortability ref={phoneNumberRef} />
             <DocumentData readonly={readOnly} ref={documentDataRef} />
-            <PaymentMethods value={paymentMethod} onChange={handlePaymentMethodChange} />
+            <PaymentMethods value={paymentMethod} onChange={handlePaymentMethodChange} readOnly={readOnly} />
          </Card>
       </div>
    )

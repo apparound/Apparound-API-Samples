@@ -57,8 +57,9 @@ const ContractCustomerAddress = ({
       <div className="flex flex-col md:flex-row gap-4 mb-4">
          {readOnly ? (
             <>
-               <FormInput required placeholder="Provincia" value={customer?.customAddress_province ?? ''} readOnly />
-               <FormInput required placeholder="Comune" value={customer?.customAddress_city ?? ''} readOnly />
+               <FormInput required placeholder="Provincia" mapField="customAddress_province" readOnly />
+               <FormInput required placeholder="Comune" mapField="customAddress_city" readOnly />
+               <FormInput required placeholder="CAP" mapField="customAddress_zipCode" readOnly={readOnly} />
             </>
          ) : (
             <>
@@ -81,9 +82,18 @@ const ContractCustomerAddress = ({
                   options={comuniList.map(comune => ({ value: comune.nome, label: comune.nome }))}
                   placeholder="Comune"
                />
+               <SelectField
+                  required
+                  value={customer?.customAddress_zipCode ?? ''}
+                  onChange={e => !readOnly && dispatch(updateCustomer({ customAddress_zipCode: e.target.value }))}
+                  disabled={!customer?.customAddress_city || readOnly}
+                  options={comuniList
+                     .filter(comune => comune.nome === customer?.customAddress_city)
+                     .flatMap(comune => comune.cap.map(cap => ({ value: cap, label: cap })))}
+                  placeholder="CAP"
+               />
             </>
          )}
-         <FormInput required placeholder="CAP" mapField="customAddress_zipCode" readOnly={readOnly} />
       </div>
       <FormInput
          required

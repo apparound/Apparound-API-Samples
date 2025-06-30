@@ -8,21 +8,30 @@ interface PaymentMethodProps {
    description: string
    checked: boolean
    onChange: (value: number) => void
+   readOnly?: boolean
 }
 
-const PaymentMethod: React.FC<PaymentMethodProps> = ({ value, label, description, checked, onChange }) => (
-   <label className="flex items-start gap-2 cursor-pointer mb-4">
+const PaymentMethod: React.FC<PaymentMethodProps> = ({
+   value,
+   label,
+   description,
+   checked,
+   onChange,
+   readOnly = false,
+}) => (
+   <label className={`flex items-start gap-2 ${readOnly ? 'cursor-default' : 'cursor-pointer'} mb-4`}>
       <input
          type="radio"
          name="paymentMethod"
          value={value}
          checked={checked}
-         onChange={() => onChange(value)}
+         onChange={() => !readOnly && onChange(value)}
+         disabled={readOnly}
          className="mt-1 accent-primary"
       />
       <div>
          <div className="font-bold text-base text-left text-black leading-tight">{label}</div>
-         <div className="text-sm text-black leading-tight">{description}</div>
+         <div className="text-sm text-black text-left leading-tight">{description}</div>
       </div>
    </label>
 )
@@ -30,10 +39,12 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({ value, label, description
 interface PaymentMethodsProps {
    value: number
    onChange: (value: number) => void
+   readOnly?: boolean
 }
 
-const PaymentMethods: React.FC<PaymentMethodsProps> = ({ value, onChange }) => {
+const PaymentMethods: React.FC<PaymentMethodsProps> = ({ value, onChange, readOnly = false }) => {
    const { t } = useTranslation()
+
    return (
       <div>
          <SectionTitle text="Metodo di pagamento" />
@@ -43,6 +54,7 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({ value, onChange }) => {
             description={t('Pagamento manuale presso poste, tabaccherie o online')}
             checked={value === 1}
             onChange={onChange}
+            readOnly={readOnly}
          />
          <PaymentMethod
             value={2}
@@ -50,6 +62,7 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({ value, onChange }) => {
             description={t('Addebito automatico sul conto corrente alla scadenza')}
             checked={value === 2}
             onChange={onChange}
+            readOnly={readOnly}
          />
       </div>
    )

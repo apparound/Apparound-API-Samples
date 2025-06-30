@@ -8,40 +8,40 @@ import DocumentTypeSelect from './DocumentTypeSelect'
 import cartaBack from '@/sites/telco/assets/misc/CartaBack.jpeg'
 import cartaFront from '@/sites/telco/assets/misc/CartaFront.jpeg'
 import { setRedOutline } from '@/lib/setRedOutline'
+import { useDocumentDataState } from './useDocumentDataState'
 
 const DocumentData: React.FC<{ readonly?: boolean } & React.RefAttributes<any>> = forwardRef(
    ({ readonly = false }, ref) => {
       const { t } = useTranslation()
-
-      const [documentType, setDocumentType] = React.useState<string | undefined>(undefined)
-      const [releaseDate, setReleaseDate] = React.useState<string>('')
-      const [expiryDate, setExpiryDate] = React.useState<string>('')
-      const [documentNumber, setDocumentNumber] = React.useState<string>('')
-      const [frontImage, setFrontImage] = React.useState<string | undefined>(undefined)
-      const [backImage, setBackImage] = React.useState<string | undefined>(undefined)
+      const { state, actions, utilities } = useDocumentDataState()
 
       const formRef = useRef<HTMLDivElement>(null)
 
-      const formatDateLocale = (date: Date) => {
-         return date.toLocaleDateString('it-IT').split('/').reverse().join('-')
-      }
-
-      const getMinExpiryDate = () => {
-         if (!releaseDate) return ''
-         const date = new Date(releaseDate)
-         date.setDate(date.getDate() + 1)
-         return date.toISOString().split('T')[0]
-      }
-
-      const handleReleaseDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-         const newReleaseDate = e.target.value
-         setReleaseDate(newReleaseDate)
-         if (!expiryDate && newReleaseDate) {
-            const date = new Date(newReleaseDate)
-            date.setFullYear(date.getFullYear() + 10)
-            setExpiryDate(formatDateLocale(date))
-         }
-      }
+      // Configurazione dei campi documento
+      const documentInputs = [
+         {
+            id: 'numero-doc',
+            placeholder: 'Numero documento',
+            value: state.documentNumber,
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) => actions.setDocumentNumber(e.target.value),
+            type: 'text' as const,
+         },
+         {
+            id: 'data-rilascio',
+            placeholder: 'Data rilascio',
+            value: state.releaseDate,
+            onChange: utilities.handleReleaseDateChange,
+            type: 'date' as const,
+         },
+         {
+            id: 'data-scadenza',
+            placeholder: 'Data scadenza',
+            value: state.expiryDate,
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) => actions.setExpiryDate(e.target.value),
+            type: 'date' as const,
+            min: utilities.getMinExpiryDate(),
+         },
+      ]
 
       const validate = () => {
          let valid = true
@@ -66,37 +66,33 @@ const DocumentData: React.FC<{ readonly?: boolean } & React.RefAttributes<any>> 
             <Card className="bg-white p-2 sm:p-4 shadow-none border-0" ref={formRef}>
                <div className="flex flex-col gap-3 sm:gap-4 mb-3 sm:mb-4">
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                     <DocumentTypeSelect value={documentType} onChange={setDocumentType} />
+                     <DocumentTypeSelect
+                        value={state.documentType}
+                        onChange={actions.setDocumentType}
+                        readOnly={readonly}
+                     />
                      <DocumentInput
-                        id="numero-doc"
-                        placeholder="Numero documento"
-                        value={documentNumber}
-                        onChange={e => setDocumentNumber(e.target.value)}
+                        id={documentInputs[0].id}
+                        placeholder={documentInputs[0].placeholder}
+                        value={documentInputs[0].value}
+                        onChange={documentInputs[0].onChange}
                         readonly={readonly}
                      />
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                     <div className="flex flex-col w-full">
-                        <DocumentInput
-                           id="data-rilascio"
-                           type="date"
-                           placeholder="Data rilascio"
-                           value={releaseDate}
-                           onChange={handleReleaseDateChange}
-                           readonly={readonly}
-                        />
-                     </div>
-                     <div className="flex flex-col w-full">
-                        <DocumentInput
-                           id="data-scadenza"
-                           type="date"
-                           placeholder="Data scadenza"
-                           value={expiryDate}
-                           onChange={e => setExpiryDate(e.target.value)}
-                           min={getMinExpiryDate()}
-                           readonly={readonly}
-                        />
-                     </div>
+                     {documentInputs.slice(1).map(input => (
+                        <div key={input.id} className="flex flex-col w-full">
+                           <DocumentInput
+                              id={input.id}
+                              type={input.type}
+                              placeholder={input.placeholder}
+                              value={input.value}
+                              onChange={input.onChange}
+                              min={input.min}
+                              readonly={readonly}
+                           />
+                        </div>
+                     ))}
                   </div>
                </div>
                <div className="rounded-xl border border-gray-200 p-2 sm:p-4 flex flex-col gap-3 sm:gap-4">
@@ -104,8 +100,8 @@ const DocumentData: React.FC<{ readonly?: boolean } & React.RefAttributes<any>> 
                      label={t('Fronte documento')}
                      alt="Fronte documento"
                      title={t('Carica fronte documento')}
-                     onButtonClick={() => setFrontImage(cartaFront)}
-                     imageSrc={frontImage}
+                     onButtonClick={() => actions.setFrontImage(cartaFront)}
+                     imageSrc={state.frontImage}
                      readOnly={readonly}
                   />
                   <div className="border-t border-gray-200 my-1 sm:my-2" />
@@ -113,8 +109,8 @@ const DocumentData: React.FC<{ readonly?: boolean } & React.RefAttributes<any>> 
                      label={t('Retro documento')}
                      alt="Retro documento"
                      title={t('Carica retro documento')}
-                     onButtonClick={() => setBackImage(cartaBack)}
-                     imageSrc={backImage}
+                     onButtonClick={() => actions.setBackImage(cartaBack)}
+                     imageSrc={state.backImage}
                      readOnly={readonly}
                   />
                </div>
