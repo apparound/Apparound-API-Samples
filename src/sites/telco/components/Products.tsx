@@ -5,6 +5,8 @@ import QuantitySwitch from '@/sites/telco/components/QuantitySwitch'
 import { useState, useEffect } from 'react'
 import { deleteProduct } from '@/sites/telco/hooks/apparoundData'
 import { useTranslation } from 'react-i18next'
+import { selectTofId } from '@/sites/retail/features/quoteSlice'
+import { useSelector } from 'react-redux'
 
 interface ProductsProps {
    products: any[]
@@ -12,7 +14,6 @@ interface ProductsProps {
    setSwitchStates: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>
    addProduct: (guid: string, dispatch: any, tofId: any, parentGuid: string) => Promise<void>
    dispatch: any
-   tofId: any
    parentGuid: string
 }
 
@@ -22,13 +23,13 @@ const Products: React.FC<ProductsProps> = ({
    setSwitchStates,
    addProduct,
    dispatch,
-   tofId,
    parentGuid,
 }) => {
    const { t } = useTranslation()
    const [simValues, setSimValues] = useState<{ [key: string]: number }>({})
    let hasCheckCoverage = products.some(product => product.description === 'Verifica copertura')
    const [discoverEnabled, setDiscoverEnabled] = useState(!hasCheckCoverage)
+   const tofId = useSelector(selectTofId)
 
    useEffect(() => {
       const check = products.some(product => product.description === 'Verifica copertura')

@@ -1,21 +1,12 @@
-import Navbar from '@/sites/telco/components/Navbar'
-import OfferHeader from '@/sites/telco/components/Offers/OfferHeader'
-import Footer from '@/components/Footer'
 import { useSelector } from 'react-redux'
-import {
-   selectCart,
-   selectMainProduct,
-   selectStartingProducts,
-   selectTofId,
-   selectTofList,
-} from '@/sites/retail/features/quoteSlice'
+import { selectCart, selectMainProduct, selectStartingProducts, selectTofId } from '@/sites/retail/features/quoteSlice'
 import { useState, useEffect } from 'react'
 import { addProduct, deleteProduct } from '@/sites/telco/hooks/apparoundData'
 import { useDispatch } from 'react-redux'
 import MainProducts from '@/sites/telco/components/MainProducts'
 import Products from '@/sites/telco/components/Products'
 import { useTranslation } from 'react-i18next'
-import StepIndicatorTelco from './StepIndicatorTelco'
+import TelcoContainer from '../components/TelcoContainer'
 
 const ConfigureOffer = () => {
    const { t } = useTranslation()
@@ -27,11 +18,7 @@ const ConfigureOffer = () => {
    const [switchStates, setSwitchStates] = useState({})
    const [selectedOfferGuid, setSelectedOfferGuid] = useState<string | null>(null)
    const cart = useSelector(selectCart)
-   const tofList = useSelector(selectTofList)
    const [addingMainProductGuid, setAddingMainProductGuid] = useState<string | null>(null)
-
-   const offerTitle = tofList?.find((tof: any) => String(tof.id) === String(tofId))?.name || ''
-   const headerTitle = offerTitle ? `Offerte ${offerTitle}` : 'Offerte'
 
    useEffect(() => {
       if (mainProduct?.clusters) {
@@ -88,37 +75,31 @@ const ConfigureOffer = () => {
    }
    return (
       <div className="min-h-screen bg-white">
-         <Navbar showTofList={true} onSelectMainProduct={handleSelectMainProduct} />
-         <StepIndicatorTelco step={0} />
+         <TelcoContainer>
+            <main className="max-w-4xl mx-auto py-12 px-4">
+               <h2 className="text-2xl font-bold text-primary mb-8 text-center">{t('Configura la tua offerta')}</h2>
 
-         <OfferHeader title={headerTitle} />
+               <MainProducts
+                  {...{
+                     startingProducts,
+                     selectedOfferGuid,
+                     setSelectedOfferGuid: handleSelectMainProduct,
+                     addProduct,
+                     addingProductGuid: addingMainProductGuid,
+                     setAddingProductGuid: setAddingMainProductGuid,
+                  }}
+               />
 
-         <main className="max-w-4xl mx-auto py-12 px-4">
-            <h2 className="text-2xl font-bold text-primary mb-8 text-center">{t('Configura la tua offerta')}</h2>
-
-            <MainProducts
-               startingProducts={startingProducts}
-               selectedOfferGuid={selectedOfferGuid}
-               setSelectedOfferGuid={handleSelectMainProduct}
-               addProduct={addProduct}
-               dispatch={dispatch}
-               tofId={tofId}
-               addingProductGuid={addingMainProductGuid}
-               setAddingProductGuid={setAddingMainProductGuid}
-            />
-
-            <Products
-               products={products}
-               switchStates={switchStates}
-               setSwitchStates={setSwitchStates}
-               addProduct={addProduct}
-               dispatch={dispatch}
-               tofId={tofId}
-               parentGuid={mainProduct?.guid}
-            />
-         </main>
-
-         <Footer />
+               <Products
+                  products={products}
+                  switchStates={switchStates}
+                  setSwitchStates={setSwitchStates}
+                  addProduct={addProduct}
+                  dispatch={dispatch}
+                  parentGuid={mainProduct?.guid}
+               />
+            </main>
+         </TelcoContainer>
       </div>
    )
 }

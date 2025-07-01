@@ -225,5 +225,9 @@
    "Chiudi": "Chiudi",
    "Carta d'identità": "Identity card",
    "Patente": "Driving license",
-   "Passaporto": "Passport"
+   "Passaporto": "Passport",
+   "offers_with_name": "{{name}} Offers",
+   "offers": "Offers",
+   "product_add_error": "An error occurred while adding the product. Please try again.",
+   "no_offers_available": "No offers available at the moment"
 }

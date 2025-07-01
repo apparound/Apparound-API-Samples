@@ -230,5 +230,9 @@
    "Chiudi": "Chiudi",
    "Carta d'identità": "Carta d'identità",
    "Patente": "Patente",
-   "Passaporto": "Passaporto"
+   "Passaporto": "Passaporto",
+   "offers_with_name": "Offerte {{name}}",
+   "offers": "Offerte",
+   "product_add_error": "Si è verificato un errore durante l'aggiunta del prodotto. Riprova.",
+   "no_offers_available": "Nessuna offerta disponibile al momento"
 }
