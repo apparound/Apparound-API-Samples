@@ -66,18 +66,22 @@ const DocumentData: React.FC<{ readonly?: boolean } & React.RefAttributes<any>> 
             <Card className="bg-white p-2 sm:p-4 shadow-none border-0" ref={formRef}>
                <div className="flex flex-col gap-3 sm:gap-4 mb-3 sm:mb-4">
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                     <DocumentTypeSelect
-                        value={state.documentType}
-                        onChange={actions.setDocumentType}
-                        readOnly={readonly}
-                     />
-                     <DocumentInput
-                        id={documentInputs[0].id}
-                        placeholder={documentInputs[0].placeholder}
-                        value={documentInputs[0].value}
-                        onChange={documentInputs[0].onChange}
-                        readonly={readonly}
-                     />
+                     <div className="w-full sm:w-1/2">
+                        <DocumentTypeSelect
+                           value={state.documentType}
+                           onChange={actions.setDocumentType}
+                           readOnly={readonly}
+                        />
+                     </div>
+                     <div className="w-full sm:w-1/2">
+                        <DocumentInput
+                           id={documentInputs[0].id}
+                           placeholder={documentInputs[0].placeholder}
+                           value={documentInputs[0].value}
+                           onChange={documentInputs[0].onChange}
+                           readonly={readonly}
+                        />
+                     </div>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                      {documentInputs.slice(1).map(input => (

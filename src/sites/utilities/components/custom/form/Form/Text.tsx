@@ -1,27 +1,20 @@
 import { useTranslation } from 'react-i18next'
+import React from 'react'
 
-// Utility function per unire le classi (alternativa a clsx)
-const cn = (...classes: (string | undefined | null | false)[]): string => {
-   return classes.filter(Boolean).join(' ')
-}
+// === IMPORTS ===
+import {
+   formatDateToISO,
+   useDateInput,
+   handleDateChange,
+   handleRegularChange,
+   handleDateFocus,
+   handleDateBlur,
+   getInputClasses,
+   getLabelClasses,
+   type TextProps,
+} from './textUtils'
 
-interface TextProps {
-   name: string
-   label: string
-   inputType?: string
-   required?: boolean
-   value?: string
-   min?: string
-   className?: string
-   labelClassName?: string
-   onChange:
-      | ((value: string | number | boolean, name: string) => any)
-      | ((e: React.ChangeEvent<HTMLInputElement>) => void)
-   onFocus?: (event: React.FocusEvent<HTMLInputElement>, name: string) => void
-   onBlur?: (event: React.FocusEvent<HTMLInputElement>, name: string) => void
-   readonly?: boolean
-   formSubmitted?: boolean
-}
+// === COMPONENT ===
 
 const Text = ({
    name,
@@ -39,44 +32,54 @@ const Text = ({
    formSubmitted = false,
 }: TextProps) => {
    const { t } = useTranslation()
+   const isDate = inputType === 'date'
 
-   const showError = required && formSubmitted && (!value || value === '')
-   const baseClasses = `bg-white px-3 py-1.5 pt-4 w-full rounded-md placeholder:text-gray-900 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6 peer`
-   const errorClass = showError ? 'outline-red-300 outline-2 outline' : ''
-   const borderOutlineClasses = readonly
-      ? 'border-0 outline-0'
-      : showError
-      ? ''
-      : 'outline outline-1 -outline-offset-1 outline-gray-300 focus:outline-primary'
-   const combinedClasses = cn('block', borderOutlineClasses, baseClasses, errorClass, className)
+   // Utilizziamo l'hook personalizzato per la gestione delle date
+   const { actualInputType, setActualInputType, displayValue, setDisplayValue } = useDateInput(isDate, value)
 
-   const labelBaseClasses =
-      'absolute text-gray-400 text-lg dark:text-gray-400 duration-300 transform -translate-y-5.5 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-primary peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-5.5 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1'
-   const combinedLabelClasses = cn(labelBaseClasses, labelClassName)
+   // === EVENT HANDLERS ===
+
+   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value
+
+      if (isDate) {
+         handleDateChange(newValue, e, actualInputType, setDisplayValue, onChange, name)
+      } else {
+         handleRegularChange(newValue, e, setDisplayValue, onChange, name)
+      }
+   }
+
+   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+      handleDateFocus(e, isDate, readonly, setActualInputType, displayValue, onFocus, name)
+   }
+
+   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+      handleDateBlur(e, isDate, setActualInputType, setDisplayValue, onBlur, name)
+   }
+
+   // === STYLING ===
+
+   const showError = required && formSubmitted && (!displayValue || displayValue === '')
+
+   // === RENDER ===
 
    return (
       <div className="relative">
          <input
-            type={inputType || 'text'}
+            type={actualInputType || 'text'}
             name={name}
             id={name}
-            className={combinedClasses}
+            className={getInputClasses(showError, readonly, className)}
             placeholder=" "
-            onChange={e => {
-               if (typeof onChange === 'function' && onChange.length === 2) {
-                  ;(onChange as (value: string | number | boolean, name: string) => any)(e.target.value, name)
-               } else {
-                  ;(onChange as (e: React.ChangeEvent<HTMLInputElement>) => void)(e)
-               }
-            }}
-            onFocus={onFocus ? e => onFocus(e, name) : undefined}
-            onBlur={onBlur ? e => onBlur(e, name) : undefined}
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             required={required}
-            value={value || ''}
-            min={min}
+            value={displayValue}
+            min={isDate && min ? formatDateToISO(min) : min}
             disabled={readonly}
          />
-         <label htmlFor={name} className={combinedLabelClasses}>
+         <label htmlFor={name} className={getLabelClasses(labelClassName)}>
             {t(label)}
             {required ? '*' : ''}
          </label>

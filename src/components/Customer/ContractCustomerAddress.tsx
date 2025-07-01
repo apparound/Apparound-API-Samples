@@ -53,7 +53,7 @@ const ContractCustomerAddress = ({
    t,
 }: ContractCustomerAddressProps) => (
    <div className="flex flex-col">
-      <label className="text-left block font-bold mb-1 mt-2">{t('Indirizzo')} *</label>
+      <label className="text-left block font-bold mb-4 mt-2">{t('Indirizzo')} *</label>
       <div className="flex flex-col md:flex-row gap-4 mb-4">
          {readOnly ? (
             <>

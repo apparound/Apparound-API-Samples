@@ -25,7 +25,6 @@ const ContractCustomerForm = React.forwardRef(
       const { t } = useTranslation()
       const formRef = useRef<HTMLFormElement>(null)
 
-      // Validazione campi obbligatori
       const validate = () => {
          let valid = true
          if (formRef.current) {

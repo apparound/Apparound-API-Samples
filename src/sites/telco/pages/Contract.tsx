@@ -30,7 +30,6 @@ const Contract = props => {
       }
    }, [])
 
-   // Scroll to top when component mounts
    useEffect(() => {
       window.scrollTo(0, 0)
    }, [])
@@ -62,7 +61,6 @@ const Contract = props => {
                   <Recap />
                </div>
 
-               {/* ContractData dopo su mobile, poi a sinistra su desktop */}
                <div className="lg:basis-[60%] min-w-0 lg:order-1">
                   <ContractData readOnly={readOnly} ref={contractDataRef} />
                   {!readOnly && (

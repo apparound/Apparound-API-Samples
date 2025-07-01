@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import TelcoContainer from '../components/TelcoContainer'
-import { SERVER_URL } from '@/utils/fetcher'
 import { Button } from '@/sites/utilities/components/ui/button'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { ApparoundData } from '@/hooks/use-apparound-data'
+import { useSelector } from 'react-redux'
+import { getPdfUrl } from '../hooks/apparoundData'
 
 const ContractSignature: React.FC = () => {
    const [iframeLoaded, setIframeLoaded] = React.useState(false)
    const [offerTitle, setOfferTitle] = useState<string>('')
+   const [pdfUrl, setPdfUrl] = useState<string>('')
    const { t } = useTranslation()
    const navigate = useNavigate()
-   const quotePdfUrl = `${SERVER_URL}/apparoundimages/v2/quote/${new ApparoundData().getQuoteId()}/pdf`
+   const sessionId = useSelector((state: any) => state.quote.sessionId)
 
    useEffect(() => {
       const OFFER_TITLE_STORAGE_KEY = 'telco:offerTitle'
@@ -20,6 +21,16 @@ const ContractSignature: React.FC = () => {
          setOfferTitle(storedOfferTitle)
       }
    }, [])
+
+   useEffect(() => {
+      const loadPdfUrl = async () => {
+         if (sessionId) {
+            const url = await getPdfUrl(sessionId)
+            setPdfUrl(url)
+         }
+      }
+      loadPdfUrl()
+   }, [sessionId])
 
    const concludeOffer = () => {
       navigate('/telco/contract', { state: { readOnly: true } })
@@ -31,13 +42,15 @@ const ContractSignature: React.FC = () => {
          <p className="mx-4 text-sm text-gray-600 mb-4">{t('Leggi il contratto e procedo in fondo con la firma')}</p>
          <div className="flex justify-center items-center w-full">
             <div className="bg-white rounded-2xl shadow-kiki-shadow p-4 w-full max-w-4xl">
-               <iframe
-                  onLoad={() => setIframeLoaded(true)}
-                  src={quotePdfUrl}
-                  className="min-h-[760px] w-full rounded-xl border"
-                  width="100%"
-                  height="100%"
-               ></iframe>
+               {pdfUrl && (
+                  <iframe
+                     onLoad={() => setIframeLoaded(true)}
+                     src={pdfUrl}
+                     className="min-h-[760px] w-full rounded-xl border"
+                     width="100%"
+                     height="100%"
+                  ></iframe>
+               )}
             </div>
          </div>
          <Button

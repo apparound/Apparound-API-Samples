@@ -20,47 +20,22 @@ const DocumentInput: React.FC<DocumentInputProps> = ({
    min,
    readonly = false,
 }) => {
-   const isDate = type === 'date'
-   const [inputType, setInputType] = React.useState(isDate ? 'text' : type)
-
    const inputClassName = '!outline-[#CCCCCC]'
-   const labelClassName = 'text-sm'
+   const labelClassName = ''
 
-   const commonTextProps = {
-      label: placeholder,
-      name: id,
-      value,
-      onChange,
-      min,
-      className: inputClassName,
-      labelClassName,
-      readonly,
-   }
-
-   React.useEffect(() => {
-      if (!isDate) setInputType(type)
-   }, [type, isDate])
-
-   if (isDate) {
-      return (
-         <Text
-            {...commonTextProps}
-            inputType={inputType}
-            onFocus={e => {
-               setInputType('date')
-               setTimeout(() => {
-                  if (e.target.showPicker) {
-                     e.target.showPicker()
-                  }
-               }, 0)
-            }}
-            onBlur={e => {
-               if (!e.target.value) setInputType('text')
-            }}
-         />
-      )
-   }
-   return <Text {...commonTextProps} inputType={type} />
+   return (
+      <Text
+         label={placeholder || ''}
+         name={id}
+         inputType={type}
+         value={value}
+         onChange={onChange}
+         min={min}
+         className={inputClassName}
+         labelClassName={labelClassName}
+         readonly={readonly}
+      />
+   )
 }
 
 export default DocumentInput

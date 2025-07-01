@@ -78,7 +78,7 @@ const Products: React.FC<ProductsProps> = ({
                         }
                      })
                   }}
-                  icon={ProductIcon.getByName(product.description.toLowerCase())}
+                  icon={ProductIcon.getByIconName(product.config.mdiIcon)}
                />
             )
          })}

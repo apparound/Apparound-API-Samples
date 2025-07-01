@@ -15,7 +15,6 @@ interface ContractDataProps {
 
 const ContractData = forwardRef<unknown, ContractDataProps>(({ className = '', readOnly = false }, ref) => {
    const [paymentMethod, setPaymentMethod] = useState(0)
-   const contract = useSelector(selectContract)
    const contractProperties = useSelector(selectContractProperties)
    const dispatch = useDispatch()
    const { t } = useTranslation()
