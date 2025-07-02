@@ -13,7 +13,7 @@ const SelectComune = ({ comuniByProvincia, handleComuneChange, isDisabled }) => 
                <SelectItem
                   key={comune.nome}
                   value={comune.nome}
-                  className="data-[state=checked]:bg-selected data-[highlighted]:bg-selected"
+                  className="data-[state=checked]:bg-[#f4f4f4] data-[highlighted]:bg-[#f4f4f4]"
                >
                   {comune.nome}
                </SelectItem>

@@ -59,10 +59,17 @@ export const handleDateFocus = (
       const isoValue = formatDateToISO(displayValue)
       e.target.value = isoValue
 
-      // Mostra il picker se disponibile
+      // Mostra il picker solo se l'utente ha cliccato direttamente sull'input
+      // e solo se il browser supporta showPicker e la funzione è disponibile
       setTimeout(() => {
-         if (e.target.showPicker) {
-            e.target.showPicker()
+         try {
+            if (e.target.showPicker && typeof e.target.showPicker === 'function') {
+               e.target.showPicker()
+            }
+         } catch (error) {
+            // Ignora l'errore se showPicker non può essere chiamato
+            // (ad esempio quando non c'è user gesture)
+            console.debug('showPicker non disponibile:', error)
          }
       }, 0)
    }

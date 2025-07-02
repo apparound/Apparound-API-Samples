@@ -17,7 +17,6 @@ const DocumentData: React.FC<{ readonly?: boolean } & React.RefAttributes<any>> 
 
       const formRef = useRef<HTMLDivElement>(null)
 
-      // Configurazione dei campi documento
       const documentInputs = [
          {
             id: 'numero-doc',

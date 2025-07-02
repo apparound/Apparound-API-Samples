@@ -13,6 +13,7 @@ interface TelcoContainerProps {
    step?: number
    offerTitle?: string
    hideStepIndicator?: boolean
+   showTofList?: boolean
 }
 
 const TelcoContainer: React.FC<TelcoContainerProps> = ({
@@ -21,6 +22,7 @@ const TelcoContainer: React.FC<TelcoContainerProps> = ({
    step = 3,
    offerTitle,
    hideStepIndicator = false,
+   showTofList = true,
 }) => {
    const { t } = useTranslation()
    const tofId = useSelector(selectTofId)
@@ -31,7 +33,7 @@ const TelcoContainer: React.FC<TelcoContainerProps> = ({
 
    return (
       <div className="h-screen w-full bg-white flex flex-col">
-         <Navbar />
+         <Navbar showTofList={showTofList} />
          {!hideStepIndicator && <StepIndicatorTelco step={step} />}
          <div className="flex-1 h-full overflow-auto">
             <OfferHeader title={headerTitle} subtitle={subtitle} />

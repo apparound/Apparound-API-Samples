@@ -15,7 +15,7 @@ const SelectCap = ({ comuniByProvincia, comuneSelezionato, handleCapChange, isDi
                <SelectItem
                   key={cap}
                   value={cap}
-                  className="data-[state=checked]:bg-selected data-[highlighted]:bg-selected"
+                  className="data-[state=checked]:bg-[#f4f4f4] data-[highlighted]:bg-[#f4f4f4]"
                >
                   {cap}
                </SelectItem>

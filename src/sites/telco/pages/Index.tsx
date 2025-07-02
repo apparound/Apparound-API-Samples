@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { reset as resetQuote } from '@/sites/retail/features/quoteSlice'
 import { showLoader, reset as resetApp } from '@/sites/retail/features/appSlice'
 import { initQuote } from '@/sites/telco/hooks/apparoundData'
-import TelcoContainer from '../components/TelcoContainer'
+import HomeCarousel from '@/sites/telco/components/Carousels/HomeCarousel'
 
 const Index = () => {
    const dispatch = useDispatch()
@@ -27,9 +27,10 @@ const Index = () => {
 
    return (
       <div className="min-h-screen bg-white flex flex-col">
-         <TelcoContainer step={1} hideStepIndicator>
-            <Offers isLoading={isLoading} />
-         </TelcoContainer>
+         <Navbar />
+         <HomeCarousel />
+         <Offers isLoading={isLoading} />
+         <Footer />
       </div>
    )
 }

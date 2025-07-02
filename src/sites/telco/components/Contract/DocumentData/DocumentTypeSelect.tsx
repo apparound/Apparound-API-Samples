@@ -24,7 +24,11 @@ const DocumentTypeSelect: React.FC<DocumentTypeSelectProps> = ({ value, onChange
          </SelectTrigger>
          <SelectContent>
             {documentTypes.map(doc => (
-               <SelectItem key={doc.value} value={doc.value}>
+               <SelectItem
+                  key={doc.value}
+                  value={doc.value}
+                  className="data-[state=checked]:bg-[#f4f4f4] data-[highlighted]:bg-[#f4f4f4]"
+               >
                   {doc.label}
                </SelectItem>
             ))}

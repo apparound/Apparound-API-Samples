@@ -13,7 +13,7 @@ const SelectProvincia = ({ province, handleProvinceChange }) => {
                <SelectItem
                   key={provincia}
                   value={provincia}
-                  className="data-[state=checked]:bg-selected data-[highlighted]:bg-selected"
+                  className="data-[state=checked]:bg-[#f4f4f4] data-[highlighted]:bg-[#f4f4f4]"
                >
                   {provincia}
                </SelectItem>

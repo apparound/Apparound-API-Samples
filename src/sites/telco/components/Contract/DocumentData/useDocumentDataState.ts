@@ -29,10 +29,31 @@ export const useDocumentDataState = () => {
    const dispatch = useDispatch()
    const documentData = useSelector(selectDocumentData)
 
-   // Stati locali
+   // Funzione per normalizzare le date al formato ISO
+   const normalizeDateToISO = (dateString: string): string => {
+      if (!dateString) return ''
+
+      // Se è già nel formato ISO corretto
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+         const testDate = new Date(dateString)
+         return !isNaN(testDate.getTime()) ? dateString : ''
+      }
+
+      // Se è nel formato italiano dd/mm/yyyy o dd-mm-yyyy
+      if (/^\d{2}[/-]\d{2}[/-]\d{4}$/.test(dateString)) {
+         const parts = dateString.split(/[/-]/)
+         const isoDate = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`
+         const testDate = new Date(isoDate)
+         return !isNaN(testDate.getTime()) ? isoDate : ''
+      }
+
+      return ''
+   }
+
+   // Stati locali con normalizzazione delle date
    const [documentType, setDocumentType] = useState<string | undefined>(documentData?.documentType)
-   const [releaseDate, setReleaseDate] = useState<string>(documentData?.releaseDate || '')
-   const [expiryDate, setExpiryDate] = useState<string>(documentData?.expiryDate || '')
+   const [releaseDate, setReleaseDate] = useState<string>(normalizeDateToISO(documentData?.releaseDate || ''))
+   const [expiryDate, setExpiryDate] = useState<string>(normalizeDateToISO(documentData?.expiryDate || ''))
    const [documentNumber, setDocumentNumber] = useState<string>(documentData?.documentNumber || '')
    const [frontImage, setFrontImage] = useState<string | undefined>(documentData?.frontImage)
    const [backImage, setBackImage] = useState<string | undefined>(documentData?.backImage)
@@ -46,8 +67,8 @@ export const useDocumentDataState = () => {
    useEffect(() => {
       if (documentData) {
          setDocumentType(documentData.documentType)
-         setReleaseDate(documentData.releaseDate || '')
-         setExpiryDate(documentData.expiryDate || '')
+         setReleaseDate(normalizeDateToISO(documentData.releaseDate || ''))
+         setExpiryDate(normalizeDateToISO(documentData.expiryDate || ''))
          setDocumentNumber(documentData.documentNumber || '')
          setFrontImage(documentData.frontImage)
          setBackImage(documentData.backImage)
@@ -69,24 +90,42 @@ export const useDocumentDataState = () => {
    }, [dispatch, documentType, releaseDate, expiryDate, documentNumber, frontImage, backImage])
 
    // Funzioni di utilità per la gestione delle date
-   const formatDateLocale = (date: Date) => {
-      return date.toLocaleDateString('it-IT').split('/').reverse().join('-')
+   const formatDateToISO = (date: Date) => {
+      if (isNaN(date.getTime())) return ''
+      return date.toISOString().split('T')[0]
    }
 
    const getMinExpiryDate = () => {
       if (!releaseDate) return ''
-      const date = new Date(releaseDate)
-      date.setDate(date.getDate() + 1)
-      return date.toISOString().split('T')[0]
+
+      // Verifica che releaseDate sia una data valida
+      const releaseDateTime = new Date(releaseDate)
+      if (isNaN(releaseDateTime.getTime())) return ''
+
+      const minDate = new Date(releaseDateTime)
+      minDate.setDate(minDate.getDate() + 1)
+
+      // Verifica che la data calcolata sia valida
+      if (isNaN(minDate.getTime())) return ''
+
+      return formatDateToISO(minDate)
    }
 
    const handleReleaseDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newReleaseDate = e.target.value
       setReleaseDate(newReleaseDate)
+
+      // Auto-imposta la data di scadenza solo se non è già impostata e la data di rilascio è valida
       if (!expiryDate && newReleaseDate) {
-         const date = new Date(newReleaseDate)
-         date.setFullYear(date.getFullYear() + 10)
-         setExpiryDate(formatDateLocale(date))
+         const releaseDateTime = new Date(newReleaseDate)
+         if (!isNaN(releaseDateTime.getTime())) {
+            const expiryDateTime = new Date(releaseDateTime)
+            expiryDateTime.setFullYear(expiryDateTime.getFullYear() + 10)
+
+            if (!isNaN(expiryDateTime.getTime())) {
+               setExpiryDate(formatDateToISO(expiryDateTime))
+            }
+         }
       }
    }
 
@@ -101,8 +140,8 @@ export const useDocumentDataState = () => {
 
    const actions: DocumentDataActions = {
       setDocumentType,
-      setReleaseDate,
-      setExpiryDate,
+      setReleaseDate: (value: string) => setReleaseDate(normalizeDateToISO(value)),
+      setExpiryDate: (value: string) => setExpiryDate(normalizeDateToISO(value)),
       setDocumentNumber,
       setFrontImage,
       setBackImage,
@@ -114,7 +153,7 @@ export const useDocumentDataState = () => {
       utilities: {
          getMinExpiryDate,
          handleReleaseDateChange,
-         formatDateLocale,
+         formatDateToISO,
       },
    }
 }

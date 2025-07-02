@@ -75,7 +75,7 @@ const Text = ({
             onFocus={handleFocus}
             onBlur={handleBlur}
             required={required}
-            value={displayValue}
+            value={actualInputType === 'date' ? formatDateToISO(displayValue) : displayValue}
             min={isDate && min ? formatDateToISO(min) : min}
             disabled={readonly}
          />

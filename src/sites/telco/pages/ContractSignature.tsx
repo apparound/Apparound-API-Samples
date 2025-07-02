@@ -39,7 +39,7 @@ const ContractSignature: React.FC = () => {
    return (
       <TelcoContainer step={4} offerTitle={offerTitle}>
          <h2 className="text-primary text-2xl font-semibold mb-2 mt-8">{t('Firma contratto')}</h2>
-         <p className="mx-4 text-sm text-gray-600 mb-4">{t('Leggi il contratto e procedo in fondo con la firma')}</p>
+         <p className="mx-4 text-sm text-gray-600 mb-4">{t('Leggi il contratto e procedi in fondo con la firma')}</p>
          <div className="flex justify-center items-center w-full">
             <div className="bg-white rounded-2xl shadow-kiki-shadow p-4 w-full max-w-4xl">
                {pdfUrl && (

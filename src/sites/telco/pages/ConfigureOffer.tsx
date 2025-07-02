@@ -75,7 +75,7 @@ const ConfigureOffer = () => {
    }
    return (
       <div className="min-h-screen bg-white">
-         <TelcoContainer>
+         <TelcoContainer step={0} showTofList={true}>
             <main className="max-w-4xl mx-auto py-12 px-4">
                <h2 className="text-2xl font-bold text-primary mb-8 text-center">{t('Configura la tua offerta')}</h2>
 

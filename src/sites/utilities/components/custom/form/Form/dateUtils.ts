@@ -6,18 +6,26 @@ import { DATE_DISPLAY_REGEX, DATE_ISO_REGEX } from './constants'
 export const formatDateToDisplay = (dateValue: string): string => {
    if (!dateValue) return ''
 
-   // Se già in formato display, restituisce così com'è
+   // Se già in formato display, verifica che sia valido
    if (DATE_DISPLAY_REGEX.test(dateValue)) {
-      return dateValue
+      const [day, month, year] = dateValue.split('-')
+      const testDate = new Date(`${year}-${month}-${day}`)
+      if (!isNaN(testDate.getTime())) {
+         return dateValue
+      }
    }
 
    // Converte da formato ISO a formato display
    if (DATE_ISO_REGEX.test(dateValue)) {
-      const [year, month, day] = dateValue.split('-')
-      return `${day}-${month}-${year}`
+      // Prima verifica che sia una data valida
+      const testDate = new Date(dateValue)
+      if (!isNaN(testDate.getTime())) {
+         const [year, month, day] = dateValue.split('-')
+         return `${day}-${month}-${year}`
+      }
    }
 
-   return dateValue
+   return ''
 }
 
 /**
@@ -26,13 +34,28 @@ export const formatDateToDisplay = (dateValue: string): string => {
 export const formatDateToISO = (displayValue: string): string => {
    if (!displayValue) return ''
 
+   // Se già in formato ISO valido, restituisce così com'è
+   if (DATE_ISO_REGEX.test(displayValue)) {
+      // Verifica che sia una data valida
+      const testDate = new Date(displayValue)
+      if (!isNaN(testDate.getTime())) {
+         return displayValue
+      }
+   }
+
    // Converte da formato display a formato ISO
    if (DATE_DISPLAY_REGEX.test(displayValue)) {
       const [day, month, year] = displayValue.split('-')
-      return `${year}-${month}-${day}`
+      const isoDate = `${year}-${month}-${day}`
+
+      // Verifica che la data convertita sia valida
+      const testDate = new Date(isoDate)
+      if (!isNaN(testDate.getTime())) {
+         return isoDate
+      }
    }
 
-   return displayValue
+   return ''
 }
 
 /**
