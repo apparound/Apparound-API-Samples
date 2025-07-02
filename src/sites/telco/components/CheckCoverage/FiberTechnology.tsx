@@ -20,14 +20,10 @@ const FiberTechnology = () => {
    const { t } = useTranslation()
    return (
       <div className="mt-8 flex flex-col sm:flex-row items-center bg-[#f6f6f8] rounded-2xl p-4 sm:p-6">
-         <div className="flex-shrink-0 mb-4 sm:mb-0 sm:mr-6">
-            <img
-               src={fttcImage}
-               alt="FTTC"
-               className="rounded-xl w-full max-w-lg h-56 object-contain sm:w-80 bg-none"
-            />
+         <div className="w-full sm:w-1/2 flex-shrink-0 mb-4 sm:mb-0 sm:mr-6">
+            <img src={fttcImage} alt="FTTC" className="rounded-xl w-full h-56 object-contain bg-none" />
          </div>
-         <div className="w-full">
+         <div className="w-full sm:w-1/2">
             <div className="flex items-baseline gap-2">
                <h4 className="text-xl sm:text-2xl font-bold text-primary">
                   {t('Tecnologia FTTC Fiber to the Cabinet')}

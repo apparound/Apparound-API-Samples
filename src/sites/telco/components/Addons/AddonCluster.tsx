@@ -47,7 +47,7 @@ const ProductList: React.FC<ProductListProps> = ({
             />
          ))}
 
-         {cluster?.label === t('Carrello') && contractProperties?.addressContract_address && (
+         {cluster?.label === t('Offer') && contractProperties?.addressContract_address && (
             <>
                <div className="font-bold text-lg text-gray-800 mt-8 mb-3 flex items-center">{t('Copertura')}</div>
                <div className="font-medium text-sm text-left text-gray-900 mb-2">

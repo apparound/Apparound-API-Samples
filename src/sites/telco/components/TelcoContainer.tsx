@@ -32,10 +32,10 @@ const TelcoContainer: React.FC<TelcoContainerProps> = ({
       offerTitle || (defaultOfferTitle ? t('offers_with_name', { name: defaultOfferTitle }) : t('offers'))
 
    return (
-      <div className="h-screen w-full bg-white flex flex-col">
+      <div className="min-h-screen w-full bg-white flex flex-col">
          <Navbar showTofList={showTofList} />
          {!hideStepIndicator && <StepIndicatorTelco step={step} />}
-         <div className="flex-1 h-full overflow-auto">
+         <div className="flex-1">
             <OfferHeader title={headerTitle} subtitle={subtitle} />
             {children}
          </div>
