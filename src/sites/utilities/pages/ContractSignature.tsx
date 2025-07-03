@@ -12,8 +12,9 @@ import Spinner from '@/components/Spinner'
 
 const ContractSignature = () => {
    const navigate = useRelativeNavigate()
-   const { t } = useTranslation() // Inizializza useTranslation
+   const { t } = useTranslation()
    const [iframeLoaded, setIframeLoaded] = useState(false)
+   const quotePdfUrl = `${SERVER_URL}/apparoundimages/v2/quote/${new ApparoundData().getQuoteId()}/pdf`
    return (
       <div className="min-h-screen flex flex-col justify-center max-h-screen overflow-hidden">
          <Header step={3} />
@@ -29,7 +30,7 @@ const ContractSignature = () => {
                   {!iframeLoaded ? <Spinner /> : null}
                   <iframe
                      onLoad={() => setIframeLoaded(true)}
-                     src={`${SERVER_URL}/apparoundimages/v2/quote/${new ApparoundData().getQuoteId()}/pdf`}
+                     src={quotePdfUrl}
                      className="min-h-[760px]"
                      width="100%"
                      height="100%"

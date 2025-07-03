@@ -31,9 +31,10 @@ export interface Product {
    offerTypeProductId: number
    children: Product[]
    nodeId: number
-   netRecurringPriceWithVatAmount: number,
-   oneOffPriceWithVatAmount: number,
+   netRecurringPriceWithVatAmount: number
+   oneOffPriceWithVatAmount: number
    clusterId: number
-   clusterName: number,
+   clusterName: number
    quantity: number
+   icon: string
 }

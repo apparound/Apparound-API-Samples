@@ -10,7 +10,6 @@ import { mainServicesId } from '@/sites/utilities/utils/constants'
 const ProductList = ({ validProducts, setSelectedService, setValidProducts, basketId, setRenderTrigger }) => {
    const { i18n } = useTranslation()
    const { t } = useTranslation()
-   const [renderTrigger, setRenderTriggerState] = useState(false)
 
    const handleServiceSelect = async service => {
       await handleSelectService(service, setValidProducts, basketId)

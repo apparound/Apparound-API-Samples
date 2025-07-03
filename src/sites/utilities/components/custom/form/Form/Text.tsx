@@ -1,34 +1,87 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
+import React from 'react'
 
-interface TextProps {
-   name: string
-   label: string
-   inputType?: string
-   required?: boolean
-   value?: string
-   onChange: (value: string | number | boolean, name: string) => any
-}
+// === IMPORTS ===
+import {
+   formatDateToISO,
+   useDateInput,
+   handleDateChange,
+   handleRegularChange,
+   handleDateFocus,
+   handleDateBlur,
+   getInputClasses,
+   getLabelClasses,
+   type TextProps,
+} from './textUtils'
 
-const Text = ({ name, label, inputType, required, onChange, value }: TextProps) => {
+// === COMPONENT ===
+
+const Text = ({
+   name,
+   label,
+   inputType,
+   required,
+   onChange,
+   value,
+   min,
+   onFocus,
+   onBlur,
+   className,
+   labelClassName,
+   readonly = false,
+   formSubmitted = false,
+}: TextProps) => {
    const { t } = useTranslation()
+   const isDate = inputType === 'date'
+
+   // Utilizziamo l'hook personalizzato per la gestione delle date
+   const { actualInputType, setActualInputType, displayValue, setDisplayValue } = useDateInput(isDate, value)
+
+   // === EVENT HANDLERS ===
+
+   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value
+
+      if (isDate) {
+         handleDateChange(newValue, e, actualInputType, setDisplayValue, onChange, name)
+      } else {
+         handleRegularChange(newValue, e, setDisplayValue, onChange, name)
+      }
+   }
+
+   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+      handleDateFocus(e, isDate, readonly, setActualInputType, displayValue, onFocus, name)
+   }
+
+   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+      handleDateBlur(e, isDate, setActualInputType, setDisplayValue, onBlur, name)
+   }
+
+   // === STYLING ===
+
+   const showError = required && formSubmitted && (!displayValue || displayValue === '')
+
+   // === RENDER ===
+
    return (
       <div className="relative">
          <input
-            type={inputType || 'text'}
+            type={actualInputType || 'text'}
             name={name}
             id={name}
-            className="block bg-white px-3 py-1.5 pt-4 w-full text-base text-gray-900 rounded-md outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6 peer :invalid:outline-red-300"
+            className={getInputClasses(showError, readonly, className)}
             placeholder=" "
-            onChange={e => onChange(e.target.value, name)}
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             required={required}
-            value={value || ''}
+            value={actualInputType === 'date' ? formatDateToISO(displayValue) : displayValue}
+            min={isDate && min ? formatDateToISO(min) : min}
+            disabled={readonly}
          />
-         <label
-            htmlFor={name}
-            className="absolute text-lg text-black dark:text-gray-400 duration-300 transform -translate-y-5.5 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-primary peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-5.5 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-         >
-            {t(label)} {required ? '*' : ''}
+         <label htmlFor={name} className={getLabelClasses(labelClassName)}>
+            {t(label)}
+            {required ? '*' : ''}
          </label>
       </div>
    )

@@ -64,7 +64,7 @@ export class ApparoundUtils {
       sessionId: any,
       token: any,
       api: string,
-      method: 'get' | 'post' | 'put' | 'delete',
+      method: 'get' | 'post' | 'put' | 'delete' | 'patch',
       bodyRequest?: any,
       responseType: 'json' | 'arraybuffer' = 'json',
       timeout: number = 0,
@@ -92,6 +92,9 @@ export class ApparoundUtils {
                break
             case 'delete':
                response = await axios.delete(url, config)
+               break
+            case 'patch':
+               response = await axios.patch(url, bodyRequest, config)
                break
             default:
                throw new Error('Invalid HTTP method')
@@ -129,7 +132,7 @@ export class ApparoundUtils {
                      obj[item.code] = item.value
 
                      return obj
-                  }, {})
+                  }, {}),
                }))
 
             if (products.length > 0) {
@@ -137,6 +140,7 @@ export class ApparoundUtils {
                   id: cluster.id,
                   label: cluster.name,
                   shortName: cluster.shortname,
+                  code: cluster.code,
                   products,
                }
             }
@@ -208,6 +212,56 @@ export class ApparoundUtils {
       }
    }
 
+   async initSession(cpqId: number): Promise<any> {
+      if (!cpqId) throw new Error('CpqId is Required!')
+
+      let token = ''
+      try {
+         const responseToken = await this.getToken()
+         token = responseToken.token || ''
+      } catch (error: any) {
+         throw new Error('Failed to retrieve TOKEN: ' + error.message)
+      }
+
+      const customer =
+         (await this.getCustomer(token, CUSTOMER_DATA_FILTER).then((response: any[]) => {
+            if (response.length > 0) {
+               return response[0]
+            } else {
+               return this.createCustomer(token, CUSTOMER_DATA)
+            }
+         })) || {}
+
+      let customerQuoteId: any = null
+      let responseInitQuoteSession: any = null
+      try {
+         customerQuoteId = await this.createCustomerQuote(token, { ...CUSTOMER_DATA, id: customer.id }, -1)
+         responseInitQuoteSession = await this.initQuoteSession(token, cpqId, customer.id)
+      } catch (error) {
+         console.log(error)
+         return null
+      }
+      const cpqInfo = responseInitQuoteSession || {}
+
+      SESSION_LIST[cpqInfo.sessionId] = {
+         TOKEN: token,
+         CPQ_ID: cpqId,
+         TOF_ID: -1,
+         QUOTE_ID: -1,
+         QUOTE: null,
+         STARTING_PRODUCTS: {},
+         CUSTOMER_ID: customer.id,
+         CUSTOMER_QUOTE_ID: customerQuoteId || -1,
+      }
+
+      return {
+         sessionId: cpqInfo.sessionId,
+         customer,
+         customerQuoteId,
+         tofList: cpqInfo.tofList || [],
+      }
+   }
+
    async getToken(): Promise<any> {
       return await this.fetchData(null, null, '/apikey/token', 'post', {
          clientId: CLIENT_ID,
@@ -251,7 +305,7 @@ export class ApparoundUtils {
       return response.customerQuoteId || -1
    }
 
-   async updateCustormer(sessionId: string, customerData: any): Promise<any> {
+   async updateCustomer(sessionId: string, customerData: any): Promise<any> {
       const token = SESSION_LIST[sessionId].TOKEN
       const customerId = SESSION_LIST[sessionId].CUSTOMER_ID
       const currentQuoteId = SESSION_LIST[sessionId].CUSTOMER_QUOTE_ID
@@ -333,7 +387,7 @@ export class ApparoundUtils {
       const quoteId = SESSION_LIST[sessionId].QUOTE_ID
 
       const quote = await this.getQuote(sessionId, cpqId, quoteId)
-      const cart = this.findCartByKey(quote, 'baskedId', cartId)
+      const cart = this.findCartByKey(quote, 'basketId', cartId)
 
       if (cart) {
          return {
@@ -371,7 +425,7 @@ export class ApparoundUtils {
       const quoteId = SESSION_LIST[sessionId].QUOTE_ID
 
       const quote = await this.getQuote(sessionId, cpqId, quoteId)
-      const cart = this.findCartByKey(quote, 'baskedId,', cartId)
+      const cart = this.findCartByKey(quote, 'basketId,', cartId)
 
       if (cart) return this.flattenCartProducts(cart.root[0])
       return []
@@ -439,32 +493,42 @@ export class ApparoundUtils {
       return await this.fetchData(sessionId, null, `/v2/cpq/${cpqId}/tof/${tofId}/validproducts`, 'get')
    }
 
-   async getValidProducts(sessionId: string, productGuid: string): Promise<any[]> {
+   async getValidProductsLegacy(sessionId: string, productGuid: string): Promise<any[]> {
+      return await this.getValidProducts(sessionId, SESSION_LIST[sessionId].TOF_ID, productGuid)
+   }
+
+   async getValidProducts(sessionId: string, tofId: string, productGuid: string): Promise<any[]> {
       const cpqId = SESSION_LIST[sessionId].CPQ_ID
       const quoteId = SESSION_LIST[sessionId].QUOTE_ID
 
       const quote: any = await this.getQuote(sessionId, cpqId, quoteId)
-      const productNode: any = this.findNodeByGuid(quote, productGuid)
-      const parentNode: any = this.findParentNodeByProductGuid(quote, productGuid)
-      const basket: any = this.findCartByProductGuid(quote, productGuid)
+      let response: any = {}
 
-      const response: any = await this.fetchData(
-         sessionId,
-         null,
-         `/v2/cpq/${cpqId}/tof/${SESSION_LIST[sessionId].TOF_ID}/validproducts?quoteId=${quoteId}&basketId=${
-            basket.basketId
-         }&nodeId=${productNode?.nodeId}&parentId=${parentNode?.nodeId || null}`,
-         'get'
-      )
+      if (productGuid) {
+         const productNode: any = this.findNodeByGuid(quote, productGuid)
+         const parentNode: any = this.findParentNodeByProductGuid(quote, productGuid)
+         const basket: any = this.findCartByProductGuid(quote, productGuid)
 
-      return [
-         ...this.generateProductList(response.bottomAxis || [], productGuid),
-         ...this.generateProductList(response.rightAxis || [], productGuid),
-      ]
+         response = await this.fetchData(
+            sessionId,
+            null,
+            `/v2/cpq/${cpqId}/tof/${tofId}/validproducts?quoteId=${quoteId}&basketId=${basket.basketId}&nodeId=${
+               productNode?.nodeId
+            }&parentId=${parentNode?.nodeId || null}`,
+            'get'
+         )
+         return [
+            ...this.generateProductList(response.bottomAxis || [], productGuid),
+            ...this.generateProductList(response.rightAxis || [], productGuid),
+         ]
+      } else {
+         response = await this.getStartingProducts(sessionId, cpqId, parseInt(tofId))
+         return this.generateProductList(response?.leftAxis || [], DEFAULT_GUID)
+      }
    }
 
-   async getQuote(sessionId: string, cpqId: number, quoteId: number): Promise<any> {
-      if (SESSION_LIST[sessionId].QUOTE) return SESSION_LIST[sessionId].QUOTE
+   async getQuote(sessionId: string, cpqId: number, quoteId: number, skipCachedQuote?: boolean): Promise<any> {
+      if (!skipCachedQuote && SESSION_LIST[sessionId].QUOTE) return SESSION_LIST[sessionId].QUOTE
       const response: any = await this.fetchData(sessionId, null, `/v2/cpq/${cpqId}/quote/${quoteId}`, 'get')
       return response?.quote || null
    }
@@ -511,22 +575,55 @@ export class ApparoundUtils {
             3000,
             true
          )
-         if (response.code === 'ECONNABORTED' || response.response?.status === 102) return this.getPdfQuote(sessionId)
+         if (response.code === 'ECONNABORTED' || response.status === 202) return this.getPdfQuote(sessionId)
          return response
       } catch (error: any) {
-         if (error.code === 'ECONNABORTED' || error.response.status === 102) return this.getPdfQuote(sessionId)
+         if (error.code === 'ECONNABORTED' || error.status === 202) return this.getPdfQuote(sessionId)
          throw new Error('Failed to fetch PDF quote: ' + error.message)
       }
    }
 
-   async addProduct(sessionId: string, productGuid: string, parentGuid?: string): Promise<any> {
+   async setProductConfiguration(sessionId: string, productGuid: string, data: any): Promise<any> {
       const cpqId = SESSION_LIST[sessionId].CPQ_ID
+      const quoteId = SESSION_LIST[sessionId].QUOTE_ID
+      const quote = await this.getQuote(sessionId, cpqId, quoteId)
+
+      const productNode = this.findNodeByGuid(quote, productGuid)
+      const basket = this.findCartByProductGuid(quote, productGuid)
+
+      if (!productNode || !basket) throw new Error('Product node or parent node not found in the quote.')
+
+      const response = await this.fetchData(sessionId, null, `/v2/quote/${quoteId}/productconfiguration`, 'patch', {
+         nodeId: productNode?.nodeId || null,
+         basketId: basket?.basketId || null,
+         productId: productNode?.productId || null,
+         data: data || [],
+      })
+
+      const updatedQuote = await this.getQuote(sessionId, cpqId, quoteId, true)
+
+      this.saveSessionQuote(updatedQuote, sessionId)
+      return {
+         quote: updatedQuote,
+      }
+   }
+
+   async addProductLegacy(sessionId: string, productGuid: string, parentGuid?: string): Promise<any> {
       const tofId = SESSION_LIST[sessionId].TOF_ID
+      return await this.addProduct(sessionId, tofId, productGuid, parentGuid)
+   }
+
+   async addProduct(sessionId: string, tofId: string, productGuid: string, parentGuid?: string): Promise<any> {
+      const cpqId = SESSION_LIST[sessionId].CPQ_ID
       const quoteId = SESSION_LIST[sessionId].QUOTE_ID
       const quote = await this.getQuote(sessionId, cpqId, quoteId)
 
       if (!parentGuid) {
-         const startingProducts = await this.getStartingProducts(sessionId, cpqId, quote?.offerTypeId || tofId)
+         const startingProducts = await this.getStartingProducts(
+            sessionId,
+            cpqId,
+            quote?.offerTypeId || parseInt(tofId)
+         )
          const product = this.findProductByKey(startingProducts.leftAxis, 'uniqueGuid', productGuid)
 
          if (product) {
@@ -540,7 +637,7 @@ export class ApparoundUtils {
             const response: any = await this.createCart(
                sessionId,
                cpqId,
-               quote?.offerTypeId || tofId,
+               quote?.offerTypeId || parseInt(tofId),
                cartData,
                quoteId || -1
             )
@@ -552,7 +649,7 @@ export class ApparoundUtils {
       } else {
          const parentNode = this.findNodeByGuid(quote, parentGuid)
          const basket = this.findCartByProductGuid(quote, parentGuid)
-         const validProducts = await this.getValidProducts(sessionId, parentGuid)
+         const validProducts = await this.getValidProducts(sessionId, tofId, parentGuid)
          const product = this.findProductByKey(validProducts, 'guid', productGuid)
 
          if (product) {
@@ -604,7 +701,11 @@ export class ApparoundUtils {
       const nodes = quoteJsonQ.find('uniqueGuid', function (this: any) {
          return this == guid
       })
-      if (nodes.length == 1) return quoteJsonQ.pathValue(nodes.jsonQ_current[0].path.slice(0, 2))
+      if (nodes.length == 1) {
+         const response = quoteJsonQ.pathValue(nodes.jsonQ_current[0].path.slice(0, 2))
+         if (Array.isArray(response) && response.length > 0) return response[0]
+         else return response
+      }
       return null
    }
 

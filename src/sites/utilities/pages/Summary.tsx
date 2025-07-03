@@ -8,7 +8,7 @@ import MainContainer from '@/sites/utilities/components/custom/MainContainer'
 import Title from '@/sites/utilities/components/custom/texts/Title'
 import { useConsumption } from '@/sites/utilities/context/ConsumptionContext'
 import Footer from '@/components/Footer'
-import CustomerModal from '@/sites/utilities/components/custom/Summary/Customer/Modal'
+import CustomerModal from '@/components/Customer/Modal'
 import { getAllMainProductsIds } from '@/utils/treeManager'
 import { Separator } from '../components/ui/separator'
 

@@ -8,20 +8,27 @@ interface Step {
    text: string
 }
 
-const StepIndicator = ({ step: currentStep }) => {
+interface StepIndicatorProps {
+   step: number
+   customSteps?: string[]
+   hideCursor?: boolean
+}
+
+const StepIndicator = ({ step: currentStep, customSteps, hideCursor = false }: StepIndicatorProps) => {
    const navigate = useNavigate()
    const location = useLocation()
    const { t } = useTranslation()
-   const steps: Step[] = [
+   const defaultSteps: Step[] = [
       { text: t('Inserisci dati fornitura') },
       { text: t('Configura offerta') },
       { text: t('Inserisci dati contatto') },
       { text: t('Firma contratto') },
    ]
+   const steps: Step[] = customSteps ? customSteps.map(text => ({ text: t(text) })) : defaultSteps
 
    return (
       <div
-         className="step-indicator w-full px-4 lg:px-24 border-t-2 whitespace-nowrap overflow-x-auto"
+         className="step-indicator w-full px-4 lg:px-24 border-t-2 whitespace-nowrap overflow-x-auto select-none"
          style={{ backgroundColor: '#f4f4f4', height: '50px' }}
       >
          {steps.map((step, index) => {
@@ -31,7 +38,7 @@ const StepIndicator = ({ step: currentStep }) => {
                <React.Fragment key={index}>
                   <div className="flex items-center">
                      <div
-                        className="step cursor-pointer"
+                        className={`step ${!hideCursor ? 'cursor-pointer' : ''}`}
                         onClick={() =>
                            step.text === 'Inserisci dati fornitura' && navigate('/', { state: location.state })
                         }
