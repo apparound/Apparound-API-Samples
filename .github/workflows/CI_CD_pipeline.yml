@@ -28,7 +28,7 @@ jobs:
               echo "Tag docker image on AzureCR..."
               docker tag ${{ secrets.ACR_LOGIN_SERVER }}/apparound-api-sample:${{ github.sha }} myregistry.azurecr.io/apparound-api-sample:${{ github.sha }}
               docker tag ${{ secrets.ACR_LOGIN_SERVER }}/apparound-api-sample:latest myregistry.azurecr.io/apparound-api-sample:latest
-              docker tag ${{ secrets.ACR_LOGIN_SERVER }}/apparound-api-sample:main myregistry.azurecr.io/apparound-api-sample:main
+              docker tag ${{ secrets.ACR_LOGIN_SERVER }}/apparound-api-sample:dev myregistry.azurecr.io/apparound-api-sample:main
 
          - name: Push Docker image
            run: |
