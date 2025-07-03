@@ -30,8 +30,7 @@ export default defineConfig(({ mode }) => {
             svgrOptions: { exportType: 'default', ref: true, svgo: false, titleProp: true },
             include: '**/*.svg',
          }),
-         mode === 'development' && componentTagger(),
-      ].filter(Boolean),
+      ],
       resolve: {
          alias: {
             '@': path.resolve(__dirname, './src'),
