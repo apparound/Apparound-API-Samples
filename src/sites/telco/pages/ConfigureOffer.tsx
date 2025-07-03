@@ -1,17 +1,17 @@
 import { useSelector } from 'react-redux'
 import { selectCart, selectMainProduct, selectStartingProducts, selectTofId } from '@/sites/retail/features/quoteSlice'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { addProduct, deleteProduct } from '@/sites/telco/hooks/apparoundData'
 import { useDispatch } from 'react-redux'
 import MainProducts from '@/sites/telco/components/MainProducts'
 import Products from '@/sites/telco/components/Products'
 import { useTranslation } from 'react-i18next'
 import TelcoContainer from '../components/TelcoContainer'
+import { useConfigureOfferEffects } from '../hooks/useConfigureOfferEffects'
 
 const ConfigureOffer = () => {
    const { t } = useTranslation()
    const startingProducts = useSelector(selectStartingProducts)
-   const tofId = useSelector(selectTofId)
    const dispatch = useDispatch()
    const mainProduct = useSelector(selectMainProduct)
    const [products, setProducts] = useState([])
@@ -20,47 +20,16 @@ const ConfigureOffer = () => {
    const cart = useSelector(selectCart)
    const [addingMainProductGuid, setAddingMainProductGuid] = useState<string | null>(null)
 
-   useEffect(() => {
-      if (mainProduct?.clusters) {
-         const clusters = mainProduct.clusters.slice(0, -1)
-         const allProducts = clusters.flatMap(cluster => cluster.products)
-         setProducts(allProducts)
-         const initialSwitches = {}
-         allProducts.forEach(p => {
-            initialSwitches[p.guid] = false
-         })
-         setSwitchStates(initialSwitches)
-      }
-   }, [mainProduct])
-
-   useEffect(() => {
-      if (cart) {
-         const updatedSwitchStates = { ...switchStates }
-         Object.keys(cart).forEach(clusterGuid => {
-            Object.keys(cart[clusterGuid]?.children || {}).forEach(productGuid => {
-               if (cart[clusterGuid]?.children[productGuid]) {
-                  updatedSwitchStates[productGuid] = true
-               }
-            })
-         })
-         setSwitchStates(updatedSwitchStates)
-      }
-   }, [cart])
-
-   function cartContainsGuid(cartObj: any, guid: string): boolean {
-      if (!cartObj || typeof cartObj !== 'object') return false
-      if (cartObj[guid]) return true
-      return Object.values(cartObj).some(value => cartContainsGuid(value, guid))
-   }
-
-   useEffect(() => {
-      if (startingProducts && startingProducts.length > 0 && cart) {
-         const found = startingProducts.find(p => cartContainsGuid(cart, p.guid))
-         if (found) {
-            setSelectedOfferGuid(found.guid)
-         }
-      }
-   }, [startingProducts, cart])
+   // Utilizzo del hook personalizzato per gli effetti
+   useConfigureOfferEffects({
+      mainProduct,
+      cart,
+      startingProducts,
+      switchStates,
+      setProducts,
+      setSwitchStates,
+      setSelectedOfferGuid,
+   })
 
    const handleSelectMainProduct = async (guid: string) => {
       if (selectedOfferGuid) {

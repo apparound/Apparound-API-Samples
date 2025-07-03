@@ -13,8 +13,8 @@ interface OfferCardProps {
 const OfferCard: React.FC<OfferCardProps> = ({ imageSrc, title, onClick, selected, loading }) => {
    return (
       <Card
-         className={`w-[350px] cursor-pointer relative rounded-2xl border-0 !shadow-kiki-shadow ${
-            selected ? 'shadow-kiki-shadow' : 'shadow-kiki-shadow hover:shadow-lg'
+         className={`w-[350px] cursor-pointer relative rounded-2xl border-0 ${
+            selected ? 'shadow-lg shadow-primary/90' : '!shadow-kiki-shadow hover:shadow-lg'
          }`}
          onClick={onClick}
       >

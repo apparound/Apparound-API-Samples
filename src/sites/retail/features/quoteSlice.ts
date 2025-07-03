@@ -223,6 +223,12 @@ export const quoteSlice = createSlice({
       },
       deleteProduct: (state, { payload }) => {
          state.cart = deleteProductR(state.cart, payload.productGuid)
+         if (payload.quote) {
+            state.quote = payload.quote
+         }
+         if (payload.validation) {
+            state.isValid = payload.validation.isValid
+         }
       },
       setProductQuantityReducer: (state, { payload }) => {
          const { productGuid, quantity } = payload

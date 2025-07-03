@@ -29,8 +29,8 @@ const MainProducts: React.FC<MainProductsProps> = ({
 
    const handleProductClick = async (productGuid: string) => {
       try {
-         await addProduct(productGuid, dispatch, tofId)
          setSelectedOfferGuid(productGuid)
+         await addProduct(productGuid, dispatch, tofId)
          setAddingProductGuid(productGuid)
       } catch (error) {
          console.error("Errore durante l'aggiunta del prodotto:", error)
