@@ -10,7 +10,7 @@ interface OfferHeaderProps {
 const OfferHeader = ({ title, subtitle }: OfferHeaderProps) => {
    const { t } = useTranslation()
    const translatedTitle = t(title)
-   const isBusiness = translatedTitle === t('Business Offers') || translatedTitle === t('Offerte business')
+   const isBusiness = translatedTitle.toLowerCase().includes('business')
    const headerHeight = subtitle ? 'h-[360px]' : 'h-[300px]'
    return (
       <>
