@@ -6,7 +6,7 @@ import Bg from '@/assets/images/homepage-background.png'
 import { useTranslation } from 'react-i18next'
 import utilities from '@/assets/images/GasLuceSquare.jpg'
 import retail from '@/assets/images/retail_tile.png'
-import telco from '@/assets/images/telco.jpg'
+import telco from '@/assets/images/telco.png'
 
 const sites = {
    utilities,

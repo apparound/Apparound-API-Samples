@@ -50,10 +50,17 @@ const OfferDetail = () => {
       )
    }, [products, cart, tree])
 
+   useEffect(() => {
+      if (offerTitle) {
+         const OFFER_TITLE_STORAGE_KEY = 'telco:offerTitle'
+         localStorage.setItem(OFFER_TITLE_STORAGE_KEY, offerTitle)
+      }
+   }, [offerTitle])
+
    return (
       <div className="min-h-screen bg-white">
          <Navbar showTofList={true} />
-         <StepIndicatorTelco step={3} />
+         <StepIndicatorTelco step={2} />
 
          <OfferHeader title={offerTitle} />
          {addons.length > 0 && (

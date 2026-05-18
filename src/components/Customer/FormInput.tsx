@@ -17,7 +17,7 @@ const FormInput = ({
    required = false,
    placeholder,
    type = 'text',
-   className = '!outline-[#CCCCCC]',
+   className = '!outline-[#CCCCCC] w-full',
    labelClassName = 'outline-[#FF0000]',
    mapField,
    readOnly = false,

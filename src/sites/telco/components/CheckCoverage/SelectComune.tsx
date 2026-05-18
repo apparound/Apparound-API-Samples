@@ -10,7 +10,11 @@ const SelectComune = ({ comuniByProvincia, handleComuneChange, isDisabled }) => 
          </SelectTrigger>
          <SelectContent>
             {comuniByProvincia.map(comune => (
-               <SelectItem key={comune.nome} value={comune.nome}>
+               <SelectItem
+                  key={comune.nome}
+                  value={comune.nome}
+                  className="data-[state=checked]:bg-[#f4f4f4] data-[highlighted]:bg-[#f4f4f4]"
+               >
                   {comune.nome}
                </SelectItem>
             ))}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { mdiFileUpload } from '@mdi/js'
 import Icon from '@mdi/react'
+import { useTranslation } from 'react-i18next'
 
 interface DocumentUploadRowProps {
    label: string
@@ -19,6 +20,7 @@ const DocumentUploadRow: React.FC<DocumentUploadRowProps> = ({
    imageSrc,
    readOnly = false,
 }) => {
+   const { t } = useTranslation()
    const [isModalOpen, setIsModalOpen] = useState(false)
    const handleImageClick = () => setIsModalOpen(true)
    const handleCloseModal = () => setIsModalOpen(false)
@@ -36,7 +38,7 @@ const DocumentUploadRow: React.FC<DocumentUploadRowProps> = ({
                   className="object-contain max-w-full max-h-full opacity-60"
                />
             </div>
-            <div className="flex-1 font-semibold flex flex-col gap-1">{label}</div>
+            <div className="flex-1 font-semibold flex flex-col gap-1 text-left">{label}</div>
             {!readOnly && (
                <button className="text-primary hover:text-purple-700 p-2" title={title} onClick={onButtonClick}>
                   <Icon path={mdiFileUpload} size={1.2} />
@@ -49,7 +51,7 @@ const DocumentUploadRow: React.FC<DocumentUploadRowProps> = ({
                onClick={handleCloseModal}
             >
                <div
-                  className="bg-white rounded shadow-lg p-4 max-w-full max-h-full flex flex-col items-center"
+                  className="bg-white rounded-lg shadow-lg p-4 max-w-full max-h-full flex flex-col items-center"
                   onClick={e => e.stopPropagation()}
                >
                   <img
@@ -58,10 +60,10 @@ const DocumentUploadRow: React.FC<DocumentUploadRowProps> = ({
                      className="object-contain max-h-[80vh] max-w-[90vw]"
                   />
                   <button
-                     className="mt-4 px-4 py-2 bg-primary text-white rounded hover:bg-purple-700"
+                     className="mt-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-purple-700"
                      onClick={handleCloseModal}
                   >
-                     Chiudi
+                     {t('Chiudi').toUpperCase()}
                   </button>
                </div>
             </div>

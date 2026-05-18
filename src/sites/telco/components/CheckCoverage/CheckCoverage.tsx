@@ -9,9 +9,10 @@ import { getProvince, getComuniByProvincia } from '@/utils/comuniUtils'
 
 interface CheckCoverageProps {
    onCoverageResponse?: (response: any) => void
+   showError?: boolean
 }
 
-const CheckCoverage = ({ onCoverageResponse }: CheckCoverageProps) => {
+const CheckCoverage = ({ onCoverageResponse, showError = false }: CheckCoverageProps) => {
    const { t } = useTranslation()
    const [formData, setFormData] = useState({ provincia: '', comune: '', cap: '', indirizzo: '' })
    const [response, setResponse] = useState(null)
@@ -97,6 +98,11 @@ const CheckCoverage = ({ onCoverageResponse }: CheckCoverageProps) => {
                handleSubmit={handleSubmit}
             />
             {response && <FiberTechnology />}
+            {showError && !response && (
+               <div className="text-red-600 text-sm mt-4 text-center">
+                  {t('Compila il form di verifica copertura per proseguire')}
+               </div>
+            )}
          </div>
       </>
    )

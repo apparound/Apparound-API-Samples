@@ -47,7 +47,7 @@ const ProductList: React.FC<ProductListProps> = ({
             />
          ))}
 
-         {cluster?.label === t('Carrello') && contractProperties?.addressContract_address && (
+         {cluster?.label === t('Offer') && contractProperties?.addressContract_address && (
             <>
                <div className="font-bold text-lg text-gray-800 mt-8 mb-3 flex items-center">{t('Copertura')}</div>
                <div className="font-medium text-sm text-left text-gray-900 mb-2">
@@ -98,7 +98,7 @@ const AddonCluster: React.FC<AddonClusterProps> = ({ cluster, includedProducts }
    }
 
    return (
-      <Card className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+      <Card className="bg-white rounded-2xl !shadow-kiki-shadow p-6">
          <div className="font-bold text-lg text-gray-800 mb-3 flex items-center">{cluster.label}</div>
          <div>
             <ProductList

@@ -49,9 +49,9 @@ export const addProduct = async (
 }
 
 export const deleteProduct = async (productGuid: string, dispatch: any) => {
-   await fetchData(`/removeProduct/productGuid/${productGuid}`, 'delete')
+   const response = await fetchData(`/removeProduct/productGuid/${productGuid}`, 'delete')
 
-   dispatch(deleteProductAction({ productGuid }))
+   dispatch(deleteProductAction({ productGuid, ...response }))
 }
 
 export const setProductQuantity = async (productGuid: string, quantity: number, dispatch: any) => {

@@ -16,7 +16,7 @@ const Navbar = ({ showTofList = false, onSelectMainProduct }: NavbarProps) => {
    const currentTofId = useSelector(selectTofId)
 
    return (
-      <nav className="flex flex-col md:flex-row justify-between items-center border-b px-4 py-2">
+      <nav className="flex flex-col md:flex-row justify-between items-center border-b px-4">
          <button
             onClick={() => {
                window.location.href = '/'

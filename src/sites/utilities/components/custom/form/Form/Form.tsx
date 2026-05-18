@@ -11,6 +11,7 @@ interface FormProps {
    }
    className?: string
    onChange: (value: string | number | boolean, name: string) => any
+   formSubmitted?: boolean
 }
 
 interface inputsI {
@@ -40,7 +41,7 @@ const inputs: inputsI = {
    Icon,
 }
 
-const Form = ({ children, onChange, values, className }: FormProps) => {
+const Form = ({ children, onChange, values, className, formSubmitted }: FormProps) => {
    return (
       <div className={`grid grid-cols-1 lg:grid-cols-12 w-full gap-y-6 gap-x-10 ${className}`}>
          {children.map((item, index) => {
@@ -48,7 +49,7 @@ const Form = ({ children, onChange, values, className }: FormProps) => {
             item.value = (values || {})[item.name]
             return InputComponent ? (
                <div className={`${sizes[item.size]}`} key={index}>
-                  <InputComponent values={values} {...item} onChange={onChange} />
+                  <InputComponent values={values} {...item} onChange={onChange} formSubmitted={formSubmitted} />
                </div>
             ) : null
          })}

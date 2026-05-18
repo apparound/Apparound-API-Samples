@@ -4,15 +4,15 @@ Questo repository contiene una collezione di applicazioni web progettate per dim
 
 ## Struttura del Progetto
 
--  **src**: Contiene il codice sorgente delle applicazioni.
-   -  **components**: Componenti React utilizzati nelle applicazioni.
-   -  **hooks**: Custom hooks per la gestione dei dati e delle API.
-   -  **interfaces**: Definizioni delle interfacce TypeScript.
-   -  **locales**: File di traduzione per l'internazionalizzazione.
-   -  **utils**: Funzioni di utilità e helper.
-   -  **server**: Configurazioni e utilità per il server.
--  **public**: Contiene i file statici e l'index.html.
--  **.env.example**: File di esempio per le variabili d'ambiente.
+-  **src**: Contiene il codice sorgente delle applicazioni
+   -  **components**: Componenti React utilizzati nelle applicazioni
+   -  **hooks**: Custom hooks per la gestione dei dati e delle API
+   -  **interfaces**: Definizioni delle interfacce TypeScript
+   -  **locales**: File di traduzione per l'internazionalizzazione
+   -  **utils**: Funzioni di utilità e helper
+   -  **server**: Configurazioni e utilità per il server
+-  **public**: Contiene i file statici e l'index.html
+-  **.env.example**: File di esempio per le variabili d'ambiente
 
 ## Configurazione
 

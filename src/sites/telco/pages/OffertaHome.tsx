@@ -13,7 +13,6 @@ import OfferHomeCarousel from '../components/Carousels/OfferHomeCarousel'
 
 const OffertaHome = () => {
    const { t } = useTranslation()
-   const isMobile = useMediaQuery({ maxWidth: 767 })
    const navigate = useNavigate()
    const mainProduct = useSelector(selectMainProduct)
    const [products, setProducts] = useState([])
@@ -33,7 +32,7 @@ const OffertaHome = () => {
    return (
       <div className="min-h-screen bg-white">
          <Navbar showTofList={true} />
-         <StepIndicatorTelco step={2} />
+         <StepIndicatorTelco step={1} />
 
          <OfferHeader title={headerTitle} />
 

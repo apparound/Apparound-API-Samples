@@ -5,6 +5,8 @@ import QuantitySwitch from '@/sites/telco/components/QuantitySwitch'
 import { useState, useEffect } from 'react'
 import { deleteProduct } from '@/sites/telco/hooks/apparoundData'
 import { useTranslation } from 'react-i18next'
+import { selectTofId } from '@/sites/retail/features/quoteSlice'
+import { useSelector } from 'react-redux'
 
 interface ProductsProps {
    products: any[]
@@ -12,8 +14,12 @@ interface ProductsProps {
    setSwitchStates: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>
    addProduct: (guid: string, dispatch: any, tofId: any, parentGuid: string) => Promise<void>
    dispatch: any
-   tofId: any
    parentGuid: string
+}
+
+// Funzione helper per verificare se un prodotto è di tipo "Check Coverage"
+const isCheckCoverageProduct = (product: any): boolean => {
+   return product.description === 'Verifica copertura' || product.description === 'Coverage check'
 }
 
 const Products: React.FC<ProductsProps> = ({
@@ -22,16 +28,16 @@ const Products: React.FC<ProductsProps> = ({
    setSwitchStates,
    addProduct,
    dispatch,
-   tofId,
    parentGuid,
 }) => {
    const { t } = useTranslation()
    const [simValues, setSimValues] = useState<{ [key: string]: number }>({})
-   let hasCheckCoverage = products.some(product => product.description === 'Verifica copertura')
+   let hasCheckCoverage = products.some(isCheckCoverageProduct)
    const [discoverEnabled, setDiscoverEnabled] = useState(!hasCheckCoverage)
+   const tofId = useSelector(selectTofId)
 
    useEffect(() => {
-      const check = products.some(product => product.description === 'Verifica copertura')
+      const check = products.some(isCheckCoverageProduct)
       setDiscoverEnabled(!check)
    }, [products])
 
@@ -45,8 +51,14 @@ const Products: React.FC<ProductsProps> = ({
    return (
       <div className="space-y-4 mb-8 flex flex-col items-center gap-4">
          {products.map(product => {
-            if (product.description === 'Verifica copertura') {
-               return <CheckCoverage key={product.guid} onCoverageResponse={handleCoverageResponse} />
+            if (isCheckCoverageProduct(product)) {
+               return (
+                  <CheckCoverage
+                     key={product.guid}
+                     onCoverageResponse={handleCoverageResponse}
+                     showError={hasCheckCoverage && !discoverEnabled}
+                  />
+               )
             }
             if (product.config.isQuantity == true) {
                return (
@@ -78,23 +90,18 @@ const Products: React.FC<ProductsProps> = ({
                         }
                      })
                   }}
-                  icon={ProductIcon.getByName(product.description.toLowerCase())}
+                  icon={ProductIcon.getByIconName(product.config.mdiIcon)}
                />
             )
          })}
          <button
             type="button"
-            className="w-[60%] mt-6 bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-3xl shadow transition-all disabled:opacity-50"
+            className="w-[60%] max-w-[250px] mt-6 bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-3xl shadow transition-all disabled:opacity-50"
             onClick={() => window.location.assign('/telco/offerta-home')}
             disabled={!discoverEnabled}
          >
             {t('Scopri le offerte').toUpperCase()}
          </button>
-         {hasCheckCoverage && !discoverEnabled && (
-            <div className="text-red-600 text-sm mt-2 text-center">
-               {t('Compila il form di verifica copertura per proseguire')}
-            </div>
-         )}
       </div>
    )
 }

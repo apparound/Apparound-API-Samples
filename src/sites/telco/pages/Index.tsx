@@ -10,8 +10,6 @@ import { initQuote } from '@/sites/telco/hooks/apparoundData'
 import HomeCarousel from '@/sites/telco/components/Carousels/HomeCarousel'
 
 const Index = () => {
-   const navigate = useNavigate()
-
    const dispatch = useDispatch()
    const [isLoading, setIsLoading] = useState(true)
 
@@ -31,7 +29,7 @@ const Index = () => {
       <div className="min-h-screen bg-white flex flex-col">
          <Navbar />
          <HomeCarousel />
-         <Offers onNavigate={navigate} isLoading={isLoading} />
+         <Offers isLoading={isLoading} />
          <Footer />
       </div>
    )

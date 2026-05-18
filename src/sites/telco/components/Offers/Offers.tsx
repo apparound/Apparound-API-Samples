@@ -6,11 +6,13 @@ import { Skeleton } from '@/components/ui/skeleton'
 import ImmaginePrivato from '@/sites/telco/assets/images/privato.png'
 import ImmagineBusiness from '@/sites/telco/assets/images/business.png'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
-const Offers = ({ onNavigate, isLoading }) => {
+const Offers = ({ isLoading }) => {
    const dispatch = useDispatch()
    const tofList = useSelector(selectTofList)
    const { t } = useTranslation()
+   const navigate = useNavigate()
 
    if (isLoading) {
       return (
@@ -21,8 +23,8 @@ const Offers = ({ onNavigate, isLoading }) => {
             <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-4">
                {[...Array(2)].map((_, index) => (
                   <div key={index} className="flex flex-col items-center p-4">
-                     <Skeleton className="h-40 w-full mb-4" /> {/* Placeholder immagine */}
-                     <Skeleton className="h-6 w-3/4" /> {/* Placeholder titolo */}
+                     <Skeleton className="h-40 w-full mb-4" />
+                     <Skeleton className="h-6 w-3/4" />
                   </div>
                ))}
             </div>
@@ -31,7 +33,16 @@ const Offers = ({ onNavigate, isLoading }) => {
    }
 
    if (!tofList || tofList.length === 0) {
-      return null
+      return (
+         <section className="py-20 px-4">
+            <h2 className="text-3xl font-bold text-center text-primary mb-12">
+               {t('Scopri le offerte pensate per te')}
+            </h2>
+            <div className="max-w-6xl mx-auto text-center">
+               <p className="text-xl text-gray-600">{t('no_offers_available')}</p>
+            </div>
+         </section>
+      )
    }
 
    return (
@@ -46,7 +57,7 @@ const Offers = ({ onNavigate, isLoading }) => {
                   title={item.name.toUpperCase()}
                   onClick={async () => {
                      await getProductsFromTof(dispatch, item.id)
-                     onNavigate(`/telco/configure-offer`)
+                     navigate(`/telco/configure-offer`)
                   }}
                />
             ))}

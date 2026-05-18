@@ -11,7 +11,7 @@ const StepIndicatorTelco = ({ step }: StepIndicatorTelcoProps) => {
    return (
       <div className="w-full">
          {!isMobile ? (
-            <StepIndicator step={step} customSteps={customSteps} />
+            <StepIndicator step={step} customSteps={customSteps} hideCursor={true} />
          ) : (
             <div className="border-t-2 w-full" style={{ borderColor: '#f4f4f4' }}></div>
          )}
